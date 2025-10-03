@@ -1,0 +1,991 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">🛠️</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-2xl font-semibold">SOLICITUD DE CONEXION</div>
+                <div class="font-bold text-primary">Gestion Solicitud de Conexiones</div>
+            </div>
+        </div>
+        <div class="ml-auto">
+            <p-button label="Nuevo Registro" icon="pi pi-plus" severity="info" (click)="nuevo()"></p-button>
+          </div>
+    </div>
+    <div class="col-12">
+        <p-fieldset legend="BUSQUEDA PERSONALIZADA">
+            <div class="grid grid-cols-12 gap-4 ">
+               <!--<div  class="col-span-12 md:col-span-4" >
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" (onChange)="onSelect($event.value)"
+                            filterBy="descripcion" [filter]="true"   class="w-full" appendTo="body"  ></p-select> 
+                        <label>Localidad</label>
+                    </p-floatlabel>
+                    <div class="col-span-12 md:col-span-6">
+                        <p-floatlabel variant="on" >
+                            <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_gestionCatastroModel.fecha_inspeccionDpl"  styleClass="w-full"/>
+                            <label >Fecha Inicio</label>
+                        </p-floatlabel>
+                    </div>
+                    <div class="col-span-12 md:col-span-6">
+                        <p-floatlabel variant="on" >
+                            <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_gestionCatastroModel.fecha_inspeccionDpl"  styleClass="w-full"/>
+                            <label >Fecha Fin</label>
+                        </p-floatlabel>
+                    </div>
+                </div>-->
+                <div class="col-span-12 md:col-span-12 d-flex justify-content-center md:col-start-2">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-3">
+                            <p-floatlabel variant="on">
+                                <p-select [options]="_sede" optionLabel="nombre"  optionValue="idSede" 
+                                    filterBy="descripcion" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idSedeBsq"  class="w-full" appendTo="body"  ></p-select> 
+                                <label>Sede</label>
+                            </p-floatlabel>
+                        </div>
+                        <div class="col-span-12 md:col-span-6">
+                            <p-floatlabel variant="on">
+                                <input  pInputText  class="w-full" [(ngModel)]="_gestionSolicitudModel.propietarioBsq" (keydown.enter)="Busqueda()"  
+                                        (input)="_gestionSolicitudModel.nrosuministroBsq =null;_gestionSolicitudModel.nrosolicitudBsq =null;
+                                                _gestionSolicitudModel.nrodocumentoBsq =null;_gestionSolicitudModel.propietarioBsq = (_gestionSolicitudModel.propietarioBsq || '').toUpperCase()"/>
+                                <label >Propietario </label>
+                            </p-floatlabel>
+                        </div>
+                        <div class="col-span-12 md:col-span-3 ">
+                            <p-floatlabel variant="on">
+                                <input pInputText class="w-full" (keydown.enter)="Busqueda()"  [(ngModel)]="_gestionSolicitudModel.nrodocumentoBsq" 
+                                        (input)="_gestionSolicitudModel.nrosuministroBsq = null;_gestionSolicitudModel.nrosolicitudBsq = null;_gestionSolicitudModel.propietarioBsq = null;" />
+                                <label >Nro Documento</label>
+                            </p-floatlabel>
+                        </div>
+                        <div class="col-span-12 md:col-span-2 md:col-start-3">
+                            <p-floatlabel variant="on">
+                                <input pInputText class="w-full" (keydown.enter)="Busqueda()"  [(ngModel)]="_gestionSolicitudModel.nrosolicitudBsq" 
+                                        (input)="_gestionSolicitudModel.propietarioBsq = null;_gestionSolicitudModel.nrosuministroBsq = null;_gestionSolicitudModel.nrodocumentoBsq = null;" />
+                                <label >Nro Solicitud</label>
+                            </p-floatlabel>
+                        </div>
+                        <div class="col-span-12 md:col-span-2">
+                            <p-floatlabel variant="on">
+                                <input pInputText class="w-full" (keydown.enter)="Busqueda()"  [(ngModel)]="_gestionSolicitudModel.nrosuministroBsq" 
+                                    (input)="_gestionSolicitudModel.propietarioBsq = null;_gestionSolicitudModel.nrosolicitudBsq = null;_gestionSolicitudModel.nrodocumentoBsq = null;" />
+                                <label >Nro Suministro</label>
+                            </p-floatlabel>
+                        </div>
+                        <div class="col-span-12 md:col-span-2">
+                            <button pButton pRipple icon="pi pi-search"  severity="info" (click)="Busqueda()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-fieldset>
+        <br>
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Solicitud de Conexion</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0" >
+                    <div class="card">
+                        <p-table #dt [value]="_gestionSolicitud"  [rows]="20" [globalFilterFields]="['from', 'title', 'propietario','nrosuministro']" scrollable="true" scrollHeight="600px"
+                            [paginator]="true"[rowsPerPageOptions]="[10, 20, 30]"[rowHover]="true"dataKey="id" [showCurrentPageReport]="true" resizableColumns="true" size="small"
+                            currentPageReportTemplate="Se Encontraron {first} de {last} Total {totalRecords} Registros" >
+                            <ng-template #caption>
+                                
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th class="text-center" >Localidad</th>
+                                    <th class="text-center" >Tipo Servicio</th>
+                                    <th class="text-center" >Tipo Solicitud</th>
+                                    <th  class="text-center">Nro Solicitud</th>
+                                    <th  class="text-center">Nro Suministro</th>
+                                    <th class="text-center">Propietario</th>
+                                    <th class="text-center" >Nro Documento</th>
+                                    <th class="text-center" >Direccion</th>
+                                    <th class="text-center" >Fecha Registro</th>
+                                    <th class="text-center" >Estado</th>
+                                    <th class="text-center" >Creador</th>
+                                    <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100" class="text-center" >Accion</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-gestionSolicitud>
+                                <tr (mouseenter)="toggleOptions($event, options, user)" (mouseleave)="toggleOptions($event, options, user)" >
+                                    <td  class="text-center">
+                                        {{gestionSolicitud.sucursal}}
+                                    </td>
+                                    <td  class="text-center">
+                                        {{gestionSolicitud.tipoServicio}}
+                                    </td>
+                                    <td  class="text-center">
+                                        {{gestionSolicitud.tipoSolicitud}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{gestionSolicitud.nroSolicitud}}
+                                    </td>
+                                    <td s class="text-center">  
+                                        {{gestionSolicitud.nroSuministro}}
+                                    </td>
+                                    <td class="text-center" >
+                                        {{gestionSolicitud.propietario}}
+                                    </td>
+                                    <td class="text-center" >
+                                        {{gestionSolicitud.nroDocIdentidad}}
+                                    </td>
+                                    <td class="text-center">
+                                        {{gestionSolicitud.direccion}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{gestionSolicitud.fechaSolicitud | date:'yyyy-MM-dd' }}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{gestionSolicitud.estado}}
+                                    </td>
+                                    <!--<td style="min-width: 12rem" class="text-center">
+                                        <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
+                                            
+                                            <span  class="product-badge  fs-12" [ngClass]="{'status-instock': gestionCatastro.estado == true, 'status-outofstock': gestionCatastro.estado == false}">
+                                            <span  class="fs-12 pi " [ngClass]="{'pi-check': gestionCatastro.estado == true, ' pi-times': gestionCatastro.estado == false}"></span> {{gestionCatastro.estado == true ? 'Activo' : 'Inactivo'}}</span> 
+                                        </span>
+                                    </td>-->
+                                    <td pFrozenColumn frozenAlign="right" style="right: 0;">
+                                        <div class="flex justify-content-center w-full px-0">
+                                            <span #user >
+                                                {{ gestionSolicitud.usuarioCreacion }}
+                                            </span>
+                                            <div style="display: none" #options><!--(click)="editar($event, gestionCatastro)"-->
+                                                <button pButton pRipple icon="pi pi-pencil" class="p-button-success h-8 w-8 mr-2"  pTooltip="Editar Registro" tooltipPosition="top" type="button"></button>
+                                                <!--<button pButton pRipple icon="pi pi-print" class="p-button-info h-8 w-8 mr-2"  (click)="desactivar($event, gestionCatastro)" pTooltip="Imprimir Ficha" tooltipPosition="top" type="button"></button>
+                                                < !--<button pButton pRipple icon="pi pi-check" class="p-button-warning h-8 w-8rem"  (click)="activar($event, gestionCatastro)" pTooltip="Activar" tooltipPosition="top" type="button" *ngIf="gestionCatastro.estado == false"></button>-->
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+
+
+
+
+
+    </div>
+
+</div>
+
+<p-dialog [visible]="dialogForm" [modal]="true" [closable]="false" [closeOnEscape]="false" [dismissableMask]="false" [style]="dialogStyle"
+              [contentStyle]="{ height: '100%' }"[styleClass]="maximized ? 'dialog-maximized' : ''" (onShow)="fixDialogPosition()">
+    <ng-template pTemplate="header">
+        <div class="dialog-header">
+        <span class="dialog-title">Solicitud Conexion</span>
+        <div class="dialog-actions">
+            <button type="button" pButton icon="pi pi-window-maximize" class="p-button-rounded p-button-text" (click)="toggleMaximize()"[attr.aria-label]="'Maximizar'"></button>
+            <button type="button"  pButton icon="pi pi-times" class="p-button-rounded p-button-text" (click)="ModalClose()" [attr.aria-label]="'Cerrar'">
+            </button>
+        </div>
+        </div>
+    </ng-template>
+    <br>
+    <div class="card">
+        <p-tabs value="0">
+            <p-tablist>
+                @for (tab of tabs; track tab.value) {
+                    <p-tab [value]="tab.value" class="flex items-center !gap-2 text-inherit"><i [class]="tab.icon"></i>{{ tab.title }}</p-tab>
+                }
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <div class="grid grid-cols-12 gap-4 ">
+                        <div  class="col-span-12 md:col-span-12" >
+                            <p-accordion [(activeIndex)]="activeAccordionIndex" [multiple]="true">
+                                <p-accordion-panel>
+                                    <p-accordion-header>Datos Generales</p-accordion-header>
+                                    <p-accordion-content>
+                                        <div class="card flex flex-col gap-4 w-full">
+                                            <div class="grid grid-cols-12 gap-4 ">
+                                                <div  class="col-span-12 md:col-span-6" >
+                                                    <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                        <p-accordion-panel >
+                                                            <p-accordion-header>Datos del solicitante</p-accordion-header>
+                                                            <p-accordion-content>
+                                                                <div class="card flex flex-col gap-4 w-full">
+                                                                    <div class="grid grid-cols-12 gap-4 ">
+                                                                        <div  class="col-span-12 md:col-span-6" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_localidad" optionLabel="descripcion"   (onChange)="changeLocalidad($event.value)"
+                                                                                    filterBy="descripcion" [filter]="true"   class="w-full" appendTo="body"   ></p-select> 
+                                                                                <label>Localidad</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-6" >
+                                                                            <app-panel-busqueda (BusquedaCliente)="recibirBusqueda($event)"></app-panel-busqueda>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroSolicitud" disabled/>
+                                                                                <label>Nro. Solicitud</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-5">
+                                                                            <p-floatlabel variant="on" >
+                                                                                <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  [(ngModel)]="_gestionSolicitudModel.fechaSolicitud"  styleClass="w-full"/>
+                                                                                <label >Fecha de Solicitud</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-2 flex items-center" >
+                                                                            <p-checkbox  binary="true" [ngModel]="_gestionSolicitudModel.flagRepresentante === 1"
+                                                                                        (onChange)="setCheckboxValue('flagRepresentante', $event.checked)"/>
+                                                                            <label for="ny" class="ml-2">Representante</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_tipoDocumento" optionLabel="descripcionCorta"  optionValue="idTipoDocIdentidad" (onChange)="onSelectDoc($event.value)"
+                                                                                    filterBy="descripcionCorta" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idTipoDocIdentidad"  class="w-full" appendTo="body" ></p-select> 
+                                                                                <label>Tipo Documento </label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroDocIdentidad" />
+                                                                                <label>Nro. Documento</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6" *ngIf="_gestionSolicitudModel.idTipoDocIdentidad !='06'" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nombres" />
+                                                                                <label>Nombres</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6" *ngIf="_gestionSolicitudModel.idTipoDocIdentidad !='06'">
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.apellidos" />
+                                                                                <label>Apellidos</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12" *ngIf="_gestionSolicitudModel.idTipoDocIdentidad ==='06'">
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.razonSocial" />
+                                                                                <label>Razon Social</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </p-accordion-content>
+                                                        </p-accordion-panel>
+                                                    </p-accordion>
+                                                </div>
+                                                <div  class="col-span-12 md:col-span-6" >
+                                                    <p-accordion [(activeIndex)]="accordions.distribucion_recibo" [multiple]="true">
+                                                        <p-accordion-panel>
+                                                            <p-accordion-header>Datos de Conexión</p-accordion-header>
+                                                            <p-accordion-content>
+                                                                <div class="card flex flex-col gap-4 w-full">
+                                                                    <div class="grid grid-cols-12 gap-4 ">
+                                                                        <div  class="col-span-12 md:col-span-12" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_tipoSolicitud" optionLabel="descripcion"  optionValue="idTipoSolicitudConexion" filterBy="descripcion" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idTipoSolicitud"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Tipo Solicitud</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-12" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_tipoServicio" optionLabel="descripcion"  optionValue="idTipoServicio" (onChange)="onSelectServicio($event.value)"
+                                                                                    filterBy="descripcion" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idTipoServicio"  class="w-full" appendTo="body"></p-select> 
+                                                                                <label>Tipo servicio</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-12" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_tipoConexion" optionLabel="descripcion"  optionValue="idTipoUsoConexion" filterBy="descripcion" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idTipoUsoConexion"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Tipo Conexión</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-6" *ngIf="_gestionSolicitudModel.idTipoServicio ===2 || _gestionSolicitudModel.idTipoServicio ===1">
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_tipoDiametrosAgu" optionLabel="descripcion"  optionValue="idDiametro" filterBy="descripcion" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idDiametroAgua"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Diámetro Agua</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-6" *ngIf="_gestionSolicitudModel.idTipoServicio ===3 || _gestionSolicitudModel.idTipoServicio ===1">
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_tipoDiametrosAlcan" optionLabel="descripcion" optionValue="idDiametro" filterBy="descripcion" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idDiametroDesague"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Diámetro Desagüe</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </p-accordion-content>
+                                                        </p-accordion-panel>
+                                                    </p-accordion>
+                                                </div>
+                                                <div  class="col-span-12 md:col-span-12"  *ngIf="_gestionSolicitudModel.flagRepresentante === 1" >
+                                                    <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                        <p-accordion-panel >
+                                                            <p-accordion-header>Datos del Representante</p-accordion-header>
+                                                            <p-accordion-content>
+                                                                <div class="card flex flex-col gap-4 w-full">
+                                                                    <div class="grid grid-cols-12 gap-4 ">
+                                                                        <div class="col-span-12 md:col-span-5" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nombreRepresentante" />
+                                                                                <label>Representante</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-2" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroDocIdentidadRepresentante" />
+                                                                                <label>Nro. Documento</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <!--<div class="col-span-12 md:col-span-4">
+                                                                            <p-inputgroup>
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText class="w-full" inputId="withoutgrouping" [(ngModel)]="descripcionDireccion"  disabled />  
+                                                                                    <label >Dirección</label>
+                                                                                </p-floatlabel>
+                                                                                <p-inputgroup-addon>
+                                                                                    <p-button  icon="pi pi-search-plus" severity="secondary"  (click)="dialogCalle=true"  />
+                                                                                </p-inputgroup-addon>
+                                                                            </p-inputgroup>
+                                                                        </div>-->
+                                                                        <div class="col-span-12 md:col-span-5" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.direccionRepresentante" />
+                                                                                <label>Dirección</label>
+                                                                            </p-floatlabel>
+                                                                        </div> 
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroCalleRepresentante" />
+                                                                                <label>Nro. Dirección</label>
+                                                                            </p-floatlabel>
+                                                                        </div>  
+                                                                        <div class="col-span-12 md:col-span-2" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.mzaMunicipalRepresentante" />
+                                                                                <label>Nro. Mzna</label>
+                                                                            </p-floatlabel>
+                                                                        </div>  
+                                                                        <div class="col-span-12 md:col-span-2" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.loteMunicipalRepresentante" />
+                                                                                <label>Nro. Lote</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <!--<div class="col-span-12 md:col-span-4">
+                                                                            <p-inputgroup>
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText class="w-full" inputId="withoutgrouping" [(ngModel)]="descripcionUrba"  disabled />
+                                                                                    <label >Urb/Asoc/PPJJ</label>
+                                                                                </p-floatlabel>
+                                                                                <p-inputgroup-addon>
+                                                                                    <p-button  icon="pi pi-search-plus" severity="secondary"  (click)="dialogUrba=true"  />
+                                                                                </p-inputgroup-addon>
+                                                                            </p-inputgroup>
+                                                                        </div>-->
+                                                                        <div class="col-span-12 md:col-span-5" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.urbanizacionRepresentante" />
+                                                                                <label>Urb/Asoc/PPJJ</label>
+                                                                            </p-floatlabel>
+                                                                        </div> 
+                                                                        <div  class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on"><!--(onChange)="changeDistrito($event.value)"-->
+                                                                                <p-select [options]="_provincia" optionLabel="nombre"  optionValue="idProvincia" 
+                                                                                    filterBy="nombre" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idProvinciaRepresentante"  class="w-full" appendTo="body"  ></p-select> 
+                                                                                <label>Provincia</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_distrito" optionLabel="nombre"  optionValue="idDistrito" filterBy="nombre" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idDistritoRepresentante"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Distrito</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroParteRegistral" />
+                                                                                <label>Nro. Parte Registral de Inscripcion Predio</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </p-accordion-content>
+                                                        </p-accordion-panel>
+                                                    </p-accordion>
+                                                </div>
+                                                <div  class="col-span-12 md:col-span-12" >
+                                                    <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                        <p-accordion-panel >
+                                                            <p-accordion-header>Ubicacion Inmueble</p-accordion-header>
+                                                            <p-accordion-content>
+                                                                <div class="card flex flex-col gap-4 w-full">
+                                                                    <div class="grid grid-cols-12 gap-4 ">
+                                                                        <div  class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_tipoEstadoPredio" optionLabel="descripcion"  optionValue="idTipoEstadoPredio" filterBy="descripcion" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idTipoEstadoPredio"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Datos Predio</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-5">
+                                                                            <p-inputgroup>
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText class="w-full" inputId="withoutgrouping" [(ngModel)]="descripcionDireccion"  disabled />  
+                                                                                    <label >Dirección</label>
+                                                                                </p-floatlabel>
+                                                                                <p-inputgroup-addon>
+                                                                                    <p-button  icon="pi pi-search-plus" severity="secondary"  (click)="dialogCalle=true"  />
+                                                                                </p-inputgroup-addon>
+                                                                            </p-inputgroup>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-4" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroCalle" />
+                                                                                <label>Nro. Dirección</label>
+                                                                            </p-floatlabel>
+                                                                        </div>  
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroInterior" />
+                                                                                <label>Nro. Mzna</label>
+                                                                            </p-floatlabel>
+                                                                        </div>  
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroInterior" />
+                                                                                <label>Nro. Lote</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6">
+                                                                            <p-inputgroup>
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText class="w-full" inputId="withoutgrouping" [(ngModel)]="descripcionUrba"  disabled />
+                                                                                    <label >Urb/Asoc/PPJJ</label>
+                                                                                </p-floatlabel>
+                                                                                <p-inputgroup-addon>
+                                                                                    <p-button  icon="pi pi-search-plus" severity="secondary"  (click)="dialogUrba=true"  />
+                                                                                </p-inputgroup-addon>
+                                                                            </p-inputgroup>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-2" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroInterior" />
+                                                                                <label>Area inmueble</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-5" >
+                                                                            <p-floatlabel variant="on"><!--(onChange)="changeDistrito($event.value)"-->
+                                                                                <p-select [options]="_provincia" optionLabel="nombre"  optionValue="idProvincia" 
+                                                                                    filterBy="nombre" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idProvincia"  class="w-full" appendTo="body"  ></p-select> 
+                                                                                <label>Provincia</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-5" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_distrito" optionLabel="nombre"  optionValue="idDistrito" filterBy="nombre" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idDistrito"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Distrito</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroParteRegistral" disabled />
+                                                                                <label>Latitud</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroParteRegistral" disabled />
+                                                                                <label>Longitud</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-4 flex items-center" >
+                                                                            <p-checkbox  binary="true" [ngModel]="_gestionSolicitudModel.flagNotificaciones === 1"
+                                                                                        (onChange)="setCheckboxValue('flagNotificaciones', $event.checked)"/>
+                                                                            <label for="ny" class="ml-2">Dirección Notificaciones</label>
+                                                                        </div>
+                                                                    </div>
+                                                                    <p-fieldset legend="Datos Comerciales">
+                                                                        <div class="grid grid-cols-12 gap-4 ">
+                                                                            <div  class="col-span-12 md:col-span-4" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <p-select  [options]="_sector" optionLabel="descripcion"  optionValue="idSector" (onChange)="changeSector($event.value)"
+                                                                                        filterBy="descripcion" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idSector"  class="w-full" appendTo="body"></p-select> 
+                                                                                    <label>Sector Comercial</label>
+                                                                                </p-floatlabel>
+                                                                            </div>
+                                                                            <div  class="col-span-12 md:col-span-4" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <p-select [options]="_manzanas" optionLabel="descripcion"  optionValue="idManzana"
+                                                                                        filterBy="descripcion" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idManzana"  class="w-full" appendTo="body"></p-select> 
+                                                                                    <label>Manzana</label>
+                                                                                </p-floatlabel>
+                                                                            </div>
+                                                                            <div class="col-span-12 md:col-span-4" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroLote" />
+                                                                                    <label>Nro Lote</label>
+                                                                                </p-floatlabel>
+                                                                            </div> 
+                                                                            <div class="col-span-12 md:col-span-4" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroSubLote" />
+                                                                                    <label>Nro SubLote</label>
+                                                                                </p-floatlabel>
+                                                                            </div>  
+                                                                            <div class="col-span-12 md:col-span-2 flex items-center" >
+                                                                                <p-checkbox  binary="true" [ngModel]="_gestionSolicitudModel.flagConexionTemporal === 1"
+                                                                                            (onChange)="setCheckboxValue('flagConexionTemporal', $event.checked)"/>
+                                                                                <label for="ny" class="ml-2">Conexion Temporal</label>
+                                                                            </div>
+                                                                            <div class="col-span-12 md:col-span-4" *ngIf="_gestionSolicitudModel.flagConexionTemporal === 1" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroMesesTemporal" />
+                                                                                    <label>Nro Meses</label>
+                                                                                </p-floatlabel>
+                                                                            </div> 
+                                                                            <div class="col-span-12 md:col-span-2 md:col-start-2" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.unidadDomestica" />
+                                                                                    <label>Domestico</label>
+                                                                                </p-floatlabel>
+                                                                            </div>
+                                                                            <div class="col-span-12 md:col-span-2" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.unidadComercial"  />
+                                                                                    <label>Comercial</label>
+                                                                                </p-floatlabel>
+                                                                            </div>      
+                                                                            <div class="col-span-12 md:col-span-2" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.unidadIndustrial"  />
+                                                                                    <label>Industrial</label>
+                                                                                </p-floatlabel>
+                                                                            </div>      
+                                                                            <div class="col-span-12 md:col-span-2" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.unidadSocial" />
+                                                                                    <label>Social</label>
+                                                                                </p-floatlabel>
+                                                                            </div>
+                                                                            <div class="col-span-12 md:col-span-2" >
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.unidadEstatal"  />
+                                                                                    <label>Estatal</label>
+                                                                                </p-floatlabel>
+                                                                            </div> 
+                                                                              
+                                                                        </div>
+                                                                    </p-fieldset>
+                                                                </div>
+                                                            </p-accordion-content>
+                                                        </p-accordion-panel>
+                                                    </p-accordion>
+                                                </div>
+                                                <div  class="col-span-12 md:col-span-12"  *ngIf="_gestionSolicitudModel.flagNotificaciones === 1" >
+                                                    <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                        <p-accordion-panel >
+                                                            <p-accordion-header>Datos para Notificaciones</p-accordion-header>
+                                                            <p-accordion-content>
+                                                                <div class="card flex flex-col gap-4 w-full">
+                                                                    <div class="grid grid-cols-12 gap-4 ">
+                                                                        <div class="col-span-12 md:col-span-4">
+                                                                            <p-inputgroup>
+                                                                                <p-floatlabel variant="on"><!--[(ngModel)]="_modalFiltro.nroSuministro" -->
+                                                                                    <input pInputText class="w-full" inputId="withoutgrouping" [(ngModel)]="descripcionDireccionNoti"  disabled />  
+                                                                                    <label >Dirección</label>
+                                                                                </p-floatlabel>
+                                                                                <p-inputgroup-addon>
+                                                                                    <p-button  icon="pi pi-search-plus" severity="secondary"  (click)="dialogCalleNoti=true"  />
+                                                                                </p-inputgroup-addon>
+                                                                            </p-inputgroup>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-4" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroCalleCorrespondencia" />
+                                                                                <label>Nro. Dirección</label>
+                                                                            </p-floatlabel>
+                                                                        </div>  
+                                                                        <div class="col-span-12 md:col-span-2" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.mzaCorrespondencia" />
+                                                                                <label>Nro. Mzna</label>
+                                                                            </p-floatlabel>
+                                                                        </div>  
+                                                                        <div class="col-span-12 md:col-span-2" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nroLoteCorrespondencia" />
+                                                                                <label>Nro. Lote</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-4">
+                                                                            <p-inputgroup>
+                                                                                <p-floatlabel variant="on">
+                                                                                    <input pInputText class="w-full" inputId="withoutgrouping" [(ngModel)]="descripcionUrbaNoti"  disabled />
+                                                                                    <label >Urb/Asoc/PPJJ</label>
+                                                                                </p-floatlabel>
+                                                                                <p-inputgroup-addon>
+                                                                                    <p-button  icon="pi pi-search-plus" severity="secondary"  (click)="dialogUrbaNoti=true"  />
+                                                                                </p-inputgroup-addon>
+                                                                            </p-inputgroup>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on"><!--(onChange)="changeDistrito($event.value)"-->
+                                                                                <p-select [options]="_provincia" optionLabel="nombre"  optionValue="idProvincia" 
+                                                                                    filterBy="nombre" [filter]="true" [(ngModel)]="_gestionSolicitudModel.idProvinciaCorrespondencia"  class="w-full" appendTo="body"  ></p-select> 
+                                                                                <label>Provincia</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div  class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <p-select [options]="_distrito" optionLabel="nombre"  optionValue="idDistrito" filterBy="nombre" [filter]="true" 
+                                                                                          [(ngModel)]="_gestionSolicitudModel.idDistritoCorrespondencia"  class="w-full"  appendTo="body" ></p-select> 
+                                                                                <label>Distrito</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </p-accordion-content>
+                                                        </p-accordion-panel>
+                                                    </p-accordion>
+                                                </div>
+                                                <div  class="col-span-12 md:col-span-12"  >
+                                                    <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                        <p-accordion-panel >
+                                                            <p-accordion-header>Requisitos</p-accordion-header>
+                                                            <p-accordion-content>
+                                                                <div class="card flex flex-col gap-4 w-full">
+                                                                    <div class="grid grid-cols-12 gap-4 ">
+                                                                        <div class="col-span-12 md:col-span-6 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Documento que acredita la propiedad o posesión</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Copia simple del documento de identidad del solicitante y/o
+                                                                                 los documentos que acreditan la representación</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Plano de ubicación o croquis del predio</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-6 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Recibo de Pago por derecho de factibilidad</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Resumen del sistema de tratamiento y evacuación de los desagues, destacando el punto de muestreo, los analisis fisicos  quimicos y bacteriologicos del efluente
+                                                                                 (en caso de uso intensivo del agua de tipo comercial o industrial) </label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Plano de diseño de salidas de alcantarillado sanitario (para los casos de edificaciones en propiedad exclusiva y común)</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Descripción de la servidumbre pactado o legal entre las partes por donde pasaran las tuberias de agua potable y/o alcantarillado sanitario
+                                                                                 (en caso de independización)</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Constancia de No Adeudo,  expedido por la Junta de Propietarios o su equivalente (En caso de independizaciones)</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Constancia de Viabilidad técnica,  suscrita por Ingeniero Sanitario (para solicitudes de dos o mas conexiones)</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">El Predio, si cuenta con un punto interior agua y/o desague de que permite la conexión hacia mi vivienda</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Acepto la facturación emitida por su representada y me comprometo al pago de los recibos que se emitan. Ejecutada la conexión</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Cancelado el recibo emitido y de no utilizar el servicio me comprometo a presentar una solicitud para realizar el corte temporal</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Resolución de la Autoridad Nacional del Agua que otorga la licencia de uso de agua</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-12 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Certificado de vigencia de poder, para el caso de personas jurídicas</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-4 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2">Otros</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-4 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2"> Detecta como clandestino</label>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-4 flex items-center" >                                                    
+                                                                            <p-toggleswitch />
+                                                                            <label class="ml-2"> Detecta como Clandestino Alcantarillado</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </p-accordion-content>
+                                                        </p-accordion-panel>
+                                                    </p-accordion>
+                                                </div>
+                                                <div  class="col-span-12 md:col-span-12"  >
+                                                    <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                        <p-accordion-panel >
+                                                            <p-accordion-header>Otros</p-accordion-header>
+                                                            <p-accordion-content>
+                                                                <div class="card flex flex-col gap-4 w-full">
+                                                                    <div class="grid grid-cols-12 gap-4 ">
+                                                                        <div  class="col-span-12 md:col-span-12" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <textarea pTextarea id="over_label" rows="5" cols="30" style="resize: none" [(ngModel)]="_gestionSolicitudModel.observacion" class="w-full" ></textarea>
+                                                                                <label>Observación</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.tipodoc" disabled/>
+                                                                                <label>Tipo Documento</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.seriedoc" disabled/>
+                                                                                <label>Serie</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+                                                                        <div class="col-span-12 md:col-span-3" >
+                                                                            <p-floatlabel variant="on">
+                                                                                <input pInputText  class="w-full" autocomplete="off" [(ngModel)]="_gestionSolicitudModel.nrodoc" disabled/>
+                                                                                <label>Numero Recibo</label>
+                                                                            </p-floatlabel>
+                                                                        </div>
+
+                                                                        
+                                                                        
+                                                                    </div>
+                                                                </div>
+                                                            </p-accordion-content>
+                                                        </p-accordion-panel>
+                                                    </p-accordion>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </p-accordion-content>
+                                </p-accordion-panel>
+                            </p-accordion>
+                            <button pButton pRipple type="button"  icon="pi pi-check" (click)="gestionar()" class="p-button-rounded p-button-info mr-2 mb-2" label="Crear Registro" ></button>
+                        </div>  
+                    </div>
+                </p-tabpanel>
+                <p-tabpanel value="1">
+
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</p-dialog>
+
+<p-dialog header="Direcciones" [modal]="true" [(visible)]="dialogCalle"  modal="modal" showEffect="fade" [style]="{height:'600px',width:'700px'}" >
+    <div class="card">
+        <p-table #dtCalle [value]="_calles" [globalFilterFields]="['from','descripcion']" selectionMode="single" (onRowSelect)="onRowSelectDireccion($event);"
+                        scrollable="true" scrollHeight="400px" resizableColumns="true" size="small">
+                        <ng-template #caption>
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <h5 class="text-1xl font-semibold text-800">LISTADO DE DIRECCION</h5>
+                                <div class="flex gap-2 items-center">
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4">
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon >
+                                            <i class="pi pi-search" ></i>
+                                        </p-inputgroup-addon>
+                                        <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterCalle(dtCalle, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                    </p-inputgroup>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr >
+                                <th class="text-center">CODCALLE</th>
+                                <th class="text-center">TIPO</th>
+                                <th class="text-center">DESCRIPCION</th>
+                                <th class="text-center">SELECCIONAR</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-calles>
+                            <tr [pSelectableRow]="calles">
+                                <td class="text-center">  
+                                    {{calles.idCalle}}
+                                </td>
+                                <td class="text-center">  
+                                    {{calles.tipo}}
+                                </td>
+                                <td class="text-center">  
+                                    {{calles.descripcion}}
+                                </td>
+                                <td>
+                                    <button pButton icon="pi pi-pencil" class="p-button-sm" (click)="onRowSelectDireccion({ data: calles })"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+        </p-table>
+    </div>
+</p-dialog>
+
+<p-dialog header="Urbanizacion" [modal]="true" [(visible)]="dialogUrba"  modal="modal" showEffect="fade"   [style]="{height:'600px',width:'700px'}" >
+    <div class="card">
+        <p-table #dtUrba [value]="_urbanizacion" [globalFilterFields]="['from','descripcion']" selectionMode="single" (onRowSelect)="onRowSelectUrba($event);"
+                        scrollable="true" scrollHeight="400px" resizableColumns="true" size="small">
+                        <ng-template #caption>
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <h5 class="text-1xl font-semibold text-800">LISTADO DE URBANIZACION</h5>
+                                <div class="flex gap-2 items-center">
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4">
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon >
+                                            <i class="pi pi-search" ></i>
+                                        </p-inputgroup-addon>
+                                        <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterUrba(dtUrba, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                    </p-inputgroup>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr >
+                                <th class="text-center">CODURBASO</th>
+                                <th class="text-center">TIPO</th>
+                                <th class="text-center">DESCRIPCION</th>
+                                <th class="text-center">SELECCIONAR</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-urba>
+                            <tr [pSelectableRow]="urba">
+                                <td class="text-center">  
+                                    {{urba.idUrbanizacion}}
+                                </td>
+                                <td class="text-center">  
+                                    {{urba.tipo}}
+                                </td>
+                                <td class="text-center">  
+                                    {{urba.descripcion}}
+                                </td>
+                                <td>
+                                    <button pButton icon="pi pi-pencil" class="p-button-sm" (click)="onRowSelectUrba({ data: urba })"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+        </p-table>
+    </div>
+</p-dialog>
+
+<!-- DIALOG PARA NOTIFICACIONES-->
+
+<p-dialog header="Direcciones" [modal]="true" [(visible)]="dialogCalleNoti"  modal="modal" showEffect="fade" [style]="{height:'600px',width:'700px'}" >
+    <div class="card">
+        <p-table #dtCalle [value]="_calles" [globalFilterFields]="['from','descripcion']" selectionMode="single" (onRowSelect)="onRowSelectDireccionNoti($event);"
+                        scrollable="true" scrollHeight="400px" resizableColumns="true" size="small">
+                        <ng-template #caption>
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <h5 class="text-1xl font-semibold text-800">LISTADO DE DIRECCION</h5>
+                                <div class="flex gap-2 items-center">
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4">
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon >
+                                            <i class="pi pi-search" ></i>
+                                        </p-inputgroup-addon>
+                                        <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterCalle(dtCalle, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                    </p-inputgroup>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr >
+                                <th class="text-center">CODCALLE</th>
+                                <th class="text-center">TIPO</th>
+                                <th class="text-center">DESCRIPCION</th>
+                                <th class="text-center">SELECCIONAR</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-calles>
+                            <tr [pSelectableRow]="calles">
+                                <td class="text-center">  
+                                    {{calles.idCalle}}
+                                </td>
+                                <td class="text-center">  
+                                    {{calles.tipo}}
+                                </td>
+                                <td class="text-center">  
+                                    {{calles.descripcion}}
+                                </td>
+                                <td>
+                                    <button pButton icon="pi pi-pencil" class="p-button-sm" (click)="onRowSelectDireccionNoti({ data: calles })"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+        </p-table>
+    </div>
+</p-dialog>
+
+<p-dialog header="Urbanizacion" [modal]="true" [(visible)]="dialogUrbaNoti"  modal="modal" showEffect="fade"   [style]="{height:'600px',width:'700px'}" >
+    <div class="card">
+        <p-table #dtUrba [value]="_urbanizacion" [globalFilterFields]="['from','descripcion']" selectionMode="single" (onRowSelect)="onRowSelectUrbaNoti($event);"
+                        scrollable="true" scrollHeight="400px" resizableColumns="true" size="small">
+                        <ng-template #caption>
+                            <div class="flex flex-wrap items-center justify-between gap-3">
+                                <h5 class="text-1xl font-semibold text-800">LISTADO DE URBANIZACION</h5>
+                                <div class="flex gap-2 items-center">
+                                </div>
+                                <div class="flex flex-col md:flex-row gap-4">
+                                    <p-inputgroup>
+                                        <p-inputgroup-addon >
+                                            <i class="pi pi-search" ></i>
+                                        </p-inputgroup-addon>
+                                        <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterUrba(dtUrba, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                    </p-inputgroup>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr >
+                                <th class="text-center">CODURBASO</th>
+                                <th class="text-center">TIPO</th>
+                                <th class="text-center">DESCRIPCION</th>
+                                <th class="text-center">SELECCIONAR</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template #body let-urba>
+                            <tr [pSelectableRow]="urba">
+                                <td class="text-center">  
+                                    {{urba.idUrbanizacion}}
+                                </td>
+                                <td class="text-center">  
+                                    {{urba.tipo}}
+                                </td>
+                                <td class="text-center">  
+                                    {{urba.descripcion}}
+                                </td>
+                                <td>
+                                    <button pButton icon="pi pi-pencil" class="p-button-sm" (click)="onRowSelectUrbaNoti({ data: urba })"></button>
+                                </td>
+                            </tr>
+                        </ng-template>
+        </p-table>
+    </div>
+</p-dialog>
