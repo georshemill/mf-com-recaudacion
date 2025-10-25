@@ -1,0 +1,353 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">🛠️</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-2xl font-semibold">ORDEN DE PAGdasdasddsO</div>
+                <div class="font-bold text-primary">Gestion de Pagos</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <p-fieldset legend="BUSQUEDA">
+            <div class="grid grid-cols-12 gap-4 ">
+                <div class="col-span-12 md:col-span-2">
+                    <app-panel-busqueda (BusquedaCliente)="recibirBusqueda($event)"></app-panel-busqueda>
+                </div>
+                <div class="col-span-12 md:col-span-1 flex items-center" >
+                    <p-checkbox  binary="true" [ngModel]="_ordenPagoModel.flagEventual === 1"
+                                (onChange)="setCheckboxValue('flagEventual', $event.checked)" />
+                    <label for="ny" class="ml-2">Eventual</label>
+                </div>
+                <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">👋</div>
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.propietario}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">🏠</div>
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.direccion}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1"><!--*ngIf="_blockPrincipal==1"-->
+                    <div class="flex items-center gap-2">
+                        <div class="text-3xl">💰</div>
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-bold text-red-500 text-3xl">S/ {{totalMonto | number : '1.2-2'}}</span>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1" ><!--*ngIf="_blockPrincipal==1"-->
+                    <div class="flex items-center gap-2">
+                        <div class="text-2xl">🛠️</div>
+                        <div class="text-surface-400 dark:text-surface-200">
+                          <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.estadoServicio}}</span>
+                        </div>
+                      </div>
+                </div>
+                <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-semibold">Localidad: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.sucursal}}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-semibold">Tipo Documento: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.tipoDocIdentidad}}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-semibold">Nro Documento: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.nroDocIdentidad}}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-semibold">Tipo Corte A: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.corteAgua}}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 md:col-start-3" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-semibold">Tipo Corte D: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.corteDesague}}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2 " *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-semibold">Fecha Corte: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.fechaCorte}}</span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                    <div class="flex items-center gap-2">
+                        <div class="text-surface-600 dark:text-surface-200">
+                          <span class="font-semibold">Fecha Reapertura: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.fechaReapertura}}</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </p-fieldset>
+        <div  class="col-span-12 md:col-span-12">
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
+                    <p-fieldset legend="FACTURACION">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div class="col-span-12 md:col-span-4">
+                                <p-floatlabel variant="on">
+                                    <p-select  [options]="_comprobante" optionLabel="descripcion" optionValue="idTipoComprobante" (onChange)="changeComprobante($event.value)"
+                                        filterBy="descripcion" [filter]="true" [(ngModel)]="_ordenPagoModel.idTipoComprobante" class="w-full" appendTo="body"  ></p-select> 
+                                    <label>Documento</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-4">
+                                <p-floatlabel variant="on">
+                                    <p-select [options]="_serieComprobante" optionLabel="serieDoc"  optionValue="serieDoc" 
+                                        filterBy="serieDoc" [filter]="true" [(ngModel)]="_ordenPagoModel.serieDoc"  class="w-full" appendTo="body"  ></p-select> 
+                                    <label>Serie</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-4">
+                                <p-floatlabel variant="on">
+                                    <input pInputText class="w-full" disabled/>
+                                    <label >Nro Documento</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-12">
+                                <p-floatlabel variant="on">
+                                    <input pInputText class="w-full" [(ngModel)]="_ordenPagoModel.glosa"    />
+                                    <label >Referencia</label>
+                                </p-floatlabel>
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+                <div  class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
+                    <p-fieldset legend="Acciones">
+                        <div class="grid grid-cols-12 gap-4 ">
+                            <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
+                                <p-button label="Nuevo Colateral" icon="pi pi-plus" variant="outlined" severity="warn" (click)="colateral()"></p-button>
+                            </div>
+                            <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
+                                <p-button label="Facturaciones" icon="pi pi-chart-line" variant="outlined" severity="success" (click)="colateral()"></p-button>
+                            </div>
+                            <div class="col-span-12 md:col-span-5 flex items-center" *ngIf="_blockPrincipal==1">
+                                <!--[ngModel]="_gestionSolicitudModel.flagRepresentante === 1"
+                                            (onChange)="setCheckboxValue('flagRepresentante', $event.checked)"-->
+                                <p-checkbox  binary="true" />
+                                <label for="ny" class="ml-2">Cargar Colateral del CORE por defecto</label>
+                            </div>
+                            <div class="col-span-12 md:col-span-4 md:col-start-4" *ngIf="_blockPrincipal==1">
+                                <p-button label="Guardar Prepago" icon="pi pi-send" severity="info" (click)="guardar()"></p-button>
+                            </div>
+            
+                        </div>
+                    </p-fieldset>
+                </div>
+            </div>
+        </div>
+        <p-tabs value="0" *ngIf="_blockPrincipal==1">
+            <p-tablist>
+                <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Orden Pago</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0" >
+                    <div class="card">
+                        <p-table  #dt [value]="_deudaList" scrollable="true" resizableColumns="true" scrollHeight="500px"  size="small"> 
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th class="text-center">Ítem</th>
+                                    <th class="text-center">Detalle</th>
+                                    <th class="text-center">Reclamo</th>
+                                    <th class="text-center">NF</th>
+                                    <th style="width: 10%" class="text-center">Importe Total</th>
+                                    <th class="text-center">Fecha Prórroga</th>
+                                    <th class="text-center" >Eliminar</th>
+                                    <!--<th class="text-center">Recibo</th>-->
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-pago let-rowIndex="rowIndex" let-i="rowIndex">
+                                <tr >
+                                    <td class="text-center">  
+                                        {{ rowIndex +1}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{pago.descripcion}}
+                                    </td>
+                                    <td  class="text-center">
+                                        <span >
+                                            <p-checkbox [ngModel]="pago.flagEnReclamo!= false" [disabled]="true" binary="true" ></p-checkbox >
+                                        </span>
+                                    </td>
+                                    <td  class="text-center">
+                                        <span >
+                                            <p-checkbox [ngModel]="pago.flagNoFacturado!= false" [disabled]="true" binary="true" ></p-checkbox >
+                                        </span>
+                                    </td>
+                                    <td  style="text-align: right;">
+                                        S/ {{ pago.impTotalMes | number:'1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <td class="text-center">  
+                                        {{ pago.fechaProrroga | date:'yyyy-MM-dd'}}
+                                    </td>
+                                    <td style="min-width: 4rem" class="text-center">
+                                        <p-button icon="pi pi-trash" severity="danger" size="small" (click)="removeCate(i)"/>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template #footer>
+                                <tr>
+                                    <td colspan="2"></td>
+                                    <td colspan="2" class="font-bold p-2" style="text-align: right;">Total</td>
+                                    <td class="font-bold p-2 fs-5" colspan="1" style="text-align: right;">
+                                        S/ {{totalMonto | number : '1.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <td colspan="2"></td>
+                            </ng-template>
+                        </p-table>  
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+
+           
+    
+    </div>
+</div>
+<p-dialog header="Asignacion Colateral" [(visible)]="dialogColateral"  modal="modal" showEffect="fade" dismissableMask="true"  position="left" 
+        draggable="false"  resizable="false" [style]="{height:'1100px',width:'450px'}" contentStyleClass="dialog-content">
+    
+    <p-table #dtConceptos [value]="_colateral" [globalFilterFields]="['from','descripcion','baseImponible']"  
+            scrollable="true" scrollHeight="flex" size="small">
+        <ng-template #caption>
+          <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-col md:flex-row gap-4">
+                  <p-inputgroup>
+                      <input pInputText placeholder="Buscar" (input)="onGlobalFilter(dtConceptos, $event)" class="w-full sm:w-auto" 
+                      style="height:35px;width:400px; font-size:12px; padding:2px 6px;"/>
+                  </p-inputgroup>
+              </div>
+          </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+          <tr>
+              <th class="text-center">ID</th>
+              <th class="text-center">DESCRIPCION</th>
+              <th class="text-center">IMPORTE</th>
+          </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-calles>
+          <tr [pSelectableRow]="calles">
+              <td class="text-center">{{calles.idConcepto}}</td>
+              <td class="text-center">{{calles.descripcion}}</td>
+              <td class="text-right">{{calles.baseImponible | number : '1.2-2'}}
+                <i class="pi pi-send" style="color: rgb(25, 172, 11); cursor:pointer;" 
+                   (click)="onRowSelect(calles)"></i>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="Asignacion Eventual" [(visible)]="dialogEventual"  modal="modal" showEffect="fade" dismissableMask="false"  
+        draggable="false"  resizable="false"  contentStyleClass="dialog-content">
+        
+        <div class="col-12">
+            <div class="card">
+                <p-fieldset legend="Busqueda por Datos de Usuario">
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-12 d-flex justify-content-center md:col-start-2">
+                            <div class="grid grid-cols-12 gap-4">
+                              <div class="col-span-12 md:col-span-3">
+                                  <p-floatlabel variant="on">
+                                      <input pInputText class="w-full" (keydown.enter)="BusquedaPersona()"  [(ngModel)]="nrodocumento" (input)="datos = '';" />
+                                      <label >Nro Documento</label>
+                                  </p-floatlabel>
+                              </div>
+                              <div class="col-span-12 md:col-span-5">
+                                  <p-floatlabel variant="on">
+                                      <input  pInputText  class="w-full" [(ngModel)]="datos" (keydown.enter)="BusquedaPersona()"  (input)="nrodocumento = '';datos = (datos || '').toUpperCase()"/>
+                                      <label >Datos Personales</label>
+                                  </p-floatlabel>
+                              </div>
+                              <div class="col-span-12 md:col-span-2">
+                                  <button pButton pRipple icon="pi pi-search"  severity="info" (click)="BusquedaPersona()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </p-fieldset>
+                <p-tabs value="0" *ngIf="blockTable==1">
+                    <p-tablist>
+                        <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado Personas</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0" >
+                            <div class="card">
+                                <p-table #dt [value]="_personas" responsiveLayout="scroll" [rows]="20" [globalFilterFields]="['from', 'title', 'apellidos','nroDocIdentidad']"
+                                    [paginator]="true"[rowsPerPageOptions]="[10, 20, 30]"[rowHover]="true"dataKey="id" [showCurrentPageReport]="true"
+                                    currentPageReportTemplate="Se Encontraron {first} de {last} Total {totalRecords} Registros"
+                                    resizableColumns="true" size="small" >
+                                    
+                                    <ng-template pTemplate="header">
+                                        <tr class="fs-12">
+                                            <th style="width: 4%" class="text-center" >IdPersona</th>
+                                            <th  class="text-center">Tipo Documento</th>
+                                            <th class="text-center">Nro Documento</th>
+                                            <th style="width: 12%" >Persona</th>
+                                            <th style="width: 12%" class="text-center" >Razon Social</th>
+                                            <th style="width: 7%" class="text-center" >Estado</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-personas>
+                                        <tr >
+                                            <td style="min-width: 4rem" class="text-center">
+                                                {{ personas.idPersona}}
+                                            </td>
+                                            <td class="text-center">  
+                                                {{ personas.idTipoDocIdentidad}}
+                                            </td>
+                                            <td style="min-width: 4rem" >
+                                                {{ personas.nroDocIdentidad}}
+                                            </td>
+                                            <td style="min-width: 4rem" >
+                                                {{ personas.nombreCompleto}}
+                                            </td>
+                                            <td style="min-width: 4rem" class="text-center">
+                                                {{ personas.razonSocial}}
+                                            </td>
+                                            <td style="min-width: 12rem" class="text-center">
+                                                <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
+                                                    <span  class="product-badge  fs-12" [ngClass]="{'status-instock': personas.estado == true, 'status-outofstock': personas.estado == false}">
+                                                    <span  class="fs-12 pi " [ngClass]="{'pi-check': personas.estado == true, ' pi-times': personas.estado == false}"></span> {{personas.estado == true ? 'Activo' : 'Inactivo'}}</span>
+                                                    &nbsp;&nbsp;<i class="pi pi-send" style="color: rgb(82, 162, 242); cursor:pointer;" (click)="onRowSelectPersona(personas)"></i> 
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+            </div>
+        </div>
+</p-dialog>
+
+

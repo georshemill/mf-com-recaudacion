@@ -19,6 +19,11 @@ export const routes: Routes = [
           import('./pages/orden-pago/orden-pago.component').then((m) => m.OrdenPagoComponent),
       },
       {
+        path: 'comercial/recaudacion/Pago',
+        loadComponent: () =>
+          import('./pages/pago/pago.component').then((m) => m.PagoComponent),
+      },
+      {
         path: 'comercial/catastro/GestionConexion',
         loadComponent: () =>
           import('./pages/catastro/gestion-conexiones/gestion-conexiones.component').then((m) => m.GestionConexionComponent),
