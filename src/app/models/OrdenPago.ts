@@ -284,5 +284,11 @@ export class OrdenPago{
     serieDoc: string | null = null;
 	impTotal!:number
 
+	//	PAGOS
+
+	nroOrdenPago:number | null = null;
+	mensaje!:string
+	flagBarras: 0 | 1 = 0;
+
 	
 }

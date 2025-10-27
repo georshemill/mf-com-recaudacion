@@ -3,7 +3,7 @@
         <div class="flex gap-3 align-items-center">
             <div class="text-4xl">🛠️</div>
             <div class="flex flex-col gap-1 text-600">
-                <div class="text-2xl font-semibold">ORDEN DE PAGdasdasddsO</div>
+                <div class="text-2xl font-semibold">ORDEN DE PAGO</div>
                 <div class="font-bold text-primary">Gestion de Pagos</div>
             </div>
         </div>
@@ -12,12 +12,38 @@
         <p-fieldset legend="BUSQUEDA">
             <div class="grid grid-cols-12 gap-4 ">
                 <div class="col-span-12 md:col-span-2">
-                    <app-panel-busqueda (BusquedaCliente)="recibirBusqueda($event)"></app-panel-busqueda>
+                    <p-inputgroup>
+                        <p-floatlabel variant="on">
+                            <p-inputnumber  class="w-full" [(ngModel)]="_modalFiltro.nroSuministro" (keydown.enter)="BusquedaOrdenDirecta()" [useGrouping]="false" 
+                                            (onInput)="_modalFiltro.nroOrdenPago = null;"/>
+                            <label >Busqueda Suministro</label>
+                        </p-floatlabel>
+                        <p-inputgroup-addon>
+                            <p-button  icon="pi pi-id-card" severity="secondary" (click)="dialogCliente=true" />
+                        </p-inputgroup-addon>
+                    </p-inputgroup>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <p-inputgroup>
+                        <p-floatlabel variant="on">
+                            <p-inputnumber  class="w-full" [(ngModel)]="_modalFiltro.nroOrdenPago" (keydown.enter)="BusquedaOrdenDirecta()" [useGrouping]="false" 
+                                            (onInput)="_modalFiltro.nroSuministro = null;"/>
+                            <label >Busqueda Orden Pago</label>
+                        </p-floatlabel>
+                        <p-inputgroup-addon>
+                            <p-button  icon="pi pi-dollar" severity="secondary" (click)="dialogOrden=true" />
+                        </p-inputgroup-addon>
+                    </p-inputgroup>
                 </div>
                 <div class="col-span-12 md:col-span-1 flex items-center" >
                     <p-checkbox  binary="true" [ngModel]="_ordenPagoModel.flagEventual === 1"
                                 (onChange)="setCheckboxValue('flagEventual', $event.checked)" />
                     <label for="ny" class="ml-2">Eventual</label>
+                </div>
+                <div class="col-span-12 md:col-span-2 flex items-center" >
+                    <p-checkbox  binary="true" [ngModel]="_ordenPagoModel.flagBarras === 1"
+                                (onChange)="setCheckboxValue('flagBarras', $event.checked)" />
+                    <label for="ny" class="ml-2">Codigo de Barras</label>
                 </div>
                 <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
                     <div class="flex items-center gap-2">
@@ -110,13 +136,13 @@
                             <div class="col-span-12 md:col-span-4">
                                 <p-floatlabel variant="on">
                                     <p-select  [options]="_comprobante" optionLabel="descripcion" optionValue="idTipoComprobante" (onChange)="changeComprobante($event.value)"
-                                        filterBy="descripcion" [filter]="true" [(ngModel)]="_ordenPagoModel.idTipoComprobante" class="w-full" appendTo="body"  ></p-select> 
+                                        filterBy="descripcion" [filter]="true" [(ngModel)]="_ordenPagoModel.idTipoComprobante"  [disabled]="true" class="w-full" appendTo="body"  ></p-select> 
                                     <label>Documento</label>
                                 </p-floatlabel>
                             </div>
                             <div class="col-span-12 md:col-span-4">
                                 <p-floatlabel variant="on">
-                                    <p-select [options]="_serieComprobante" optionLabel="serieDoc"  optionValue="serieDoc" 
+                                    <p-select [options]="_serieComprobante" optionLabel="serieDoc"  optionValue="serieDoc" [disabled]="true"
                                         filterBy="serieDoc" [filter]="true" [(ngModel)]="_ordenPagoModel.serieDoc"  class="w-full" appendTo="body"  ></p-select> 
                                     <label>Serie</label>
                                 </p-floatlabel>
@@ -127,7 +153,14 @@
                                     <label >Nro Documento</label>
                                 </p-floatlabel>
                             </div>
-                            <div class="col-span-12 md:col-span-12">
+                            <div class="col-span-12 md:col-span-4">
+                                <p-floatlabel variant="on">
+                                    <p-select [options]="_formaPago" optionLabel="descripcion"  optionValue="idFormaPago" 
+                                        filterBy="descripcion" [filter]="true"   class="w-full" appendTo="body"  ></p-select> 
+                                    <label>Forma Pago</label>
+                                </p-floatlabel>
+                            </div>
+                            <div class="col-span-12 md:col-span-8">
                                 <p-floatlabel variant="on">
                                     <input pInputText class="w-full" [(ngModel)]="_ordenPagoModel.glosa"    />
                                     <label >Referencia</label>
@@ -265,6 +298,89 @@
   </p-table>
 </p-dialog>
 
+<p-dialog header="Busqueda Orden de Pago" [(visible)]="dialogOrden"  modal="modal" showEffect="fade" dismissableMask="false"  
+        draggable="false"  resizable="false"  contentStyleClass="dialog-content">
+        
+        <div class="col-12">
+            <div class="card">
+                <p-tabs value="0" >
+                    <p-tablist>
+                        <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado Ordenes</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0" >
+                            <div class="card">
+                                <p-table #dtOrdenes [value]="_listBusquedaPago" 
+                                        scrollable="true" scrollHeight="400px" resizableColumns="true" size="small" 
+                                        [globalFilterFields]="['from','nroOrdenPago','propietario','nroSuministro']">
+                                <ng-template #caption>
+                                    <div class="flex flex-wrap items-center justify-between gap-3">
+                                        <h5 class="text-1xl font-semibold text-900">LISTADO DE ORDEN DE PAGO</h5>
+                                        <div class="flex gap-2 items-center">
+                                        </div>
+                                        <div class="flex flex-col md:flex-row gap-4">
+                                            <p-inputgroup>
+                                                <p-inputgroup-addon >
+                                                    <i class="pi pi-search" ></i>
+                                                </p-inputgroup-addon>
+                                                <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterOrdenes(dtOrdenes, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                            </p-inputgroup>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr >
+                                        <th class="text-center">Sede</th>
+                                        <th class="text-center">Nro OrdenPago</th>
+                                        <th class="text-center">Nro Suministro</th>
+                                        <th style="text-align: center;">Propietario</th>
+                                        <th class="text-center">Fecha Prepago</th>
+                                        <th class="text-center">Importe Total</th>
+                                        <th style="text-align: center;">Estado</th>
+                                        <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100">Asignacion</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #body let-listado>
+                                    <tr  [pSelectableRow]="listado">
+                                        <td>
+                                            {{listado.idSede }}
+                                        </td>
+                                        <td style="text-align: center;">  
+                                            {{listado.nroOrdenPago}}
+                                        </td>
+                                        <td style="text-align: center;">  
+                                            {{listado.nroSuministro}}
+                                        </td>
+                                        <td style="text-align: center;">  
+                                            {{listado.propietario}}
+                                        </td>                                    
+                                        <td style="text-align: center;">  
+                                            {{listado.fechaPrepago | date:'yyyy-MM-dd' }}
+                                        </td>
+                                        <td style="text-align: right;">  
+                                            {{listado.impTotal | number:'1.2-2'}}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
+                                                
+                                                <span  class="product-badge  fs-12" [ngClass]="{'status-instock': listado.idEstado == 1, 'status-outofstock': listado.idEstado != 1}">
+                                                <span  class="fs-12 pi " [ngClass]="{'pi-check': listado.idEstado == 1, ' pi-times': listado.idEstado != 1}"></span> {{listado.estado}}</span> 
+                                            </span>
+                                        </td>
+                                        <td pFrozenColumn frozenAlign="right" style="text-align: center;">
+                                            <i class="pi pi-send" style="font-size: 1.3rem;color: rgb(25, 172, 11); cursor:pointer;" 
+                                            (click)="onRowSelectOrden(listado)"></i>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            </div>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+            </div>
+        </div>
+</p-dialog>
 <p-dialog header="Asignacion Eventual" [(visible)]="dialogEventual"  modal="modal" showEffect="fade" dismissableMask="false"  
         draggable="false"  resizable="false"  contentStyleClass="dialog-content">
         
@@ -349,5 +465,205 @@
             </div>
         </div>
 </p-dialog>
-
+<p-dialog header="BUSQUEDA DE CLIENTE" [modal]="true" [(visible)]="dialogCliente" (onHide)="ModalClose()" modal="modal" showEffect="fade"   [style]="{height:'700px',width:'1200px'}" [maximizable]="true" >
+    <br>
+    <div class="card" >
+        <div class="grid grid-cols-12 gap-4 ">
+            <div class="col-span-12 md:col-span-2 flex items-center" >
+                <p-checkbox   binary="true"  [(ngModel)]="_modalFiltroCliente.checkSucursal" (ngModelChange)="actualizaSucursal($event)" />
+                <label for="ny" class="ml-2">Todos las Sucursales</label>
+            </div> 
+            <div  class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" [disabled]="blockLocalidad!= 0"
+                            filterBy="descripcion" [filter]="true"   class="w-full"  [(ngModel)]="_modalFiltroCliente.idSucursal" ></p-select> 
+                    <label>Localidad</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" [(ngModel)]="_modalFiltroCliente.direccion" appUppercase autocomplete="off" />
+                    <label>Calle</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" [(ngModel)]="_modalFiltroCliente.urbanizacion" appUppercase autocomplete="off" />
+                    <label>Urbanizacion</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()"  [(ngModel)]="_modalFiltroCliente.nroSuministro" 
+                            (input)="_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.propietario='';
+                            _modalFiltroCliente.nroDocIdentidad = '';_modalFiltroCliente.recibo = '';"  />
+                    <label>Nro Suministro</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.codigoAntiguo"
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.propietario='';
+                    _modalFiltroCliente.nroDocIdentidad = '';_modalFiltroCliente.recibo = '';" />
+                    <label>Codigo Antiguo</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.nroMedidor"
+                        (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.propietario='';
+                                _modalFiltroCliente.nroDocIdentidad = '';_modalFiltroCliente.recibo = '';" />
+                    <label>Nro Medidor</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-3" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()"[(ngModel)]="_modalFiltroCliente.nroDocIdentidad" 
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.propietario='';
+                            _modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.recibo = '';" />
+                    <label>Nro Documento Identidad</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-3" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.recibo"
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.propietario='';
+                            _modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.nroDocIdentidad = '';" />
+                    <label>Nro Recibo</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-10" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.propietario" appUppercase
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.recibo='';
+                                    _modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.nroDocIdentidad = '';" />
+                    <label>Propietario</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2">
+                <button pButton pRipple icon="pi pi-search"  severity="info"  label="Buscar Cliente" iconPos="right" (keydown.enter)="Busqueda()"  (click)="Busqueda()" class="p-button p-button-warning  mr-2" ></button>
+            </div>
+        </div>
+        <br>
+        <p-tabs value="0" *ngIf="blockTable==1">
+            <p-tablist>
+                <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado de Busqueda</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0" >
+                    <div class="card">
+                        <p-table #dt [value]="_filtroCliente" scrollable="true" 
+                                    scrollHeight="400px" resizableColumns="true" size="small">
+                            <ng-template #caption>
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <h5 class="text-1xl font-semibold text-900">LISTADO DE CLIENTES</h5>
+                                    <div class="flex gap-2 items-center">
+                                    </div>
+                                    <div class="flex flex-col md:flex-row gap-4">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon >
+                                                <i class="pi pi-search" ></i>
+                                            </p-inputgroup-addon>
+                                            <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilter(dt, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th class="text-center">Sucursal</th>
+                                    <th class="text-center">Nro Suministro</th>
+                                    <th class="text-center">Nro Medidor</th>
+                                    <th class="text-center">Codigo Antiguo</th>
+                                    <th class="text-center">Propietario</th>
+                                    <th class="text-center">Nro Documento</th>
+                                    <th class="text-center">Calle</th>
+                                    <th class="text-center" >Nro Calle</th>
+                                    <th class="text-center" >Referencia</th>
+                                    <th class="text-center" >Asociacion</th>
+                                    <th class="text-center" >Estado</th>
+                                    <th class="text-center" >Tipo Usuario</th>
+                                    <th class="text-center" >Tipo Servicio</th>
+                                    <th class="text-center" >Sector</th>
+                                    <th class="text-center" >Nro. Mza</th>
+                                    <th class="text-center" >Nro Lote</th>
+                                    <th class="text-center" >Ciclo</th>
+                                    <th class="text-center" >RutaDistrib</th>
+                                    <th class="text-center" >Orden</th>
+                                    <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100"> Acciones</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-listado>
+                                <tr  [pSelectableRow]="listado">
+                                    <td>{{listado.sucursal }}</td>
+                                    <td class="text-center">  
+                                        {{listado.nroSuministro}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroMedidor}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.codigoAntiguo}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.propietario}}
+                                    </td>                                    
+                                    <td class="text-center">  
+                                        {{listado.nroDocIdentidad}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.direccion2}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroCalle}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.referencia}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.urbanizacion}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.estadoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.tipoUsuario}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.tipoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.sector}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.idManzana}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroLote}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.ciclo}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.idRutaReparto}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.ordenRutaReparto}}
+                                    </td>
+                                    <!--<td  pFrozenColumn frozenAlign="right" style="right: 0;"  class="frozen-right-cell">
+                                        <button pButton icon="pi pi-pencil" class="p-button-sm"(click)="onRowSelect({ data: listado })"></button>
+                                    </td>-->
+                                    <td pFrozenColumn frozenAlign="right" style="right: 0;"  class="frozen-right-cell">
+                                        <i class="pi pi-send" style="font-size: 1.3rem;color: rgb(25, 172, 11); cursor:pointer;" 
+                                        (click)="onRowSelectCliente(listado)"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</p-dialog>
 

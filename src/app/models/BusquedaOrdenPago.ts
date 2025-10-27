@@ -1,4 +1,4 @@
-export class Colateral{
+export class BusquedaOrdenPago{
 	idEmpresa!:number 
 	idSede!:number
 	idSedeOperacional!:number 

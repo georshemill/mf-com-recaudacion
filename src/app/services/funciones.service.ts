@@ -54,6 +54,23 @@ export class FuncionesService {
     return Swal.fire({title: titulo,text: mensaje,icon: 'warning',showCancelButton: true,confirmButtonColor: '#3085d6',cancelButtonColor: '#d33',confirmButtonText: textButton,cancelButtonText: 'Cancelar',})
   }
 
+  popupAlerta(title:string){
+    //Swal.fire(title,mensaje,'success')
+
+    Swal.fire({
+      icon: 'warning',
+      title: title, 
+      confirmButtonText: "Aceptar",
+      confirmButtonColor: '#03A9F4',
+    }).then((result) => {
+      if (result.isDenied) {
+        //this.printBarra(this.codigoAp_Derivacion)
+        }
+    })
+  }
+
+
+
   getnamemes(mes:string){
     let mesLiteral = "";
     switch(mes){

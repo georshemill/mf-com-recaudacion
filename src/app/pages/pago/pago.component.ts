@@ -11,6 +11,10 @@ import { SerieComprobante } from '../../models/SerieComprobante';
 import { Table } from 'primeng/table';
 import { Personas } from '../../models/Personas';
 import { MessageService } from 'primeng/api';
+import { BusquedaOrdenPago } from '../../models/BusquedaOrdenPago';
+import { FiltroCliente } from '../../models/FiltroCliente';
+import { Localidad } from '../../models/Localidad';
+import { TipoFormaPago } from '../../models/TipoFormaPago';
 
 
 
@@ -29,10 +33,13 @@ export class PagoComponent implements OnInit{
   @ViewChild(PanelBusquedaComponent) panelBusqueda!: PanelBusquedaComponent;
   _blockPrincipal:number=0
   dialogColateral:boolean=false
+  dialogOrden:boolean=false
   dialogEventual:boolean=false
+  dialogCliente:boolean=false
   _colateral:Colateral[] = []
   _comprobante:Comprobante[] = []
   _serieComprobante:SerieComprobante[] = []
+  _formaPago:TipoFormaPago[] = []
   _ordenPagoModel:OrdenPago=new OrdenPago
   _deudaList:Deuda[] = []
   totalMonto: number = 0;
@@ -44,6 +51,12 @@ export class PagoComponent implements OnInit{
   parametro: string=""
   searchSede!:number
   searchEmp!:number
+  _listBusquedaPago:BusquedaOrdenPago[] = []
+  _modalFiltro:OrdenPago=new OrdenPago
+  _filtroCliente:FiltroCliente[] = []
+  _modalFiltroCliente:FiltroCliente=new FiltroCliente
+  blockLocalidad:number=0
+  _localidad:Localidad[] = []
 
 
 
@@ -58,9 +71,7 @@ export class PagoComponent implements OnInit{
     this.init()
   }
 
-  onGlobalFilter(table: Table, event: Event) {
-    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-  }
+  
 
   init(){
     this.recaudacionService.ListColateral({idEmpresa:1,idSede:1}).subscribe((respuesta) => {
@@ -70,6 +81,22 @@ export class PagoComponent implements OnInit{
     this.recaudacionService.dropdownComprobante().subscribe((respuesta) => {
       this._comprobante=respuesta.data
     })
+
+
+    this.recaudacionService.ListDeudaPagos({idEmpresa:1,idSede:1}).subscribe((respuesta) => {
+      this._listBusquedaPago=respuesta.data
+    })
+
+    this.recaudacionService.dropdownTipoFormaPago().subscribe((respuesta) => {
+      this._formaPago=respuesta.data
+    })
+
+
+    
+
+
+    
+
   }
 
 
@@ -107,11 +134,76 @@ export class PagoComponent implements OnInit{
     });
   }
 
+
+  BusquedaOrdenDirecta(){
+
+    this._modalFiltro.idEmpresa=1
+    this._modalFiltro.idSede=1
+
+    this.recaudacionService.ConsultaDeudaPago(this._modalFiltro).subscribe({
+          next: (data) => {
+            if (data.data != null) {
+              this._ordenPagoModel = data.data;
+              this._deudaList= data.data.deudaList
+              this._blockPrincipal=1
+              this._ordenPagoModel.idPersona=null
+              this.calcularTotal()
+
+              if(this._ordenPagoModel.mensaje!=null){
+                this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
+              }
+            } else {
+              this.funcionesService.popupError("Búsqueda sin información", "");
+              this._blockPrincipal=0
+            }
+          },
+          error: (err) => {
+            this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+            this._blockPrincipal=0
+          }
+        }); 
+  }
+
+
+  onRowSelectOrden(x:any){
+
+    this._modalFiltro.idEmpresa=x.idEmpresa
+    this._modalFiltro.idSede=x.idSede
+    this._modalFiltro.nroSuministro=x.nroSuministro
+
+    this.recaudacionService.ConsultaDeudaPago(this._modalFiltro).subscribe({
+          next: (data) => {
+            if (data.data != null) {
+              this._ordenPagoModel = data.data;
+              this._deudaList= data.data.deudaList
+              this._blockPrincipal=1
+              this._ordenPagoModel.idPersona=null
+              this.calcularTotal()
+              this.dialogOrden=false
+
+              if(this._ordenPagoModel.mensaje!=null){
+                this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
+              }
+            } else {
+              this.funcionesService.popupError("Búsqueda sin información", "");
+              this._blockPrincipal=0
+              this.dialogOrden=false
+            }
+          },
+          error: (err) => {
+            this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+            this._blockPrincipal=0
+            this.dialogOrden=false
+          }
+        }); 
+
+  }
+
    setCheckboxValue(prop: IntBooleanKeys<OrdenPago>, checked: boolean): void {
         this._ordenPagoModel[prop] = checked ? 1 : 0;
   
         if(this._ordenPagoModel.flagEventual===0){
-          this.panelBusqueda.limpiar();
+          //this.panelBusqueda.limpiar(); ver 
           this.blockTable=0
           this._personas = [];
           this.nrodocumento=""
@@ -122,7 +214,7 @@ export class PagoComponent implements OnInit{
           this._tarifasModelCategorizacion= null;
           this._tipoactividadModelCategorizacion= null;*/
         }else{
-          this.panelBusqueda.limpiar();
+          //this.panelBusqueda.limpiar();
           this.dialogEventual=true
         }
       }
@@ -266,5 +358,90 @@ export class PagoComponent implements OnInit{
     });
   }
 
+
+
+  //BUSQEUDA CLIENTE
+
+  Busqueda(){
+
+    this._modalFiltroCliente.idEmpresa=1
+
+    this.recaudacionService.BusquedaCliente(this._modalFiltroCliente).subscribe({
+          next: (data) => {
+            if (data.data.length != 0) {
+              this._filtroCliente = data.data;
+              this.blockTable = 1;
+            } else {
+              this.funcionesService.popupError("Búsqueda sin información", "");
+              this._filtroCliente = [];
+              this.blockTable = 0;
+            }
+          },
+          error: (err) => {
+            this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+            this._filtroCliente = [];
+            this.blockTable = 0;
+          }
+        }); 
+  }
+
+  onRowSelectCliente(x:any){
+
+    this._modalFiltro.idEmpresa=x.idEmpresa
+    this._modalFiltro.idSede=x.idSede
+    this._modalFiltro.nroSuministro=x.nroSuministro
+
+    this.recaudacionService.ConsultaDeudaPago(this._modalFiltro).subscribe({
+          next: (data) => {
+            if (data.data != null) {
+              this._ordenPagoModel = data.data;
+              this._deudaList= data.data.deudaList
+              this._blockPrincipal=1
+              this._ordenPagoModel.idPersona=null
+              this.calcularTotal()
+              this.dialogCliente=false
+
+              if(this._ordenPagoModel.mensaje!=null){
+                this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
+              }
+            } else {
+              this.funcionesService.popupError("Búsqueda sin información", "");
+              this._blockPrincipal=0
+              this.dialogCliente=false
+            }
+          },
+          error: (err) => {
+            this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+            this._blockPrincipal=0
+            this.dialogCliente=false
+          }
+        }); 
+
+
+  }
+
+  actualizaSucursal(x:any){
+    if(x==true){
+      this._modalFiltro.idSucursal=0
+      this.blockLocalidad=1
+    }else{
+      this.blockLocalidad=0
+    }
+  }
+
+  ModalClose(){
+    this._filtroCliente = [];
+    this.blockTable = 0;
+  }
+
+
+
+  onGlobalFilterOrdenes(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
+  onGlobalFilter(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
 
 }

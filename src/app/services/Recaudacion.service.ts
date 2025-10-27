@@ -75,6 +75,8 @@ import { Colateral } from '../models/Colateral';
 import { OrdenPago } from '../models/OrdenPago';
 import { Comprobante } from '../models/Comprobante';
 import { SerieComprobante } from '../models/SerieComprobante';
+import { BusquedaOrdenPago } from '../models/BusquedaOrdenPago';
+import { TipoFormaPago } from '../models/TipoFormaPago';
 
 
 
@@ -417,6 +419,13 @@ export class RecaudacionService {
         return this.http.get<ListResponse<TipoEstadoPredio[]>>(`https://gateway1.emapasalas.net.pe/TipoEstadoPredio/dropdown`);
     }
 
+    dropdownTipoFormaPago(): Observable<ListResponse<TipoFormaPago[]>> {
+        return this.http.get<ListResponse<TipoFormaPago[]>>(`https://gateway1.emapasalas.net.pe/TipoFormaPago/dropdown`);
+    }
+
+
+    
+
     //SOLICITUD COMERCIALIAZCON
 
     BusquedaSolicitudConex(model: Solicitud): Observable<ListResponse<Solicitud[]>> {
@@ -443,6 +452,16 @@ export class RecaudacionService {
 
     GeneraOrdenPago(model: OrdenPago): Observable<Mensaje> {
         return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/OrdenPago/GenerarOrdenPago`, model);
+    }
+
+    //PAGOS
+
+    ListDeudaPagos( model:Partial<BusquedaOrdenPago>): Observable<ListResponse<BusquedaOrdenPago[]>> {
+        return this.http.post<ListResponse<BusquedaOrdenPago[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ListBusquedaOrdenPago`,model);
+    }
+
+    ConsultaDeudaPago(model: OrdenPago): Observable<ListResponse<OrdenPago>> {
+        return this.http.post<ListResponse<OrdenPago>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ConsultaDeudaPago`,model);
     }
 
 
