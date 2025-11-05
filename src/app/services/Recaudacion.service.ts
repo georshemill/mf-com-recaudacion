@@ -79,6 +79,7 @@ import { BusquedaOrdenPago } from '../models/BusquedaOrdenPago';
 import { TipoFormaPago } from '../models/TipoFormaPago';
 import { Car } from '../models/Car';
 import { ResumenCaja } from '../models/ResumenCaja';
+import { ValidaPassPago } from '../models/ValidaPassPago';
 
 
 
@@ -484,6 +485,10 @@ export class RecaudacionService {
 
     RegistrarPagoxOrden(model: OrdenPago): Observable<Mensaje> {
         return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/RegistrarPagoxOrden`, model);
+    }
+
+    ValidaLoginPago(model:Partial<ValidaPassPago>): Observable<Boolean> {
+        return this.http.post<Boolean>(`https://gateway8079.emapasalas.net.pe/ValidaUser`, model);
     }
 
 

@@ -9,7 +9,7 @@ export class GlobalSession {
     return Session.get('IDSEDE');
   }
 
-  static get idUsuario(): string | null {
+  static get idUsuario(): number | null {
     return Session.get('IDUSUARIO');
   }
 

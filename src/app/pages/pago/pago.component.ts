@@ -20,6 +20,8 @@ import { GlobalSession } from '../utils/globalSession'
 import { ResumenCaja } from '../../models/ResumenCaja';
 import { InputNumber } from 'primeng/inputnumber';
 import Swal from 'sweetalert2';
+import { ValidaPassPago } from '../../models/ValidaPassPago';
+import { Router } from '@angular/router';
 
 
 
@@ -70,6 +72,8 @@ export class PagoComponent implements OnInit{
   blockLocalidad:number=0
   _localidad:Localidad[] = []
   _resumenCajaModel:ResumenCaja=new ResumenCaja
+  _validaPassModel:ValidaPassPago=new ValidaPassPago
+
   flagGeneraPago: number = 0;
   carId: number = 0;
   efectivo = 0.0;
@@ -88,6 +92,7 @@ export class PagoComponent implements OnInit{
 
    constructor(private recaudacionService:RecaudacionService,
               private funcionesService:FuncionesService,
+              private router: Router,
               private messageService: MessageService
     ) 
     {}
@@ -153,17 +158,31 @@ export class PagoComponent implements OnInit{
     return;
     }
 
-    this.carId=this._ordenPagoModel.idCar
-    this.ResumenCaja(this._ordenPagoModel.idCar)
-    
-
-    
-
-    this.formCar=false
+    this.recaudacionService.ValidaLoginPago({idUsuario:this.idUsuarioTk!,clave:this._ordenPagoModel.validaPass}).subscribe({
+      next: (data) => {
+        if (data == true) {
+          this.carId=this._ordenPagoModel.idCar!
+          this.ResumenCaja(this._ordenPagoModel.idCar)
+          this.formCar=false
+            
+        } else {
+          this.messageService.add({
+            severity: "warn",summary: "Aviso de usuario",
+            detail: "Contraseña Incorrecta",life: 3000});
+          return;
+        }
+      },
+      error: (err) => {
+        this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+        this._blockPrincipal=0
+      }
+    });
 
   }
   
   cancelarLogin(){
+
+    this.router.navigate(['/comercial/recaudacion/dashboard']);
 
   }
 

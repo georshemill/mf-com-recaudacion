@@ -3,4 +3,5 @@ export interface Mensaje {
     response: string;
     message:string
     dataId: number;
+    data:boolean
 }
