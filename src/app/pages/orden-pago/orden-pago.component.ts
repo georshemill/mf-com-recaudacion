@@ -11,6 +11,7 @@ import { SerieComprobante } from '../../models/SerieComprobante';
 import { Table } from 'primeng/table';
 import { Personas } from '../../models/Personas';
 import { MessageService } from 'primeng/api';
+import { GlobalSession } from '../utils/globalSession'
 
 
 
@@ -45,6 +46,14 @@ export class OrdenPagoComponent implements OnInit{
   searchSede!:number
   searchEmp!:number
 
+  
+  idEmpresa = GlobalSession.idEmpresa;
+  idSede = GlobalSession.idSede;
+  usuario = GlobalSession.usuario;
+  idUsuario = GlobalSession.idUsuario;
+  
+
+
 
 
 
@@ -56,6 +65,7 @@ export class OrdenPagoComponent implements OnInit{
 
   ngOnInit(): void {
     this.init()
+    
   }
 
   onGlobalFilter(table: Table, event: Event) {
@@ -63,7 +73,7 @@ export class OrdenPagoComponent implements OnInit{
   }
 
   init(){
-    this.recaudacionService.ListColateral({idEmpresa:1,idSede:1}).subscribe((respuesta) => {
+    this.recaudacionService.ListColateral({idEmpresa:this.idEmpresa!,idSede:this.idSede!}).subscribe((respuesta) => {
       this._colateral=respuesta.data
     })
 

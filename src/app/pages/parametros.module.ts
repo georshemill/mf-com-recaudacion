@@ -23,6 +23,7 @@ import { SelectButtonModule } from 'primeng/selectbutton';
 import { PanelModule } from 'primeng/panel';
 import { NgControl } from '@angular/forms';
 import { ToggleSwitchModule } from 'primeng/toggleswitch';
+import { CardModule } from 'primeng/card';
 
 import { HttpClientModule } from '@angular/common/http';
 
@@ -71,7 +72,8 @@ import { UppercaseDirective } from './utils/uppercase.directive';
         PanelModule,
         InputGroup,
         UppercaseDirective,
-        ToggleSwitchModule
+        ToggleSwitchModule,
+        CardModule
     ],
     exports: [
       InputTextModule,
@@ -107,7 +109,8 @@ import { UppercaseDirective } from './utils/uppercase.directive';
       PanelModule,
       InputGroup,
       UppercaseDirective,
-      ToggleSwitchModule
+      ToggleSwitchModule,
+      CardModule
     ]
 })
 export class ParametrosModule {

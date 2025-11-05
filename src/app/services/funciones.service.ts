@@ -120,6 +120,10 @@ export class FuncionesService {
     return Math.round(value * factor) / factor;
   }
 
+  roundToFix(value: number, args: number): string {
+    return (Math.round(value * 10 ** args) / 10 ** args).toFixed(args);
+  }
+
   formatDate(fecha:Date) : Date{
     return new Date(formatDate(fecha, 'short', 'en-US'));
   }

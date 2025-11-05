@@ -15,6 +15,11 @@ import { BusquedaOrdenPago } from '../../models/BusquedaOrdenPago';
 import { FiltroCliente } from '../../models/FiltroCliente';
 import { Localidad } from '../../models/Localidad';
 import { TipoFormaPago } from '../../models/TipoFormaPago';
+import { Car } from '../../models/Car';
+import { GlobalSession } from '../utils/globalSession'
+import { ResumenCaja } from '../../models/ResumenCaja';
+import { InputNumber } from 'primeng/inputnumber';
+import Swal from 'sweetalert2';
 
 
 
@@ -30,14 +35,21 @@ type IntBooleanKeys<T> = {
   providers: [RecaudacionService]
 })
 export class PagoComponent implements OnInit{
+  @ViewChild('inputSearch') inputSearch!: InputNumber;
   @ViewChild(PanelBusquedaComponent) panelBusqueda!: PanelBusquedaComponent;
+
+  //fechActual = new Date().toISOString().slice(0, 10);
+  fechActual = new Date().toLocaleDateString('en-CA');
   _blockPrincipal:number=0
   dialogColateral:boolean=false
   dialogOrden:boolean=false
   dialogEventual:boolean=false
   dialogCliente:boolean=false
+  dialogVuelto:boolean=false
+  formCar:boolean=false
   _colateral:Colateral[] = []
   _comprobante:Comprobante[] = []
+  _car:Car[] = []
   _serieComprobante:SerieComprobante[] = []
   _formaPago:TipoFormaPago[] = []
   _ordenPagoModel:OrdenPago=new OrdenPago
@@ -57,6 +69,19 @@ export class PagoComponent implements OnInit{
   _modalFiltroCliente:FiltroCliente=new FiltroCliente
   blockLocalidad:number=0
   _localidad:Localidad[] = []
+  _resumenCajaModel:ResumenCaja=new ResumenCaja
+  flagGeneraPago: number = 0;
+  carId: number = 0;
+  efectivo = 0.0;
+  vuelto = 0.0;
+
+  //PARA CAR
+  
+
+  idEmpresaTk = GlobalSession.idEmpresa;
+  idSedeTk = GlobalSession.idSede;
+  usuarioTk = GlobalSession.usuario;
+  idUsuarioTk = GlobalSession.idUsuario;
 
 
 
@@ -90,14 +115,58 @@ export class PagoComponent implements OnInit{
     this.recaudacionService.dropdownTipoFormaPago().subscribe((respuesta) => {
       this._formaPago=respuesta.data
     })
-
+//this.idUsuarioTk!
+    this.recaudacionService.dropdownCar(this.idEmpresaTk!,this.idSedeTk!,"MIGRA").subscribe((respuesta) => {
+      this._car=respuesta.data
+    })
 
     
 
 
-    
+    this.formCar=true
 
   }
+
+  ResumenCaja(idCar:any){
+    this.recaudacionService.ResumenCaja({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,usuarioCreacion:this.usuarioTk,
+                                         idCar:idCar,fecha:this.fechActual}).subscribe((respuesta) => {
+      this._resumenCajaModel=respuesta.data
+    })
+  
+  }
+
+  //MODAL LOGIN PAGOS
+
+  validaLogin(){
+
+    if( this._ordenPagoModel.validaPass==undefined || this._ordenPagoModel.validaPass==null || this._ordenPagoModel.validaPass=="" ){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "Ingresar Contraseña",life: 3000});
+    return;
+    }
+
+    if( this._ordenPagoModel.idCar==undefined || this._ordenPagoModel.idCar==null || this._ordenPagoModel.idCar==0){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "Ingresar Car",life: 3000});
+    return;
+    }
+
+    this.carId=this._ordenPagoModel.idCar
+    this.ResumenCaja(this._ordenPagoModel.idCar)
+    
+
+    
+
+    this.formCar=false
+
+  }
+  
+  cancelarLogin(){
+
+  }
+
 
 
   recibirBusqueda(x: any) {
@@ -121,6 +190,8 @@ export class PagoComponent implements OnInit{
             this._blockPrincipal=1
             this._ordenPagoModel.idPersona=null
             this.calcularTotal()
+            this._ordenPagoModel.idFormaPago=1
+            this.onChangeFormaPago(1)
             
         } else {
           this.funcionesService.popupError("Búsqueda sin información", "");
@@ -148,6 +219,9 @@ export class PagoComponent implements OnInit{
               this._blockPrincipal=1
               this._ordenPagoModel.idPersona=null
               this.calcularTotal()
+              this.flagGeneraPago=0
+              this._ordenPagoModel.idFormaPago=1
+              this.onChangeFormaPago(1)
 
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
@@ -155,11 +229,47 @@ export class PagoComponent implements OnInit{
             } else {
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._blockPrincipal=0
+              this.flagGeneraPago=0
             }
           },
           error: (err) => {
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._blockPrincipal=0
+            this.flagGeneraPago=0
+          }
+        }); 
+  }
+
+  BusquedaOrdenDirectaCaja(){
+
+    this._modalFiltro.idEmpresa=1
+    this._modalFiltro.idSede=1
+
+    this.recaudacionService.ConsultaDeudaPagoCaja(this._modalFiltro).subscribe({
+          next: (data) => {
+            if (data.data != null) {
+              this._ordenPagoModel = data.data;
+              this._deudaList= data.data.deudaList
+              this._blockPrincipal=1
+              this._ordenPagoModel.idPersona=null
+              this.calcularTotal()
+              this.flagGeneraPago=1
+              this._ordenPagoModel.idFormaPago=1
+              this.onChangeFormaPago(1)
+
+              if(this._ordenPagoModel.mensaje!=null){
+                this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
+              }
+            } else {
+              this.funcionesService.popupError("Búsqueda sin información", "");
+              this._blockPrincipal=0
+              this.flagGeneraPago=0
+            }
+          },
+          error: (err) => {
+            this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+            this._blockPrincipal=0
+            this.flagGeneraPago=0
           }
         }); 
   }
@@ -167,11 +277,12 @@ export class PagoComponent implements OnInit{
 
   onRowSelectOrden(x:any){
 
+    this._modalFiltro.nroSuministro=null
     this._modalFiltro.idEmpresa=x.idEmpresa
     this._modalFiltro.idSede=x.idSede
-    this._modalFiltro.nroSuministro=x.nroSuministro
+    this._modalFiltro.nroOrdenPago=x.nroOrdenPago
 
-    this.recaudacionService.ConsultaDeudaPago(this._modalFiltro).subscribe({
+    this.recaudacionService.ConsultaDeudaPagoCaja(this._modalFiltro).subscribe({
           next: (data) => {
             if (data.data != null) {
               this._ordenPagoModel = data.data;
@@ -180,6 +291,9 @@ export class PagoComponent implements OnInit{
               this._ordenPagoModel.idPersona=null
               this.calcularTotal()
               this.dialogOrden=false
+              this.flagGeneraPago=1
+              this._ordenPagoModel.idFormaPago=1
+              this.onChangeFormaPago(1)
 
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
@@ -188,12 +302,14 @@ export class PagoComponent implements OnInit{
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._blockPrincipal=0
               this.dialogOrden=false
+              this.flagGeneraPago=0
             }
           },
           error: (err) => {
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._blockPrincipal=0
             this.dialogOrden=false
+            this.flagGeneraPago=0
           }
         }); 
 
@@ -241,17 +357,31 @@ export class PagoComponent implements OnInit{
     this._deudaList = this._deudaList ?? [];
     this._deudaList.push(deuda)
     this.calcularTotal()
+    
   }
 
 
   removeCate(idx:any){
     this._deudaList.splice(idx,1);
     this.calcularTotal()
+    this._ordenPagoModel.impFormaPago=this.funcionesService.roundToFix(parseFloat(this.totalMonto as any ),2)
   } 
+
 
   calcularTotal() {
     //this.totalMonto = this._deudaList.reduce((acc, item) => acc + item.impTotalMes, 0); LOQ UE TENIA INCIAL
-    this.totalMonto = (this._deudaList ?? []).reduce((acc, item) => acc + (item.impTotalMes || 0),0);
+    //this.totalMonto = this.funcionesService.roundToFix((this._deudaList ?? []).reduce((acc, item) => acc + (item.impTotalMes || 0),0),2);
+    
+    this.totalMonto = Number(
+      this.funcionesService.roundToFix(
+        (this._deudaList ?? []).reduce((acc, item) => acc + (item.impTotalMes || 0), 0),
+        2
+      )
+    );
+    
+
+    
+   this.efectivo=this.totalMonto
   }
 
   colateral(){
@@ -306,56 +436,186 @@ export class PagoComponent implements OnInit{
 
   }
 
-  guardar(){
-    this._ordenPagoModel.impTotal=this.totalMonto
-    this._ordenPagoModel.idSede=this.searchSede
-    this._ordenPagoModel.idEmpresa=this.searchEmp
-    this._ordenPagoModel.usuarioCreacion="CHIBELI"
-    
-    this.recaudacionService.GeneraOrdenPago(this._ordenPagoModel).subscribe({
-      next: (respuesta) => {
-        if (respuesta.success==true) {
-          this.panelBusqueda.limpiar();
-            this._blockPrincipal=0
-            let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
-            this.funcionesService.popupExitoCrud(mensajeAlert);
-            //this.funcionesService.popupExito("Confirmacion","El Registro se Genero Correctamente");
-            this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
-            /*this._ordenPagoModel = data.data;
-            this._deudaList= data.data.deudaList
-            this._blockPrincipal=1
-            this._ordenPagoModel.idPersona=null
-            this.calcularTotal()
-            
-            this.mensajeAlert="Solicitud Ingresada Nro <br><strong style='font-size: 35px; '>"+ this.codigoAp_Derivacion+ "</strong>"
-                     
-                          Swal.fire({
-                           icon: 'success',
-                           title: this.mensajeAlert, 
-                           showDenyButton: true,
-                           confirmButtonText: "Aceptar",
-                           denyButtonColor: ' #607D8B',
-                           denyButtonText: `Imprimir`,
-                           confirmButtonColor: '#03A9F4',
-                         }).then((result) => {
-                           if (result.isDenied) {
-                             this.printBarra(this.codigoAp_Derivacion)
-                             }
-                         })
+  validaForm(){
 
-            
-            
-            */           
-        } else {
-          this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
-          this._blockPrincipal=0
+    if( this._ordenPagoModel.idFormaPago==undefined || this._ordenPagoModel.idFormaPago==null || this._ordenPagoModel.idFormaPago==0 ){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "Ingresar Forma de Pago",life: 3000});
+    return;
+    }
+
+    if( this._ordenPagoModel.impFormaPago==undefined || this._ordenPagoModel.impFormaPago==null || this._ordenPagoModel.impFormaPago==""  ){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "Ingresar Importe de Pago",life: 3000});
+    return;
+    }
+
+
+    //this.efectivo=this.totalMonto
+    this.calcularVuelto()
+    this.dialogVuelto=true
+
+  }
+
+  calcularVuelto() {
+    const resultado = this.efectivo - this.totalMonto;
+    this.vuelto = Math.abs(resultado) < 0.001 ? 0 : resultado;
+  }
+
+  cancelarVuelto(){
+    
+    this.dialogVuelto=false
+    this.efectivo=this.totalMonto
+    this.vuelto=0.0 
+  }
+
+  pagarDeduda(){
+    
+   
+     if( this.efectivo! <this.totalMonto  ){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "El Importe debe ser mayor o igual que el Total",life: 3000});
+    return;
+    }
+    //this.funcionesService.popupConfirmacion("Anulacion","Desea Anular la Solicitud?","Anular").then((result)=>{
+      this.funcionesService.popupConfirmacion("Desea Realizar el Pago ?","","Pagar").then((result)=>{
+        if(result.isConfirmed){
+          this.dialogVuelto=false
+          this.guardar()
         }
-      },
-      error: (err) => {
-        this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
-        this._blockPrincipal=0
-      }
-    });
+      });
+  }
+
+  guardar(){
+
+    
+    this._ordenPagoModel.idSede=this.idSedeTk!
+    this._ordenPagoModel.idEmpresa=this.idEmpresaTk!
+    this._ordenPagoModel.usuarioCreacion=this.usuarioTk
+    this._ordenPagoModel.idCar=this.carId
+
+    
+    
+
+
+
+    if(this.flagGeneraPago==0){
+
+      this.recaudacionService.GeneraPagoCaja(this._ordenPagoModel).subscribe({
+        next: (respuesta) => {
+          if (respuesta.success==true) {
+              this._modalFiltro.nroOrdenPago=null
+              this._modalFiltro.nroSuministro=null
+              this._ordenPagoModel.flagEventual=0
+              this._ordenPagoModel.flagBarras=0
+              this.ResumenCaja(this._ordenPagoModel.idCar)
+              this._blockPrincipal=0
+              let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
+              
+              Swal.fire({
+                icon: 'success',
+                title: mensajeAlert, 
+                showDenyButton: true,
+                confirmButtonText: "Aceptar",
+                denyButtonColor: ' #607D8B',
+                denyButtonText: `Imprimir`,
+                confirmButtonColor: '#03A9F4',
+              }).then((result:any) => {
+                if (result.isConfirmed) {
+                  // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+                  this.inputSearch.input?.nativeElement.focus();
+                  this.inputSearch.input?.nativeElement.select();
+                }
+              
+                if (result.isDenied) {
+                  // Si el usuario hizo clic en "Imprimir"
+                  // this.printBarra(this.codigoAp_Derivacion);
+                }
+              });
+              
+              //this.funcionesService.popupExitoCrud(mensajeAlert);
+              /*this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
+                    
+              setTimeout(() => {
+                this.inputSearch.input?.nativeElement.focus();
+                this.inputSearch.input?.nativeElement.select();
+              }, 5000);*/
+
+          } else {
+            this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
+            this._blockPrincipal=0
+
+            setTimeout(() => {
+              this.inputSearch.input?.nativeElement.focus();
+              this.inputSearch.input?.nativeElement.select();
+            }, 100);
+          }
+        },
+        error: (err) => {
+          this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
+          this._blockPrincipal=0
+
+          setTimeout(() => {
+            this.inputSearch.input?.nativeElement.focus();
+            this.inputSearch.input?.nativeElement.select();
+          }, 100);
+        }
+      });
+    }else{
+      this.recaudacionService.RegistrarPagoxOrden(this._ordenPagoModel).subscribe({
+        next: (respuesta) => {
+          if (respuesta.success==true) {
+              this._modalFiltro.nroOrdenPago=null
+              this._modalFiltro.nroSuministro=null
+              this._ordenPagoModel.flagEventual=0
+              this._ordenPagoModel.flagBarras=0
+              this.ResumenCaja(this._ordenPagoModel.idCar)
+              this._blockPrincipal=0
+              let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
+              this.funcionesService.popupExitoCrud(mensajeAlert);
+              this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
+                    
+              setTimeout(() => {
+                this.inputSearch.input?.nativeElement.focus();
+                this.inputSearch.input?.nativeElement.select();
+              }, 100);
+
+          } else {
+            this._modalFiltro.nroOrdenPago=null
+            this._modalFiltro.nroSuministro=null
+            this._ordenPagoModel.flagEventual=0
+            this._ordenPagoModel.flagBarras=0
+            this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
+            this._blockPrincipal=0
+
+            setTimeout(() => {
+              this.inputSearch.input?.nativeElement.focus();
+              this.inputSearch.input?.nativeElement.select();
+            }, 100);
+
+          }
+        },
+        error: (err) => {
+          this._modalFiltro.nroOrdenPago=null
+          this._modalFiltro.nroSuministro=null
+          this._ordenPagoModel.flagEventual=0
+          this._ordenPagoModel.flagBarras=0
+          this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
+          this._blockPrincipal=0
+
+          setTimeout(() => {
+            this.inputSearch.input?.nativeElement.focus();
+            this.inputSearch.input?.nativeElement.select();
+          }, 100);
+
+        }
+      });
+    }
+    
+    
   }
 
 
@@ -387,6 +647,7 @@ export class PagoComponent implements OnInit{
 
   onRowSelectCliente(x:any){
 
+    this._modalFiltro.nroOrdenPago=null
     this._modalFiltro.idEmpresa=x.idEmpresa
     this._modalFiltro.idSede=x.idSede
     this._modalFiltro.nroSuministro=x.nroSuministro
@@ -400,6 +661,7 @@ export class PagoComponent implements OnInit{
               this._ordenPagoModel.idPersona=null
               this.calcularTotal()
               this.dialogCliente=false
+              this.flagGeneraPago=0
 
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
@@ -408,15 +670,27 @@ export class PagoComponent implements OnInit{
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._blockPrincipal=0
               this.dialogCliente=false
+              this.flagGeneraPago=0
             }
           },
           error: (err) => {
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._blockPrincipal=0
             this.dialogCliente=false
+            this.flagGeneraPago=0
           }
         }); 
 
+
+  }
+
+  onChangeFormaPago(x:any){
+
+    if(x==1){
+      this._ordenPagoModel.impFormaPago= this.funcionesService.roundToFix(parseFloat(this.totalMonto as any),2)   
+    }else{
+      this._ordenPagoModel.impFormaPago=this.funcionesService.roundToFix(parseFloat(this.totalMonto as any),2)   
+    }
 
   }
 
@@ -443,5 +717,8 @@ export class PagoComponent implements OnInit{
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
+
+
 
 }

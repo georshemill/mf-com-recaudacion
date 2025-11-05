@@ -289,6 +289,12 @@ export class OrdenPago{
 	nroOrdenPago:number | null = null;
 	mensaje!:string
 	flagBarras: 0 | 1 = 0;
+    idFormaPago:number | null = null;
+    impFormaPago:string | null = null;
+    nroDocFpago: string | null = null;
+    usuarioAutorizador: string | null = null;
+    idCar:number | null = null;
+	validaPass: string | null = null;
 
 	
 }

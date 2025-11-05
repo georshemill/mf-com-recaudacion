@@ -77,6 +77,8 @@ import { Comprobante } from '../models/Comprobante';
 import { SerieComprobante } from '../models/SerieComprobante';
 import { BusquedaOrdenPago } from '../models/BusquedaOrdenPago';
 import { TipoFormaPago } from '../models/TipoFormaPago';
+import { Car } from '../models/Car';
+import { ResumenCaja } from '../models/ResumenCaja';
 
 
 
@@ -464,10 +466,31 @@ export class RecaudacionService {
         return this.http.post<ListResponse<OrdenPago>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ConsultaDeudaPago`,model);
     }
 
+    GeneraPagoCaja(model: OrdenPago): Observable<Mensaje> {
+        return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/RegistroPagoCaja`, model);
+    }
+
+    dropdownCar(idEmpresa: number,idSede:number,user: string): Observable<ListResponse<Car[]>> {
+        return this.http.get<ListResponse<Car[]>>(`https://gateway1.emapasalas.net.pe/Car/dropdown/${idEmpresa}/${idSede}/${user}`);
+    }
+
+    ConsultaDeudaPagoCaja(model: OrdenPago): Observable<ListResponse<OrdenPago>> {
+        return this.http.post<ListResponse<OrdenPago>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ConsultaDeudaPagoCaja`,model);
+    }
+
+    ResumenCaja(model:Partial<ResumenCaja>): Observable<ListResponse<ResumenCaja>> {
+        return this.http.post<ListResponse<ResumenCaja>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ResumenCaja`,model);
+    }
+
+    RegistrarPagoxOrden(model: OrdenPago): Observable<Mensaje> {
+        return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/RegistrarPagoxOrden`, model);
+    }
+
 
     
 
-    //GESTION DE CLIENTE
+
+    //GESTION DE CLIENTE  http://localhost:8061/Recaudacion/Pagos/AnulaPagoxOrden
 
     crudGestionClientes(model: Personas,op: number): Observable<Mensaje> {
         return this.http.post<Mensaje>(`https://gateway8055.emapasalas.net.pe/CatastroClientes/GestionPersonas/${op}`, model);

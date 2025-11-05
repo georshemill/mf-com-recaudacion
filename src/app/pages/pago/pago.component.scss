@@ -167,4 +167,134 @@
     font-size: 14px !important;    /* ícono más chico */
   }
   
+
+  //PARA CARDS DE PAGOS 
+
+  .card-container {
+    padding: 2rem;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+  }
+
+  /*:host ::ng-deep .green-card {
+    background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  :host ::ng-deep .green-card .p-card-title {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  :host ::ng-deep .green-card .p-card-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  :host ::ng-deep .green-card .p-card-content {
+    color: white;
+    padding: 1.5rem;
+  }
+
+  :host ::ng-deep .green-card .p-card-footer {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 1rem 1.5rem;
+  }
+
+  :host ::ng-deep .green-card img {
+    border-radius: 12px 12px 0 0;
+  }*/
+
+  :host ::ng-deep .green-card {
+    background: linear-gradient(135deg, #43a047 0%, #66bb6a 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  :host ::ng-deep .green-card .p-card-title {
+    color: white;
+  }
+
+  :host ::ng-deep .green-card .p-card-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  :host ::ng-deep .green-card .p-card-content {
+    color: white;
+    font-weight: 600;
+  }
+
+
+
+  
+  
+  //CARD AZUL
+  :host ::ng-deep .blue-card {
+    background: linear-gradient(135deg, #74c5de 0%, #74c5de 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  :host ::ng-deep .blue-card .p-card-title {
+    color: white;
+  }
+
+  :host ::ng-deep .blue-card .p-card-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  :host ::ng-deep .blue-card .p-card-content {
+    color: white;
+    font-weight: 600;
+  }
+
+  //CARD ROJO
+
+  :host ::ng-deep .red-card {
+    background: linear-gradient(135deg, #f13333 0%, #f13333 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  :host ::ng-deep .red-card .p-card-title {
+    color: white;
+  }
+
+  :host ::ng-deep .red-card .p-card-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  :host ::ng-deep .red-card .p-card-content {
+    color: white;
+    font-weight: 600;
+  }
+
+  //AMARILLO
+
+  :host ::ng-deep .amarillo-card {
+    background: linear-gradient(135deg, #eee781 0%, #eee781 100%);
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+
+  
+
   
