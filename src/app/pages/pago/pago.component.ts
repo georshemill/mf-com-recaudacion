@@ -31,14 +31,13 @@ type IntBooleanKeys<T> = {
 
 @Component({
   selector: 'app-pago',
-  imports: [ParametrosModule,PanelBusquedaComponent],
+  imports: [ParametrosModule],
   templateUrl: './pago.component.html',
   styleUrl: './pago.component.scss',
   providers: [RecaudacionService]
 })
 export class PagoComponent implements OnInit{
   @ViewChild('inputSearch') inputSearch!: InputNumber;
-  @ViewChild(PanelBusquedaComponent) panelBusqueda!: PanelBusquedaComponent;
 
   //fechActual = new Date().toISOString().slice(0, 10);
   fechActual = new Date().toLocaleDateString('en-CA');
@@ -120,8 +119,8 @@ export class PagoComponent implements OnInit{
     this.recaudacionService.dropdownTipoFormaPago().subscribe((respuesta) => {
       this._formaPago=respuesta.data
     })
-//this.idUsuarioTk!
-    this.recaudacionService.dropdownCar(this.idEmpresaTk!,this.idSedeTk!,"MIGRA").subscribe((respuesta) => {
+
+    this.recaudacionService.dropdownCar(this.idEmpresaTk!,this.idSedeTk!,this.usuarioTk).subscribe((respuesta) => {
       this._car=respuesta.data
     })
 
@@ -166,9 +165,7 @@ export class PagoComponent implements OnInit{
           this.formCar=false
             
         } else {
-          this.messageService.add({
-            severity: "warn",summary: "Aviso de usuario",
-            detail: "Contraseña Incorrecta",life: 3000});
+          this.messageService.add({severity: "warn",summary: "Aviso de usuario",detail: "Contraseña Incorrecta",life: 3000});
           return;
         }
       },

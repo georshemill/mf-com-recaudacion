@@ -1,0 +1,267 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">💸</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-2xl font-semibold">ANULACIÓN</div>
+                <div class="font-bold text-primary">Gestion Anulación de Pagos</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <p-fieldset legend="BUSQUEDA"><!--class="flex justify-center gap-3 mt-4"-->
+            <div class="grid grid-cols-12 gap-4 ">
+                <div class="col-span-12 md:col-span-3 md:col-start-4">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body" [(ngModel)]="_anulacionModel.fechaEmision"
+                                       (onSelect)="onFechaEmisionChange($event)"  styleClass="w-full"/>
+                        <label >Fecha de Emisión</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-3">
+                    <p-floatlabel variant="on">
+                        <input pInputText class="w-full" [(ngModel)]="usuarioTk" disabled/>
+                        <label >Usuario </label>
+                    </p-floatlabel>
+                </div>
+            </div>
+        </p-fieldset>
+        <br>
+        <p-tabs value="0">
+            <p-tablist>
+                @for (tab of tabs; track tab.value) {
+                    <p-tab [value]="tab.value" class="flex items-center !gap-2 text-inherit"><i [class]="tab.icon"></i>{{ tab.title }}</p-tab>
+                }
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <div class="card">
+                        <p-table #dtPagos class="tabla-1" [value]="_listXAnulacion" dataKey="nroSuministro" [tableStyle]="{ 'min-width': '60rem' }"
+                                [globalFilterFields]="['from','nroPago', 'propietario','nroSuministro','impTotal']" 
+                                [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)" size="small">
+
+                            <ng-template #caption>
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <!--<h5 class="text-1xl font-semibold text-800">LISTADO DE PAGOS</h5>-->
+                                    <div class="flex gap-2 items-center">
+                                        <p-button label="Expandir Detalle" icon="pi pi-plus" text (onClick)="expandAll()" />
+                                        <p-button label="Reducir Detalle" icon="pi pi-minus" text (onClick)="collapseAll()" />
+                                    </div>
+                                    <div class="flex flex-col md:flex-row gap-4">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon >
+                                                <i class="pi pi-search" ></i>
+                                            </p-inputgroup-addon>
+                                            <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterPagos(dtPagos, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
+                            </ng-template>
+
+                            <!-- Cabecera -->
+                            <ng-template #header>
+                                <tr>
+                                <th style="width: 5rem"></th>
+                                <th >Nro Pago</th>
+                                <th style="text-align: center;">Nro Suministro</th>
+                                <th style="text-align: center;">Propietario</th>
+                                <th style="text-align: center;">Dia Pago</th>
+                                <th class="text-center">Importe Total</th>
+                                <th style="text-align: center;">Accion</th>
+                                </tr>
+                            </ng-template>
+                            <!-- Cuerpo -->
+                            <ng-template #body let-anulados let-expanded="expanded">
+                                <tr>
+                                <td style="width: 4%">
+                                    <p-button type="button"  [pRowToggler]="anulados"  [text]="true" size="small" 
+                                    severity="secondary" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                    />
+                                </td>
+                                <td style="width: 5%">{{ anulados.nroPago }}</td>
+                                <td style="text-align: center;width: 10%">
+                                    {{ anulados.nroSuministro }}
+                                </td>
+                                <td style="text-align: left;width: 25%">
+                                    {{ anulados.propietario }}
+                                </td>
+                                <td style="text-align: center;width: 10%">
+                                    {{ anulados.diaPago | date: 'yyyy-MM-dd HH:mm:ss' }}
+                                </td>
+                                <td style="text-align: right;width: 6%">
+                                    {{ anulados.impTotal | number: '1.2-2' }}
+                                </td>
+                                <td style="text-align: center;width: 8%"> 
+                                    <i class="pi pi-trash" style="font-size: 1.2rem;color: rgb(235, 25, 17); cursor:pointer;"
+                                        (click)="onRowAnulacion(anulados)"></i>
+                                </td>
+                                </tr>
+                            </ng-template>
+                            <!-- Fila expandida (detalle) -->
+                            <ng-template #expandedrow let-anulados>
+                                <tr>
+                                <td colspan="7">
+                                    <div class="p-4">
+                                    <h5>DETALLE DE PAGO</h5>
+                                    <p-table [value]="anulados.detalleList" dataKey="nroSuministro" class="tabla-2">
+                                        <ng-template #header>
+                                        <tr>
+                                            <th>Descripción</th>
+                                            <th>SerieDoc</th>
+                                            <th>NroDoc</th>
+                                            <th>Imp. TotalMes</th>
+                                        </tr>
+                                        </ng-template>
+                                        <ng-template #body let-det>
+                                        <tr>
+                                            <td>{{ det.descripcion }}</td>
+                                            <td>{{ det.serieDoc }}</td>
+                                            <td>{{ det.nroDoc }}</td>
+                                            <td class="text-right">{{ det.impTotalMes | number: '1.2-2' }}</td>
+                                        </tr>
+                                        </ng-template>
+                                    </p-table>
+                                    </div>
+                                </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                    <div class="card">
+                        <p-table #dt [value]="_listAnulados"  [rows]="20" [globalFilterFields]="['from', 'title', 'propietario','nrosuministro']" scrollable="true" scrollHeight="600px"
+                            [paginator]="true"[rowsPerPageOptions]="[10, 20, 30]"[rowHover]="true"dataKey="id" [showCurrentPageReport]="true" resizableColumns="true" class="tabla-3"
+                            size="small" currentPageReportTemplate="Se Encontraron {first} de {last} Total {totalRecords} Registros" >
+                            <ng-template #caption>
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <h5 class="text-1xl font-semibold text-900">LISTADO DE ANULACION</h5>
+                                    <div class="flex gap-2 items-center">
+                                    </div>
+                                    <div class="flex flex-col md:flex-row gap-4">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon >
+                                                <i class="pi pi-search" ></i>
+                                            </p-inputgroup-addon>
+                                            <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterAnulados(dt, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th style="text-align: center;">Nro Pago</th>
+                                    <th style="text-align: center;" >Nro Suministro</th>
+                                    <th style="text-align: center;">Propietario</th>
+                                    <th style="text-align: center;">Dia Pago</th>
+                                    <th class="text-center" >Importe Total</th>
+                                    <th style="text-align: center;" >Dia Anulacion</th>
+                                    <th style="text-align: center;" >Motivo Anulacion</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-anulados>
+                                <tr  >
+                                    <td  style="text-align: center;">
+                                        {{anulados.nroPago}}
+                                    </td>
+                                    <td style="text-align: center;">  
+                                        {{anulados.nroSuministro}}
+                                    </td>
+                                    <td class="text-center" >
+                                        {{anulados.propietario}}
+                                    </td>
+                                    <td style="text-align: center;">  
+                                        {{anulados.diaPago | date: 'yyyy-MM-dd HH:mm:ss'}}
+                                    </td>
+                                    <td style="text-align: right;width: 6%">
+                                        {{anulados.impTotal | number:'1.2-2'}}
+                                    </td>
+                                    <td style="text-align: center;">  
+                                        {{anulados.fechaAnulacion | date: 'yyyy-MM-dd HH:mm:ss'}}
+                                    </td>
+                                    <td style="text-align: center;">  
+                                        {{anulados.motivoAnulacion}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>
+
+
+<p-dialog  [(visible)]="dialogformCar" maskStyleClass="backdrop-blur-sm"  [modal]="true" [draggable]="false"
+            [resizable]="false" [closable]="false" styleClass="!border-0 !bg-transparent">
+    <ng-template #headless>
+        <div class="flex flex-col px-8 py-8 gap-6 rounded-2xl mx-auto" style="width: 400px; border-radius: 12px;
+                     background-image: radial-gradient(circle at left top, rgb(129 133 153), rgb(61 117 199));" >
+
+            <div class="flex justify-center gap-3 mb-6">
+                <i class="pi pi-user text-3xl text-primary-50"></i>
+                <h2 class="text-xl font-semibold text-primary-50">Acceso CAR</h2>
+            </div>
+
+            <div class="flex flex-col gap-5">
+                <p-floatlabel variant="on" class="w-full">
+                    <input pInputText type="password" [(ngModel)]="_anulacionModel.validaPass"
+                            class="!bg-white/20 !border-0 !px-5 !py-3 !text-primary-50 w-full rounded-lg" />
+                    <label>Confirmar Contraseña</label>
+                </p-floatlabel>
+                <p-floatlabel variant="on" class="w-full">
+                    <p-select [options]="_car"  optionLabel="descripcion"  optionValue="idCar"
+                            filterBy="descripcion"  [(ngModel)]="_anulacionModel.idCar" [filter]="true"
+                            appendTo="body"class="w-full !bg-white/20 !border-0 !text-primary-50 rounded-lg" >
+                    </p-select>
+                    <label>CAR</label>
+                </p-floatlabel>
+                <div class="flex justify-center gap-3 mt-6">
+                    <p-button label="Ingresar" [text]="true" (onClick)="validaLogin()"
+                        styleClass="!px-5 !py-2 !text-primary-50 !border !border-white/30 hover:!bg-white/10"/>
+                    <p-button label="Cancelar" [text]="true" (onClick)="cancelarLogin()"
+                        styleClass="!px-5 !py-2 !text-primary-50 !border !border-white/30 hover:!bg-white/10" />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+<!--DIALOG ANULACION-->
+<p-dialog header="ANULACION" [closable]="false" [(visible)]="dialogAnulacion" [modal]="true"  
+        [style]="{ width: '600px' }" [draggable]="false" [resizable]="false">
+<br>
+    <div class="flex flex-col gap-3 p-3">
+        <div class="grid grid-cols-12 gap-4 ">
+            <div class="col-span-12 md:col-span-4">
+                <p-floatlabel variant="on">
+                    <input pInputText class="w-full" [(ngModel)]="_anulacionModel.nroPago" disabled/>
+                    <label >Nro Pago</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4">
+                <p-floatlabel variant="on">
+                    <input pInputText class="w-full" [(ngModel)]="_anulacionModel.nroSuministro" disabled/>
+                    <label >Nro Suministro</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4">
+                <p-floatlabel variant="on">
+                    <input pInputText class="w-full" [(ngModel)]="_anulacionModel.impTotalAnula" disabled/>
+                    <label >Importe Total</label>
+                </p-floatlabel>
+            </div>
+        </div>
+        <div class="field">
+            <p-floatlabel variant="on">
+                <textarea pTextarea id="over_label" rows="5" cols="30" style="resize: none" 
+                          [(ngModel)]="_anulacionModel.motivoAnulacion" class="w-full" ></textarea>
+                <label>Motivo de Anulacion</label>
+            </p-floatlabel>
+        </div>
+        <div class="flex justify-center gap-3 mt-4"><!--  -->
+            <p-button  label="Guardar" icon="pi pi-save" severity="success" (onClick)="genAnulacion()" ></p-button>
+            <p-button label="Cancelar" icon="pi pi-times" severity="danger" (onClick)="dialogAnulacion=false"></p-button>
+        </div>
+    </div>
+</p-dialog>

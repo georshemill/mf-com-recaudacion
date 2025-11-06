@@ -24,11 +24,12 @@ export const routes: Routes = [
           import('./pages/pago/pago.component').then((m) => m.PagoComponent),
       },
       {
-        path: 'comercial/catastro/GestionConexion',
+        path: 'comercial/recaudacion/AnulacionPago',
         loadComponent: () =>
-          import('./pages/catastro/gestion-conexiones/gestion-conexiones.component').then((m) => m.GestionConexionComponent),
+          import('./pages/anulacion/anulacion.component').then((m) => m.AnulacionComponent),
       },
-      {
+
+      /*{
         path: 'comercial/catastro/OrdenTrabajo',
         loadComponent: () =>
           import('./pages/catastro/orden-trabajo/orden-trabajo.component').then((c) => c.OrdenTrabajoComponent),
@@ -38,16 +39,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/catastro/horario-abastecimiento/horario-abastecimiento.component').then((c) => c.HorarioAbastecimientoComponent),
       },
-      /*{
-        path: 'comercial/catastro/SolicitudConexion',
-        loadComponent: () =>
-          import('./pages/presupuesto/solicitud-conexion/solicitud-conexion.component').then((c) => c.SolicitudConexionComponent),
-      },*/
       {
         path: 'comercial/catastro/PanelBusqueda',
         loadComponent: () =>
           import('./shared/panel-busqueda/panel-busqueda.component').then((c) => c.PanelBusquedaComponent),
-      },
+      },*/
       
 
      

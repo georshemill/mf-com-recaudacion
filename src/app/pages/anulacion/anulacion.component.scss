@@ -1,0 +1,38 @@
+::ng-deep .p-dialog-header {
+    background: #0a89c7 !important;
+    color: #f6f8f9 !important;
+    padding: 0.75rem;
+  }
+
+:host ::ng-deep   .p-inputtext:disabled {
+    background:#c2ddf5;
+    color: #070606;
+    opacity: 4.38;
+  }
+  
+  
+
+/* Estilo para la primera tabla */
+::ng-deep .tabla-1 .p-datatable-thead > tr > th {
+    background-color: #13aadb !important; /* Fondo turquesa para la primera tabla */
+    color: #fafafa !important; /* Texto blanco */
+  }
+  
+  /* Estilo para la segunda tabla */
+  ::ng-deep .tabla-2 .p-datatable-thead > tr > th {
+    background-color: #6ca4b8 !important; /* Fondo naranja para la segunda tabla #8cbccd*/
+    color: #fafafa !important; /* Texto blanco */
+  }
+
+  ::ng-deep .tabla-2 .p-datatable-tbody > tr > td {
+    color: #333333 !important;       /* Texto gris oscuro */
+    background-color: #f2f2f2 !important;  /* Fondo gris claro */
+  }
+
+  ::ng-deep .tabla-3 .p-datatable-thead > tr > th {
+    background-color: #ff3f3f !important; /* Fondo turquesa para la primera tabla */
+    color: #fafafa !important; /* Texto blanco */
+  }
+  
+ 
+  

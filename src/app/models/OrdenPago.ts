@@ -295,6 +295,10 @@ export class OrdenPago{
     usuarioAutorizador: string | null = null;
     idCar:number | null = null;
 	validaPass: string | null = null;
-
+	//ANULACION
+	nroPago:number | null = null;
+	motivoAnulacion: string | null = null;
+	impTotalAnula: string | null = null;
+	fechaEmision: string | null = null;
 	
 }

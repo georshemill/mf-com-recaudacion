@@ -1,15 +1,15 @@
 import { AuthAPI, OptionsAPI, JwtUtils, Session, StorageConstants } from '@test/mf-utils-modules';
 
 export class GlobalSession {
-  static get idEmpresa(): number | null {
+  static get idEmpresa(): number {
     return Session.get('IDEMPRESA');
   }
 
-  static get idSede(): number | null {
+  static get idSede(): number {
     return Session.get('IDSEDE');
   }
 
-  static get idUsuario(): number | null {
+  static get idUsuario(): number  {
     return Session.get('IDUSUARIO');
   }
 

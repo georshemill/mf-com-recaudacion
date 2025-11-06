@@ -80,6 +80,7 @@ import { TipoFormaPago } from '../models/TipoFormaPago';
 import { Car } from '../models/Car';
 import { ResumenCaja } from '../models/ResumenCaja';
 import { ValidaPassPago } from '../models/ValidaPassPago';
+import { BusquedAnulacionPago } from '../models/BusquedAnulacionPago';
 
 
 
@@ -489,6 +490,14 @@ export class RecaudacionService {
 
     ValidaLoginPago(model:Partial<ValidaPassPago>): Observable<Boolean> {
         return this.http.post<Boolean>(`https://gateway8079.emapasalas.net.pe/ValidaUser`, model);
+    }
+
+    ConsultaPagosAnulacion( model:Partial<BusquedAnulacionPago>): Observable<ListResponse<BusquedAnulacionPago[]>> {
+        return this.http.post<ListResponse<BusquedAnulacionPago[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/BusquedaPagoAnulacion`,model);
+    }
+
+    AnulaPagoxOrden(model: OrdenPago): Observable<Mensaje> {
+        return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/AnulaPagoxOrden`, model);
     }
 
 
