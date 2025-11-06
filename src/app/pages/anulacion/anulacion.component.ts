@@ -191,9 +191,9 @@ onRowCollapse(event: TableRowCollapseEvent) {
   }
 
   guardarAnulacion(){
-    this._anulacionModel.idSede=3//this.idSedeTk!
+    this._anulacionModel.idSede=this.idSedeTk!
     this._anulacionModel.idEmpresa=this.idEmpresaTk!
-    this._anulacionModel.usuarioCreacion="MIGRA"//this.usuarioTk
+    this._anulacionModel.usuarioCreacion=this.usuarioTk
     this._anulacionModel.idCar=this.carId
     this._anulacionModel.usuarioAutorizador="ADMIN"
 
