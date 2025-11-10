@@ -12,6 +12,7 @@ import { Table } from 'primeng/table';
 import { Personas } from '../../models/Personas';
 import { MessageService } from 'primeng/api';
 import { GlobalSession } from '../utils/globalSession'
+import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 
 
 
@@ -43,24 +44,18 @@ export class OrdenPagoComponent implements OnInit{
   datos: string=""
   campo: string=""
   parametro: string=""
-  searchSede!:number
-  searchEmp!:number
-
-  
-  idEmpresa = GlobalSession.idEmpresa;
-  idSede = GlobalSession.idSede;
-  usuario = GlobalSession.usuario;
-  idUsuario = GlobalSession.idUsuario;
   
 
-
-
-
+  
+  idEmpresaTk = GlobalSession.idEmpresa;
+  idSedeTk = GlobalSession.idSede;
+  usuarioTk = GlobalSession.usuario;
+  idUsuarioTk = GlobalSession.idUsuario;
+  
 
    constructor(private recaudacionService:RecaudacionService,
               private funcionesService:FuncionesService,
-              private messageService: MessageService
-    ) 
+              private messageService: MessageService) 
     {}
 
   ngOnInit(): void {
@@ -73,7 +68,7 @@ export class OrdenPagoComponent implements OnInit{
   }
 
   init(){
-    this.recaudacionService.ListColateral({idEmpresa:this.idEmpresa!,idSede:this.idSede!}).subscribe((respuesta) => {
+    this.recaudacionService.ListColateral({idEmpresa:this.idEmpresaTk!,idSede:this.idSedeTk!}).subscribe((respuesta) => {
       this._colateral=respuesta.data
     })
 
@@ -85,9 +80,8 @@ export class OrdenPagoComponent implements OnInit{
 
   recibirBusqueda(x: any) {
 
-    this.searchSede=x.idSede
-    this.searchEmp=1
-
+    showGlobalLoader()
+   
     if(x.nroSuministro>0){
       this._ordenPagoModel.idSede=x.idSede
       this._ordenPagoModel.idEmpresa=1
@@ -104,13 +98,16 @@ export class OrdenPagoComponent implements OnInit{
             this._blockPrincipal=1
             this._ordenPagoModel.idPersona=null
             this.calcularTotal()
+            hideGlobalLoader()
             
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Búsqueda sin información", "");
           this._blockPrincipal=0
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
         this._blockPrincipal=0
       }
@@ -186,6 +183,8 @@ export class OrdenPagoComponent implements OnInit{
       this.parametro=this.nrodocumento
     }
 
+    showGlobalLoader()
+
     this.recaudacionService.listarPersonas(this.campo, this.parametro).subscribe({
       next: (data) => {
         if (data.data.length != 0) {
@@ -193,8 +192,10 @@ export class OrdenPagoComponent implements OnInit{
           //this.nrodocumento = "";
           //this.datos = "";
           this.blockTable = 1;
+          hideGlobalLoader()
         } else {
           this.funcionesService.popupError("Búsqueda sin información", "");
+          hideGlobalLoader()
           this._personas = [];
           this.blockTable = 0;
           this.nrodocumento = "";
@@ -203,6 +204,7 @@ export class OrdenPagoComponent implements OnInit{
       },
       error: (err) => {
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+        hideGlobalLoader()
         this._personas = [];
         this.blockTable = 0;
         this.nrodocumento = "";
@@ -226,14 +228,17 @@ export class OrdenPagoComponent implements OnInit{
 
   guardar(){
     this._ordenPagoModel.impTotal=this.totalMonto
-    this._ordenPagoModel.idSede=this.searchSede
-    this._ordenPagoModel.idEmpresa=this.searchEmp
-    this._ordenPagoModel.usuarioCreacion="CHIBELI"
+    this._ordenPagoModel.idSede=this.idSedeTk
+    this._ordenPagoModel.idEmpresa=this.idEmpresaTk
+    this._ordenPagoModel.usuarioCreacion=this.usuarioTk
+
+    showGlobalLoader()     
     
     this.recaudacionService.GeneraOrdenPago(this._ordenPagoModel).subscribe({
       next: (respuesta) => {
         if (respuesta.success==true) {
           this.panelBusqueda.limpiar();
+            hideGlobalLoader()
             this._blockPrincipal=0
             let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
             this.funcionesService.popupExitoCrud(mensajeAlert);
@@ -265,16 +270,17 @@ export class OrdenPagoComponent implements OnInit{
             
             */           
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
           this._blockPrincipal=0
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
         this._blockPrincipal=0
       }
     });
   }
-
 
 }

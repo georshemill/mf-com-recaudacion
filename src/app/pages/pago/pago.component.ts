@@ -22,6 +22,7 @@ import { InputNumber } from 'primeng/inputnumber';
 import Swal from 'sweetalert2';
 import { ValidaPassPago } from '../../models/ValidaPassPago';
 import { Router } from '@angular/router';
+import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 
 
 
@@ -62,8 +63,6 @@ export class PagoComponent implements OnInit{
   datos: string=""
   campo: string=""
   parametro: string=""
-  searchSede!:number
-  searchEmp!:number
   _listBusquedaPago:BusquedaOrdenPago[] = []
   _modalFiltro:OrdenPago=new OrdenPago
   _filtroCliente:FiltroCliente[] = []
@@ -103,7 +102,7 @@ export class PagoComponent implements OnInit{
   
 
   init(){
-    this.recaudacionService.ListColateral({idEmpresa:1,idSede:1}).subscribe((respuesta) => {
+    this.recaudacionService.ListColateral({idEmpresa:this.idEmpresaTk,idSede:1}).subscribe((respuesta) => {
       this._colateral=respuesta.data
     })
 
@@ -112,7 +111,7 @@ export class PagoComponent implements OnInit{
     })
 
 
-    this.recaudacionService.ListDeudaPagos({idEmpresa:1,idSede:1}).subscribe((respuesta) => {
+    this.recaudacionService.ListDeudaPagos({idEmpresa:this.idEmpresaTk,idSede:1}).subscribe((respuesta) => {
       this._listBusquedaPago=respuesta.data
     })
 
@@ -123,9 +122,6 @@ export class PagoComponent implements OnInit{
     this.recaudacionService.dropdownCar(this.idEmpresaTk!,this.idSedeTk!,this.usuarioTk).subscribe((respuesta) => {
       this._car=respuesta.data
     })
-
-    
-
 
     this.formCar=true
 
@@ -187,12 +183,10 @@ export class PagoComponent implements OnInit{
 
   recibirBusqueda(x: any) {
 
-    this.searchSede=x.idSede
-    this.searchEmp=1
-
+    showGlobalLoader()
     if(x.nroSuministro>0){
-      this._ordenPagoModel.idSede=x.idSede
-      this._ordenPagoModel.idEmpresa=1
+      this._ordenPagoModel.idSede=this.idSedeTk
+      this._ordenPagoModel.idEmpresa=this.idEmpresaTk
       this._ordenPagoModel.nroSuministro=x.nroSuministro
     }else{
       this._blockPrincipal=0
@@ -208,13 +202,16 @@ export class PagoComponent implements OnInit{
             this.calcularTotal()
             this._ordenPagoModel.idFormaPago=1
             this.onChangeFormaPago(1)
+            hideGlobalLoader()
             
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Búsqueda sin información", "");
           this._blockPrincipal=0
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
         this._blockPrincipal=0
       }
@@ -223,9 +220,9 @@ export class PagoComponent implements OnInit{
 
 
   BusquedaOrdenDirecta(){
-
-    this._modalFiltro.idEmpresa=1
-    this._modalFiltro.idSede=1
+    showGlobalLoader()
+    this._modalFiltro.idEmpresa=this.idEmpresaTk
+    this._modalFiltro.idSede=this.idSedeTk
 
     this.recaudacionService.ConsultaDeudaPago(this._modalFiltro).subscribe({
           next: (data) => {
@@ -238,17 +235,20 @@ export class PagoComponent implements OnInit{
               this.flagGeneraPago=0
               this._ordenPagoModel.idFormaPago=1
               this.onChangeFormaPago(1)
+              hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
               }
             } else {
+              hideGlobalLoader()
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._blockPrincipal=0
               this.flagGeneraPago=0
             }
           },
           error: (err) => {
+            hideGlobalLoader()
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._blockPrincipal=0
             this.flagGeneraPago=0
@@ -257,9 +257,9 @@ export class PagoComponent implements OnInit{
   }
 
   BusquedaOrdenDirectaCaja(){
-
-    this._modalFiltro.idEmpresa=1
-    this._modalFiltro.idSede=1
+    showGlobalLoader()
+    this._modalFiltro.idEmpresa=this.idEmpresaTk
+    this._modalFiltro.idSede=this.idSedeTk
 
     this.recaudacionService.ConsultaDeudaPagoCaja(this._modalFiltro).subscribe({
           next: (data) => {
@@ -272,17 +272,20 @@ export class PagoComponent implements OnInit{
               this.flagGeneraPago=1
               this._ordenPagoModel.idFormaPago=1
               this.onChangeFormaPago(1)
+              hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
               }
             } else {
+              hideGlobalLoader()
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._blockPrincipal=0
               this.flagGeneraPago=0
             }
           },
           error: (err) => {
+            hideGlobalLoader()
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._blockPrincipal=0
             this.flagGeneraPago=0
@@ -293,6 +296,7 @@ export class PagoComponent implements OnInit{
 
   onRowSelectOrden(x:any){
 
+    showGlobalLoader()
     this._modalFiltro.nroSuministro=null
     this._modalFiltro.idEmpresa=x.idEmpresa
     this._modalFiltro.idSede=x.idSede
@@ -310,11 +314,13 @@ export class PagoComponent implements OnInit{
               this.flagGeneraPago=1
               this._ordenPagoModel.idFormaPago=1
               this.onChangeFormaPago(1)
+              hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
               }
             } else {
+              hideGlobalLoader()
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._blockPrincipal=0
               this.dialogOrden=false
@@ -322,6 +328,7 @@ export class PagoComponent implements OnInit{
             }
           },
           error: (err) => {
+            hideGlobalLoader()  
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._blockPrincipal=0
             this.dialogOrden=false
@@ -406,6 +413,8 @@ export class PagoComponent implements OnInit{
   }
 
   BusquedaPersona(){
+
+    showGlobalLoader()
     if(this.nrodocumento==undefined ||this.nrodocumento==""){
       this.campo="NombreCompleto"
       this.parametro=this.datos
@@ -417,11 +426,13 @@ export class PagoComponent implements OnInit{
     this.recaudacionService.listarPersonas(this.campo, this.parametro).subscribe({
       next: (data) => {
         if (data.data.length != 0) {
+          hideGlobalLoader()
           this._personas = data.data;
           //this.nrodocumento = "";
           //this.datos = "";
           this.blockTable = 1;
         } else {
+          hideGlobalLoader()
           this.funcionesService.popupError("Búsqueda sin información", "");
           this._personas = [];
           this.blockTable = 0;
@@ -430,6 +441,7 @@ export class PagoComponent implements OnInit{
         }
       },
       error: (err) => {
+        hideGlobalLoader()
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
         this._personas = [];
         this.blockTable = 0;
@@ -506,17 +518,11 @@ export class PagoComponent implements OnInit{
   }
 
   guardar(){
-
-    
+    showGlobalLoader()
     this._ordenPagoModel.idSede=this.idSedeTk!
     this._ordenPagoModel.idEmpresa=this.idEmpresaTk!
     this._ordenPagoModel.usuarioCreacion=this.usuarioTk
     this._ordenPagoModel.idCar=this.carId
-
-    
-    
-
-
 
     if(this.flagGeneraPago==0){
 
@@ -529,6 +535,7 @@ export class PagoComponent implements OnInit{
               this._ordenPagoModel.flagBarras=0
               this.ResumenCaja(this._ordenPagoModel.idCar)
               this._blockPrincipal=0
+              hideGlobalLoader()
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
               
               Swal.fire({
@@ -561,6 +568,7 @@ export class PagoComponent implements OnInit{
               }, 5000);*/
 
           } else {
+            hideGlobalLoader()
             this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
             this._blockPrincipal=0
 
@@ -571,6 +579,7 @@ export class PagoComponent implements OnInit{
           }
         },
         error: (err) => {
+          hideGlobalLoader()
           this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
           this._blockPrincipal=0
 
@@ -590,6 +599,7 @@ export class PagoComponent implements OnInit{
               this._ordenPagoModel.flagBarras=0
               this.ResumenCaja(this._ordenPagoModel.idCar)
               this._blockPrincipal=0
+              hideGlobalLoader()
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
               this.funcionesService.popupExitoCrud(mensajeAlert);
               this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
@@ -606,6 +616,7 @@ export class PagoComponent implements OnInit{
             this._ordenPagoModel.flagBarras=0
             this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
             this._blockPrincipal=0
+            hideGlobalLoader()
 
             setTimeout(() => {
               this.inputSearch.input?.nativeElement.focus();
@@ -621,6 +632,7 @@ export class PagoComponent implements OnInit{
           this._ordenPagoModel.flagBarras=0
           this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
           this._blockPrincipal=0
+          hideGlobalLoader()
 
           setTimeout(() => {
             this.inputSearch.input?.nativeElement.focus();
@@ -639,21 +651,24 @@ export class PagoComponent implements OnInit{
   //BUSQEUDA CLIENTE
 
   Busqueda(){
-
-    this._modalFiltroCliente.idEmpresa=1
+    showGlobalLoader()
+    this._modalFiltroCliente.idEmpresa=this.idEmpresaTk
 
     this.recaudacionService.BusquedaCliente(this._modalFiltroCliente).subscribe({
           next: (data) => {
             if (data.data.length != 0) {
               this._filtroCliente = data.data;
               this.blockTable = 1;
+              hideGlobalLoader()
             } else {
+              hideGlobalLoader()
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._filtroCliente = [];
               this.blockTable = 0;
             }
           },
           error: (err) => {
+            hideGlobalLoader()
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._filtroCliente = [];
             this.blockTable = 0;
@@ -663,6 +678,7 @@ export class PagoComponent implements OnInit{
 
   onRowSelectCliente(x:any){
 
+    showGlobalLoader()
     this._modalFiltro.nroOrdenPago=null
     this._modalFiltro.idEmpresa=x.idEmpresa
     this._modalFiltro.idSede=x.idSede
@@ -678,11 +694,13 @@ export class PagoComponent implements OnInit{
               this.calcularTotal()
               this.dialogCliente=false
               this.flagGeneraPago=0
+              hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
               }
             } else {
+              hideGlobalLoader()
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._blockPrincipal=0
               this.dialogCliente=false
@@ -690,6 +708,7 @@ export class PagoComponent implements OnInit{
             }
           },
           error: (err) => {
+            hideGlobalLoader()
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._blockPrincipal=0
             this.dialogCliente=false

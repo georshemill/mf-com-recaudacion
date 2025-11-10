@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { OrdenPago } from '../../models/OrdenPago';
 import { BusquedAnulacionPago } from '../../models/BusquedAnulacionPago';
 import { Table, TableRowCollapseEvent, TableRowExpandEvent } from 'primeng/table';
+import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 
 @Component({
   selector: 'app-anulacion',
@@ -85,29 +86,17 @@ collapseAll() {
     this.expandedRows = {};
 }
 
-  onRowExpand(event: TableRowExpandEvent) {
-    //this.messageService.add({ severity: 'info', summary: 'Product Expanded', detail: event.data.name, life: 3000 });
-}
-
-onRowCollapse(event: TableRowCollapseEvent) {
-    //this.messageService.add({ severity: 'success', summary: 'Product Collapsed', detail: event.data.name, life: 3000 });
-}
-
-
-
-
-
   //SE CIERRA TABLA
 
   listAnulacion(){
 
     this.recaudacionService.ConsultaPagosAnulacion({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:this._anulacionModel.fechaEmision!,
-                                                    usuarioCreacion:"MIGRA",nroPago:null, anulado:0}).subscribe((respuesta) => {
+                                                    usuarioCreacion:this.usuarioTk,nroPago:null, anulado:0}).subscribe((respuesta) => {
         this._listXAnulacion=respuesta.data
     })
 
     this.recaudacionService.ConsultaPagosAnulacion({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:this._anulacionModel.fechaEmision!,
-                                                    usuarioCreacion:"MIGRA",nroPago:null, anulado:1}).subscribe((respuesta) => {
+                                                    usuarioCreacion:this.usuarioTk,nroPago:null, anulado:1}).subscribe((respuesta) => {
         this._listAnulados=respuesta.data
     })
 
@@ -191,6 +180,7 @@ onRowCollapse(event: TableRowCollapseEvent) {
   }
 
   guardarAnulacion(){
+    showGlobalLoader()  
     this._anulacionModel.idSede=this.idSedeTk!
     this._anulacionModel.idEmpresa=this.idEmpresaTk!
     this._anulacionModel.usuarioCreacion=this.usuarioTk
@@ -204,16 +194,19 @@ onRowCollapse(event: TableRowCollapseEvent) {
           this.dialogAnulacion=false
           this._anulacionModel.motivoAnulacion=null
           this.listAnulacion()
+          hideGlobalLoader()
           this.funcionesService.popupExito("Aviso de Usuario", data.message);
         } else {
           this.dialogAnulacion=false
           this._anulacionModel.motivoAnulacion=null
+          hideGlobalLoader()
           this.funcionesService.popupError("Aviso de Usuario", data.message);
         }
       },
       error: (err) => {
         this.dialogAnulacion=false
         this._anulacionModel.motivoAnulacion=null
+        hideGlobalLoader()
         this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
       }
     });

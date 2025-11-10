@@ -4,6 +4,7 @@ declare module '@test/mf-utils-modules' {
   export const surfaceOptions: { name: string; palette: any }[];
   export const menuThemes: { name: string; color: string }[];
   export const topbarThemes: { name: string; color: string }[];
+  
   export const surfaces: {
     name: string;
     palette: Record<number | string, string>;
@@ -55,6 +56,9 @@ declare module '@test/mf-utils-modules' {
     const ACCESS_TOKEN: any;
     const MODULE_KEYS: any;
   }
+
+  export function showGlobalLoader(): void;
+export function hideGlobalLoader(): void;
 }
 
 declare module '@prisma/mf-shared-ui' {
