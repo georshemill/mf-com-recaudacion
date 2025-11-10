@@ -38,7 +38,7 @@
                     <div class="card">
                         <p-table #dtPagos class="tabla-1" [value]="_listXAnulacion" dataKey="nroSuministro" [tableStyle]="{ 'min-width': '60rem' }"
                                 [globalFilterFields]="['from','nroPago', 'propietario','nroSuministro','impTotal']" 
-                                [expandedRowKeys]="expandedRows" (onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)" size="small">
+                                [expandedRowKeys]="expandedRows"  size="small"><!--(onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)"-->
 
                             <ng-template #caption>
                                 <div class="flex flex-wrap items-center justify-between gap-3">
