@@ -6,6 +6,7 @@ import { FiltroCliente } from '../../models/FiltroCliente';
 import { FuncionesService } from '../../services/funciones.service';
 import { Table } from 'primeng/table';
 import { RecaudacionService } from '../../services/Recaudacion.service';
+import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 
 @Component({
   selector: 'app-panel-busqueda',
@@ -77,7 +78,7 @@ export class PanelBusquedaComponent implements OnInit  {
   }
 
   BusquedaDirecta(){
-
+    showGlobalLoader()
     this._modalFiltro.idEmpresa=1
 
     this.catastroService.BusquedaCliente(this._modalFiltro).subscribe({
@@ -119,7 +120,9 @@ export class PanelBusquedaComponent implements OnInit  {
             
               };
               this.BusquedaCliente.emit(resultado);
+              hideGlobalLoader()
             } else {
+              hideGlobalLoader()
               this.funcionesService.popupError("Búsqueda sin información", "");
               //this._filtroCliente = [];
               //this.blockTable = 0;
@@ -130,6 +133,7 @@ export class PanelBusquedaComponent implements OnInit  {
             }
           },
           error: (err) => {
+            hideGlobalLoader()
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             //this._filtroCliente = [];
             //this.blockTable = 0;
@@ -138,7 +142,7 @@ export class PanelBusquedaComponent implements OnInit  {
   }
 
   Busqueda(){
-
+    showGlobalLoader()
     this._modalFiltro.idEmpresa=1
 
     this.catastroService.BusquedaCliente(this._modalFiltro).subscribe({
@@ -146,13 +150,17 @@ export class PanelBusquedaComponent implements OnInit  {
             if (data.data.length != 0) {
               this._filtroCliente = data.data;
               this.blockTable = 1;
+              hideGlobalLoader()
+              
             } else {
+              hideGlobalLoader()
               this.funcionesService.popupError("Búsqueda sin información", "");
               this._filtroCliente = [];
               this.blockTable = 0;
             }
           },
           error: (err) => {
+            hideGlobalLoader()
             this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
             this._filtroCliente = [];
             this.blockTable = 0;

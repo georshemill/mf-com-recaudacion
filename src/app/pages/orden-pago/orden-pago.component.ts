@@ -80,7 +80,7 @@ export class OrdenPagoComponent implements OnInit{
 
   recibirBusqueda(x: any) {
 
-    showGlobalLoader()
+    //showGlobalLoader()
    
     if(x.nroSuministro>0){
       this._ordenPagoModel.idSede=x.idSede
