@@ -1,15 +1,18 @@
 <div class="card overflow-x-auto">
     <div class="flex justify-content-between align-items-center mb-4">
         <div class="flex gap-3 align-items-center">
-            <div class="text-4xl">🛠️</div>
+            <div class="text-3xl">🔖</div>
             <div class="flex flex-col gap-1 text-600">
-                <div class="text-2xl font-semibold">ORDEN DE PAGO</div>
+                <div class="text-xl font-semibold">ORDEN DE PAGO</div>
                 <div class="font-bold text-primary">Gestion de Pagos</div>
             </div>
         </div>
     </div>
     <div class="col-12">
-        <p-fieldset legend="BUSQUEDA">
+        <fieldset class="border border-gray-300 rounded-lg p-5">
+            <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+              Búsqueda Personalizada
+            </legend>
             <div class="grid grid-cols-12 gap-4 ">
                 <div class="col-span-12 md:col-span-2">
                     <app-panel-busqueda (BusquedaCliente)="recibirBusqueda($event)"></app-panel-busqueda>
@@ -100,12 +103,16 @@
                         </div>
                     </div>
                 </div>
-            </div>    
-        </p-fieldset>
+            </div>   
+        </fieldset>
+        <br>
         <div  class="col-span-12 md:col-span-12">
             <div class="grid grid-cols-12 gap-4 ">
                 <div  class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
-                    <p-fieldset legend="FACTURACION">
+                    <fieldset class="border border-gray-300 rounded-lg p-5">
+                        <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                          Facturacion
+                        </legend>
                         <div class="grid grid-cols-12 gap-4 ">
                             <div class="col-span-12 md:col-span-4">
                                 <p-floatlabel variant="on">
@@ -134,10 +141,13 @@
                                 </p-floatlabel>
                             </div>
                         </div>
-                    </p-fieldset>
+                    </fieldset>
                 </div>
                 <div  class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
-                    <p-fieldset legend="Acciones">
+                    <fieldset class="border border-gray-300 rounded-lg p-5">
+                        <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                          Acciones
+                        </legend>
                         <div class="grid grid-cols-12 gap-4 ">
                             <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
                                 <p-button label="Nuevo Colateral" icon="pi pi-plus" variant="outlined" severity="warn" (click)="colateral()"></p-button>
@@ -154,9 +164,8 @@
                             <div class="col-span-12 md:col-span-4 md:col-start-4" *ngIf="_blockPrincipal==1">
                                 <p-button label="Guardar Prepago" icon="pi pi-send" severity="info" (click)="guardar()"></p-button>
                             </div>
-            
                         </div>
-                    </p-fieldset>
+                    </fieldset>
                 </div>
             </div>
         </div>
@@ -223,11 +232,8 @@
                 </p-tabpanel>
             </p-tabpanels>
         </p-tabs>
-
-           
-    
     </div>
-</div>
+    
 <p-dialog header="Asignacion Colateral" [(visible)]="dialogColateral"  modal="modal" showEffect="fade" dismissableMask="true"  position="left" 
         draggable="false"  resizable="false" [style]="{height:'1100px',width:'450px'}" contentStyleClass="dialog-content">
     
@@ -242,8 +248,7 @@
                   </p-inputgroup>
               </div>
           </div>
-      </ng-template>
-
+      </ng-template>¡
       <ng-template pTemplate="header">
           <tr>
               <th class="text-center">ID</th>
@@ -270,29 +275,32 @@
         
         <div class="col-12">
             <div class="card">
-                <p-fieldset legend="Busqueda por Datos de Usuario">
-                    <div class="grid grid-cols-12 gap-4">
-                        <div class="col-span-12 md:col-span-12 d-flex justify-content-center md:col-start-2">
-                            <div class="grid grid-cols-12 gap-4">
-                              <div class="col-span-12 md:col-span-3">
-                                  <p-floatlabel variant="on">
-                                      <input pInputText class="w-full" (keydown.enter)="BusquedaPersona()"  [(ngModel)]="nrodocumento" (input)="datos = '';" />
-                                      <label >Nro Documento</label>
-                                  </p-floatlabel>
-                              </div>
-                              <div class="col-span-12 md:col-span-5">
-                                  <p-floatlabel variant="on">
-                                      <input  pInputText  class="w-full" [(ngModel)]="datos" (keydown.enter)="BusquedaPersona()"  (input)="nrodocumento = '';datos = (datos || '').toUpperCase()"/>
-                                      <label >Datos Personales</label>
-                                  </p-floatlabel>
-                              </div>
-                              <div class="col-span-12 md:col-span-2">
-                                  <button pButton pRipple icon="pi pi-search"  severity="info" (click)="BusquedaPersona()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
-                              </div>
+                    <fieldset class="border border-gray-300 rounded-lg p-5"><!--para usar con  scss class="fieldset border rounded-lg p-5"-->
+                        <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                          Búsqueda por Datos de Usuario
+                        </legend>
+                        <div class="grid grid-cols-12 gap-4">
+                            <div class="col-span-12 md:col-span-12 d-flex justify-content-center md:col-start-2">
+                                <div class="grid grid-cols-12 gap-4">
+                                <div class="col-span-12 md:col-span-3">
+                                    <p-floatlabel variant="on">
+                                        <input pInputText class="w-full" (keydown.enter)="BusquedaPersona()"  [(ngModel)]="nrodocumento" (input)="datos = '';" />
+                                        <label >Nro Documento</label>
+                                    </p-floatlabel>
+                                </div>
+                                <div class="col-span-12 md:col-span-5">
+                                    <p-floatlabel variant="on">
+                                        <input  pInputText  class="w-full" [(ngModel)]="datos" (keydown.enter)="BusquedaPersona()"  (input)="nrodocumento = '';datos = (datos || '').toUpperCase()"/>
+                                        <label >Datos Personales</label>
+                                    </p-floatlabel>
+                                </div>
+                                <div class="col-span-12 md:col-span-2">
+                                    <button pButton pRipple icon="pi pi-search"  severity="info" (click)="BusquedaPersona()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                                </div>
+                                </div>
                             </div>
-                          </div>
-                    </div>
-                </p-fieldset>
+                        </div>
+                </fieldset>
                 <p-tabs value="0" *ngIf="blockTable==1">
                     <p-tablist>
                         <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado Personas</p-tab>
