@@ -108,7 +108,7 @@ export class OrdenPagoComponent implements OnInit{
       },
       error: (err) => {
         hideGlobalLoader()
-        this.funcionesService.popupError("Búsqueda sin información", "Intente nuevamente");
+        this.funcionesService.popupError("Error", err);
         this._blockPrincipal=0
       }
     });

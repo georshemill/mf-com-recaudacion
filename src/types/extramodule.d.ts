@@ -58,7 +58,7 @@ declare module '@test/mf-utils-modules' {
   }
 
   export function showGlobalLoader(): void;
-export function hideGlobalLoader(): void;
+  export function hideGlobalLoader(): void;
 }
 
 declare module '@prisma/mf-shared-ui' {
