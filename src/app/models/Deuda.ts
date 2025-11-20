@@ -24,4 +24,9 @@ export class Deuda{
     impTotalMes:number| 0 = 0;
     flagNoFacturado:boolean | false = false;
     idConcepto:number| null = null;
+    //PARA INSERTAR UN CONCEPTO
+    impIgv:number| 0 = 0;
+    impTotal:number| 0 = 0;
+	baseImponible:number| 0 = 0;
+    flagEditable:boolean | false = false;
 }

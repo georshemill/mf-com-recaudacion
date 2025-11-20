@@ -38,6 +38,8 @@ export class OrdenPagoComponent implements OnInit{
   _ordenPagoModel:OrdenPago=new OrdenPago
   _deudaList:Deuda[] = []
   totalMonto: number = 0;
+  totalIGV: number = 0;
+  totalBase: number = 0;
   _personas:Personas[] = []
   blockTable:number=0
   nrodocumento: string=""
@@ -94,7 +96,8 @@ export class OrdenPagoComponent implements OnInit{
       next: (data) => {
         if (data.data != null) {
             this._ordenPagoModel = data.data;
-            this._deudaList= data.data.deudaList
+            //this._deudaList= data.data.deudaList
+            this._deudaList = data.data.deudaList.map(x => ({ ...x, flagEditable: false }));
             this._blockPrincipal=1
             this._ordenPagoModel.idPersona=null
             this.calcularTotal()
@@ -144,18 +147,28 @@ export class OrdenPagoComponent implements OnInit{
 
   onRowSelect(x:any){
     let deuda = new Deuda;
-    /*deuda.descripcion = x.data.descripcion
-    deuda.impTotalMes = x.data.baseImponible
-    deuda.flagEnReclamo = false     CON SELECT A LATABLA
-    deuda.flagNoFacturado = false*/
+
+    const duplicado = this._deudaList.some((f) => f.idConcepto === x.idConcepto);
+    if (duplicado) {
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "El Registro ya se encuentra Asignado",life: 3000});
+        return;
+    }
+
+    //deuda.descripcion = x.data.descripcion
+    deuda.flagEditable = x.flagEditable
+    deuda.impIgv = x.impIgv
+    deuda.baseImponible = x.baseImponible
     deuda.descripcion = x.descripcion
-    deuda.impTotalMes = x.baseImponible
+    deuda.impTotalMes = x.impTotal
     deuda.idConcepto =x.idConcepto
     deuda.flagEnReclamo = false
     deuda.flagNoFacturado = false
     this._deudaList = this._deudaList ?? [];
     this._deudaList.push(deuda)
     this.calcularTotal()
+    
   }
 
 
@@ -168,6 +181,14 @@ export class OrdenPagoComponent implements OnInit{
     //this.totalMonto = this._deudaList.reduce((acc, item) => acc + item.impTotalMes, 0); LOQ UE TENIA INCIAL
     this.totalMonto = (this._deudaList ?? []).reduce((acc, item) => acc + (item.impTotalMes || 0),0);
   }
+
+  calcularIgv(pago: any) {
+    const BASE_RATE = 1.18; // La tasa para calcular la base imponible (total con IGV / 1.18)
+    pago.impIgv = pago.impTotalMes - (pago.impTotalMes / BASE_RATE); // Calcula el IGV restando la base imponible
+    pago.baseImponible=pago.impTotalMes-pago.impIgv
+    this.calcularTotal()
+  }
+  
 
   colateral(){
     this.dialogColateral=true
@@ -231,6 +252,8 @@ export class OrdenPagoComponent implements OnInit{
     this._ordenPagoModel.idSede=this.idSedeTk
     this._ordenPagoModel.idEmpresa=this.idEmpresaTk
     this._ordenPagoModel.usuarioCreacion=this.usuarioTk
+
+    this._ordenPagoModel.deudaList=this._deudaList
 
     showGlobalLoader()     
     

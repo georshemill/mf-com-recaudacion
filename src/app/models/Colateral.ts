@@ -6,6 +6,8 @@ export class Colateral{
 	flagInafecto !:string
 	flagEditable !:string
 	descripcion !:string
+	impIgv!:number        
+	impTotal!:number
 	baseImponible!:number
 	idConcepto!:number 
 	

@@ -167,4 +167,11 @@
     font-size: 14px !important;    /* ícono más chico */
   }
   
+
+  :host  ::ng-deep .footer-total {
+    background-color: #61b9d6; /* Azul */
+    color: rgb(1, 0, 0);
+    font-weight: bold;
+}
+
   

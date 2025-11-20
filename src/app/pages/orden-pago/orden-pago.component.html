@@ -149,19 +149,20 @@
                           Acciones
                         </legend>
                         <div class="grid grid-cols-12 gap-4 ">
-                            <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
-                                <p-button label="Nuevo Colateral" icon="pi pi-plus" variant="outlined" severity="warn" (click)="colateral()"></p-button>
-                            </div>
-                            <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
-                                <p-button label="Facturaciones" icon="pi pi-chart-line" variant="outlined" severity="success" (click)="colateral()"></p-button>
-                            </div>
-                            <div class="col-span-12 md:col-span-5 flex items-center" *ngIf="_blockPrincipal==1">
+                            <div class="col-span-12 md:col-span-12 flex items-center" *ngIf="_blockPrincipal==1">
                                 <!--[ngModel]="_gestionSolicitudModel.flagRepresentante === 1"
                                             (onChange)="setCheckboxValue('flagRepresentante', $event.checked)"-->
                                 <p-checkbox  binary="true" />
                                 <label for="ny" class="ml-2">Cargar Colateral del CORE por defecto</label>
                             </div>
-                            <div class="col-span-12 md:col-span-4 md:col-start-4" *ngIf="_blockPrincipal==1">
+                            <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                <p-button label="Nuevo Colateral" icon="pi pi-plus" variant="outlined" severity="warn" (click)="colateral()"></p-button>
+                            </div>
+                            <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                <p-button label="Facturaciones" icon="pi pi-chart-line" variant="outlined" severity="success" (click)="colateral()"></p-button>
+                            </div>
+                            
+                            <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1">
                                 <p-button label="Guardar Prepago" icon="pi pi-send" severity="info" (click)="guardar()"></p-button>
                             </div>
                         </div>
@@ -183,6 +184,8 @@
                                     <th class="text-center">Detalle</th>
                                     <th class="text-center">Reclamo</th>
                                     <th class="text-center">NF</th>
+                                    <th style="width: 10%" class="text-center">Importe IGV</th>
+                                    <th style="width: 10%" class="text-center">Base Imponible</th>
                                     <th style="width: 10%" class="text-center">Importe Total</th>
                                     <th class="text-center">Fecha Prórroga</th>
                                     <th class="text-center" >Eliminar</th>
@@ -208,7 +211,29 @@
                                         </span>
                                     </td>
                                     <td  style="text-align: right;">
+                                        S/ {{ pago.impIgv | number:'1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <td  style="text-align: right;">
+                                        S/ {{ pago.baseImponible | number:'1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>
+                                    <!--<td  style="text-align: right;">
                                         S/ {{ pago.impTotalMes | number:'1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </td>-->
+                                    <td style="text-align: right;" (mouseenter)="pago.flagEditable && (pago.editing = true)"
+                                        (mouseleave)="pago.flagEditable && (pago.editing = false)">
+                                    <!-- Modo EDICIÓN -->
+                                    <ng-container *ngIf="pago.flagEditable && pago.editing; else viewMode">
+                                        <input type="number"
+                                            pInputText
+                                            [(ngModel)]="pago.impTotalMes"
+                                            (ngModelChange)="calcularIgv(pago)"
+                                            style="width: 80px; text-align: right;"
+                                            (blur)="pago.editing = false"/>
+                                    </ng-container>
+                                        <!-- Modo VISTA -->
+                                    <ng-template #viewMode>
+                                        S/ {{ pago.impTotalMes | number:'1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    </ng-template>
                                     </td>
                                     <td class="text-center">  
                                         {{ pago.fechaProrroga | date:'yyyy-MM-dd'}}
@@ -219,13 +244,14 @@
                                 </tr>
                             </ng-template>
                             <ng-template #footer>
-                                <tr>
-                                    <td colspan="2"></td>
-                                    <td colspan="2" class="font-bold p-2" style="text-align: right;">Total</td>
-                                    <td class="font-bold p-2 fs-5" colspan="1" style="text-align: right;">
+                                <tr >
+                                    <td class="footer-total" colspan="4"></td>
+                                    <td  class="footer-total"colspan="2" style="text-align: right;">Total</td><!--class="font-bold p-2" -->
+                                    <td  class="footer-total" colspan="1" style="text-align: right;"><!--class="font-bold p-2 fs-5"-->
                                         S/ {{totalMonto | number : '1.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                     </td>
-                                    <td colspan="2"></td>
+                                    <td class="footer-total" colspan="2"></td>
+                                </tr>
                             </ng-template>
                         </p-table>  
                     </div>
@@ -248,7 +274,7 @@
                   </p-inputgroup>
               </div>
           </div>
-      </ng-template>¡
+      </ng-template>
       <ng-template pTemplate="header">
           <tr>
               <th class="text-center">ID</th>
@@ -261,7 +287,7 @@
           <tr [pSelectableRow]="calles">
               <td class="text-center">{{calles.idConcepto}}</td>
               <td class="text-center">{{calles.descripcion}}</td>
-              <td class="text-right">{{calles.baseImponible | number : '1.2-2'}}
+              <td class="text-right">{{calles.impTotal | number : '1.2-2'}}
                 <i class="pi pi-send" style="color: rgb(25, 172, 11); cursor:pointer;" 
                    (click)="onRowSelect(calles)"></i>
               </td>
