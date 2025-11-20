@@ -174,4 +174,7 @@
     font-weight: bold;
 }
 
-  
+:host  ::ng-deep .nuevo-registro {
+  background-color: #acefd0; /* Color suave de fondo */
+  transition: background-color 0.5s ease;
+}

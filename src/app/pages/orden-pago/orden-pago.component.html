@@ -193,7 +193,7 @@
                                 </tr>
                             </ng-template>
                             <ng-template #body let-pago let-rowIndex="rowIndex" let-i="rowIndex">
-                                <tr >
+                                <tr [ngClass]="{'nuevo-registro': pago.nuevo}">
                                     <td class="text-center">  
                                         {{ rowIndex +1}}
                                     </td>

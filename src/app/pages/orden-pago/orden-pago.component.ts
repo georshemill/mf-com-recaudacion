@@ -156,7 +156,6 @@ export class OrdenPagoComponent implements OnInit{
         return;
     }
 
-    //deuda.descripcion = x.data.descripcion
     deuda.flagEditable = x.flagEditable
     deuda.impIgv = x.impIgv
     deuda.baseImponible = x.baseImponible
@@ -165,6 +164,7 @@ export class OrdenPagoComponent implements OnInit{
     deuda.idConcepto =x.idConcepto
     deuda.flagEnReclamo = false
     deuda.flagNoFacturado = false
+    deuda.nuevo = true; 
     this._deudaList = this._deudaList ?? [];
     this._deudaList.push(deuda)
     this.calcularTotal()
@@ -255,6 +255,17 @@ export class OrdenPagoComponent implements OnInit{
 
     this._ordenPagoModel.deudaList=this._deudaList
 
+    const importeCero = this._deudaList.some((f) => f.impTotalMes === 0);
+    if (importeCero) {
+      this.messageService.add({
+        severity: "warn", 
+        summary: "Aviso de usuario",
+        detail: "El Conpecto Agregado debe ser mayor a 0.", 
+        life: 3000
+      });
+      return;
+    }
+  
     showGlobalLoader()     
     
     this.recaudacionService.GeneraOrdenPago(this._ordenPagoModel).subscribe({
@@ -295,7 +306,7 @@ export class OrdenPagoComponent implements OnInit{
         } else {
           hideGlobalLoader()
           this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
-          this._blockPrincipal=0
+          //this._blockPrincipal=0
         }
       },
       error: (err) => {

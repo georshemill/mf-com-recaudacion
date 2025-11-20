@@ -29,4 +29,5 @@ export class Deuda{
     impTotal:number| 0 = 0;
 	baseImponible:number| 0 = 0;
     flagEditable:boolean | false = false;
+    nuevo!:boolean
 }
