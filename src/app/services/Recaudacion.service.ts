@@ -501,7 +501,7 @@ export class RecaudacionService {
     }
 
     getPdfWithData(data: any): Observable<Blob> {
-        const url = 'https://gateway8063.emapasalas.net.pe/Reports/Recaudacion/Ticket';
+        const url = 'https://gateway8063.emapasalas.net.pe/Reports/Recaudacion/TicketPDF';
         const headers = new HttpHeaders({
           'Content-Type': 'application/json',  // Se asegura de que se envíe en formato JSON
           // 'Authorization': 'Bearer your_token', // Si necesitas autorización, agrega el token aquí

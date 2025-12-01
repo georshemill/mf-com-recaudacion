@@ -23,6 +23,7 @@ import Swal from 'sweetalert2';
 import { ValidaPassPago } from '../../models/ValidaPassPago';
 import { Router } from '@angular/router';
 import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
+import printJS from 'print-js';
 
 
 
@@ -739,6 +740,14 @@ export class PagoComponent implements OnInit{
   }
 
   
+  blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result as string);
+      reader.onerror = reject;
+      reader.readAsDataURL(blob); // Convierte el Blob en data:application/pdf;base64,...
+    });
+  }
 
 
   printBoucher(): void {
@@ -793,7 +802,7 @@ export class PagoComponent implements OnInit{
   }
 
     // Llamar al servicio para obtener el PDF con los datos
-    this.recaudacionService.getPdfWithData(requestData).subscribe((pdfBlob) => {
+    /*this.recaudacionService.getPdfWithData(requestData).subscribe((pdfBlob) => {
       // Crear un URL de objeto para el archivo Blob (PDF)
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
@@ -811,6 +820,26 @@ export class PagoComponent implements OnInit{
         document.body.appendChild(iframe);
       }, (error) => {
         console.error('Error al obtener el PDF', error);
+      });*/
+      this.recaudacionService.getPdfWithData(requestData).subscribe({
+        next: async (pdfBlob: Blob) => {
+          try {
+            // Convertir el Blob a Base64
+            const pdfBase64 = await this.blobToBase64(pdfBlob);
+      
+            // Imprimir usando printJS
+            printJS({
+              printable: pdfBase64,   // data URL Base64
+              type: 'pdf',
+              showModal: false
+            });
+          } catch (error) {
+            console.error('Error al convertir PDF a Base64', error);
+          }
+        },
+        error: (error) => {
+          console.error('Error al obtener el PDF', error);
+        }
       });
     }
   
