@@ -460,8 +460,12 @@ export class RecaudacionService {
 
     //PAGOS
 
-    ListDeudaPagos( model:Partial<BusquedaOrdenPago>): Observable<ListResponse<BusquedaOrdenPago[]>> {
+    ListDeudaPagos( model:Partial<BusquedaOrdenPago>): Observable<ListResponse<BusquedaOrdenPago[]>> {//ListBusquedaOrdenPagoTab
         return this.http.post<ListResponse<BusquedaOrdenPago[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ListBusquedaOrdenPago`,model);
+    }
+
+    ListDeudaPagosTAB( model:Partial<BusquedaOrdenPago>): Observable<ListResponse<BusquedaOrdenPago[]>> {//ListBusquedaOrdenPagoTab
+        return this.http.post<ListResponse<BusquedaOrdenPago[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ListBusquedaOrdenPagoTab`,model);
     }
 
     ConsultaDeudaPago(model: OrdenPago): Observable<ListResponse<OrdenPago>> {

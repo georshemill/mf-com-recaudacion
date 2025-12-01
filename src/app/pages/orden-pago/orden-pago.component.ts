@@ -157,7 +157,7 @@ export class OrdenPagoComponent implements OnInit{
     }
 
     deuda.flagEditable = x.flagEditable
-    deuda.impIgv = x.impIgv
+    deuda.impIGV = x.impIgv
     deuda.baseImponible = x.baseImponible
     deuda.descripcion = x.descripcion
     deuda.impTotalMes = x.impTotal
@@ -184,8 +184,8 @@ export class OrdenPagoComponent implements OnInit{
 
   calcularIgv(pago: any) {
     const BASE_RATE = 1.18; // La tasa para calcular la base imponible (total con IGV / 1.18)
-    pago.impIgv = pago.impTotalMes - (pago.impTotalMes / BASE_RATE); // Calcula el IGV restando la base imponible
-    pago.baseImponible=pago.impTotalMes-pago.impIgv
+    pago.impIGV = pago.impTotalMes - (pago.impTotalMes / BASE_RATE); // Calcula el IGV restando la base imponible
+    pago.baseImponible=pago.impTotalMes-pago.impIGV
     this.calcularTotal()
   }
   

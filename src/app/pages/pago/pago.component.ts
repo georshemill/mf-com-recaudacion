@@ -103,7 +103,7 @@ export class PagoComponent implements OnInit{
   
 
   init(){
-    this.recaudacionService.ListColateral({idEmpresa:this.idEmpresaTk,idSede:1}).subscribe((respuesta) => {
+    this.recaudacionService.ListColateral({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk}).subscribe((respuesta) => {
       this._colateral=respuesta.data
     })
 
@@ -112,7 +112,7 @@ export class PagoComponent implements OnInit{
     })
 
 
-    this.recaudacionService.ListDeudaPagos({idEmpresa:this.idEmpresaTk,idSede:1}).subscribe((respuesta) => {
+    this.recaudacionService.ListDeudaPagosTAB({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk}).subscribe((respuesta) => {
       this._listBusquedaPago=respuesta.data
     })
 
@@ -557,6 +557,7 @@ export class PagoComponent implements OnInit{
                 if (result.isDenied) {
                   // Si el usuario hizo clic en "Imprimir"
                   // this.printBarra(this.codigoAp_Derivacion);
+                  this.printBoucher();
                 }
               });
               
@@ -605,10 +606,32 @@ export class PagoComponent implements OnInit{
               this.funcionesService.popupExitoCrud(mensajeAlert);
               this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
                     
-              setTimeout(() => {
+
+              Swal.fire({
+                icon: 'success',
+                title: mensajeAlert, 
+                showDenyButton: true,
+                confirmButtonText: "Aceptar",
+                denyButtonColor: ' #607D8B',
+                denyButtonText: `Imprimir`,
+                confirmButtonColor: '#03A9F4',
+              }).then((result:any) => {
+                if (result.isConfirmed) {
+                  // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+                  this.inputSearch.input?.nativeElement.focus();
+                  this.inputSearch.input?.nativeElement.select();
+                }
+              
+                if (result.isDenied) {
+                  // Si el usuario hizo clic en "Imprimir"
+                  // this.printBarra(this.codigoAp_Derivacion);
+                  this.printBoucher();
+                }
+              });
+              /*setTimeout(() => {
                 this.inputSearch.input?.nativeElement.focus();
                 this.inputSearch.input?.nativeElement.select();
-              }, 100);
+              }, 100);*/
 
           } else {
             this._modalFiltro.nroOrdenPago=null
@@ -802,7 +825,7 @@ export class PagoComponent implements OnInit{
   }
 
     // Llamar al servicio para obtener el PDF con los datos
-    /*this.recaudacionService.getPdfWithData(requestData).subscribe((pdfBlob) => {
+    this.recaudacionService.getPdfWithData(requestData).subscribe((pdfBlob) => {
       // Crear un URL de objeto para el archivo Blob (PDF)
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
@@ -820,8 +843,8 @@ export class PagoComponent implements OnInit{
         document.body.appendChild(iframe);
       }, (error) => {
         console.error('Error al obtener el PDF', error);
-      });*/
-      this.recaudacionService.getPdfWithData(requestData).subscribe({
+      });
+      /*this.recaudacionService.getPdfWithData(requestData).subscribe({
         next: async (pdfBlob: Blob) => {
           try {
             // Convertir el Blob a Base64
@@ -840,7 +863,7 @@ export class PagoComponent implements OnInit{
         error: (error) => {
           console.error('Error al obtener el PDF', error);
         }
-      });
+      });*/
     }
   
 
