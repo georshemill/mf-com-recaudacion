@@ -123,7 +123,7 @@ export class PagoComponent implements OnInit{
       this._car=respuesta.data
     })
 
-    this.formCar=true
+    //this.formCar=true
 
   }
 
@@ -737,6 +737,83 @@ export class PagoComponent implements OnInit{
       this.blockLocalidad=0
     }
   }
+
+  
+
+
+  printBoucher(): void {
+
+    const requestData = {
+      "nombresede": "ZONAL CONCEPCION",
+      "fpago": "08/04/2025",
+      "horapago": "11:46:26",
+      "vuelto": 0.00,
+      "fimpres": "07/11/2025",
+      "horaimpres": "17:38:42",
+      "idCar": 0,
+      "anulado": "0",
+      "nroPago": "22726",
+      "idSede": null,
+      "items": "2",
+      "impIgv": 7.58,
+      "diaPago": "2025-04-08 11:46:26.0000000",
+      "ruc": "20121726212",
+      "nombre": "E.P.S. MANTARO S.A.",
+      "nroSuministro": 3004324,
+      "propietario": "ORE APOLINARIO JULIAN",
+      "usuarioCreacion": "MIGRA",
+      "detalleTicket": [
+          {
+              "item": 1,
+              "serieDoc": "S006",
+              "anio": "2025",
+              "mes": "3",
+              "nroDoc": 616943,
+              "tipoComprobante": "REC",
+              "descripcion": "FAC 2025 MARZO",
+              "impTotalMes": 24.70
+          },
+          {
+              "item": 2,
+              "serieDoc": "S006",
+              "anio": "2025",
+              "mes": "4",
+              "nroDoc": 622083,
+              "tipoComprobante": "REC",
+              "descripcion": "FAC 2025 ABRIL",
+              "impTotalMes": 25.00
+          }
+      ],
+      "impTotal": 49.70,
+      "idEmpresa": null,
+      "impEfectivo": 49.70,
+      "codigoCatastral": "0103002331",
+      "baseImponible": 42.12,
+      "direccion": "AV. AGRICULTURA 796B"
+  }
+
+    // Llamar al servicio para obtener el PDF con los datos
+    this.recaudacionService.getPdfWithData(requestData).subscribe((pdfBlob) => {
+      // Crear un URL de objeto para el archivo Blob (PDF)
+        const pdfUrl = URL.createObjectURL(pdfBlob);
+
+        // Crear un iframe oculto para cargar el PDF
+        const iframe = document.createElement('iframe');
+        iframe.style.visibility = 'hidden';
+        iframe.src = pdfUrl;
+
+        // Esperar que se cargue el PDF y luego imprimirlo
+        iframe.onload = () => {
+          iframe.contentWindow?.print();
+        };
+
+        // Añadir el iframe al cuerpo del documento
+        document.body.appendChild(iframe);
+      }, (error) => {
+        console.error('Error al obtener el PDF', error);
+      });
+    }
+  
 
   ModalClose(){
     this._filtroCliente = [];

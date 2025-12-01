@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { ListResponse } from '../responses/ListResponse';
 import { GestionCatastro } from '../models/GestionCatastro';
@@ -500,7 +500,16 @@ export class RecaudacionService {
         return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/AnulaPagoxOrden`, model);
     }
 
-
+    getPdfWithData(data: any): Observable<Blob> {
+        const url = 'https://gateway8063.emapasalas.net.pe/Reports/Recaudacion/Ticket';
+        const headers = new HttpHeaders({
+          'Content-Type': 'application/json',  // Se asegura de que se envíe en formato JSON
+          // 'Authorization': 'Bearer your_token', // Si necesitas autorización, agrega el token aquí
+        });
+    
+        // Realiza un POST con el body en formato JSON
+        return this.http.post(url, data, { headers, responseType: 'blob' });
+      }
     
 
 
