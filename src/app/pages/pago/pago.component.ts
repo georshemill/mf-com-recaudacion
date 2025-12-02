@@ -969,14 +969,27 @@ export class PagoComponent implements OnInit{
   }
 
   
-  blobToBase64(blob: Blob): Promise<string> {
+  /*blobToBase64(blob: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result as string);
       reader.onerror = reject;
       reader.readAsDataURL(blob); // Convierte el Blob en data:application/pdf;base64,...
     });
+  }*/
+
+  async blobToBase64(blob: Blob): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64data = reader.result as string;
+        resolve(base64data.split(',')[1]);  // Quitar la parte 'data:application/pdf;base64,' de la cadena.
+      };
+      reader.onerror = reject;
+      reader.readAsDataURL(blob);
+    });
   }
+  
 
 
   printBoucher(): void {
@@ -1031,7 +1044,7 @@ export class PagoComponent implements OnInit{
   }
 
     // Llamar al servicio para obtener el PDF con los datos
-    /*this.recaudacionService.getPdfWithData(this._ticketModel).subscribe((pdfBlob) => {
+    this.recaudacionService.getPdfWithData(this._ticketModel).subscribe((pdfBlob) => {
       // Crear un URL de objeto para el archivo Blob (PDF)
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
@@ -1049,10 +1062,10 @@ export class PagoComponent implements OnInit{
         document.body.appendChild(iframe);
       }, (error) => {
         console.error('Error al obtener el PDF', error);
-      }); FUNCIONA CON DIALOG DE IMPRESION*/
+      }); //FUNCIONA CON DIALOG DE IMPRESION*/
 
 
-      this.recaudacionService.getPdfWithData(requestData).subscribe({
+      /*this.recaudacionService.getPdfWithData(requestData).subscribe({
         next: async (pdfBlob: Blob) => {
           try {
             // Convertir el Blob a Base64
@@ -1071,7 +1084,7 @@ export class PagoComponent implements OnInit{
         error: (error) => {
           console.error('Error al obtener el PDF', error);
         }
-      });
+      });*/
     }
   
 
