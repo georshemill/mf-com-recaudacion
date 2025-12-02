@@ -127,7 +127,7 @@ export class PagoComponent implements OnInit{
       this._car=respuesta.data
     })
 
-    //this.formCar=true
+    this.formCar=true
 
   }
 
