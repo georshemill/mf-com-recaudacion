@@ -81,6 +81,7 @@ import { Car } from '../models/Car';
 import { ResumenCaja } from '../models/ResumenCaja';
 import { ValidaPassPago } from '../models/ValidaPassPago';
 import { BusquedAnulacionPago } from '../models/BusquedAnulacionPago';
+import { Ticket } from '../models/Ticket';
 
 
 
@@ -491,6 +492,12 @@ export class RecaudacionService {
     RegistrarPagoxOrden(model: OrdenPago): Observable<Mensaje> {
         return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/RegistrarPagoxOrden`, model);
     }
+
+    ConsultaTicket(model: Ticket): Observable<ListResponse<Ticket>> {
+        return this.http.post<ListResponse<Ticket>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ConsultaTicket`,model);
+    }
+
+
 
     ValidaLoginPago(model:Partial<ValidaPassPago>): Observable<Boolean> {
         return this.http.post<Boolean>(`https://gateway8079.emapasalas.net.pe/ValidaUser`, model);

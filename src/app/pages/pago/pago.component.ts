@@ -24,6 +24,7 @@ import { ValidaPassPago } from '../../models/ValidaPassPago';
 import { Router } from '@angular/router';
 import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 import printJS from 'print-js';
+import { Ticket } from '../../models/Ticket';
 
 
 
@@ -72,6 +73,8 @@ export class PagoComponent implements OnInit{
   _localidad:Localidad[] = []
   _resumenCajaModel:ResumenCaja=new ResumenCaja
   _validaPassModel:ValidaPassPago=new ValidaPassPago
+  _ticketModel:Ticket=new Ticket
+  _ticketModelImpresion:Ticket=new Ticket
 
   flagGeneraPago: number = 0;
   carId: number = 0;
@@ -538,8 +541,117 @@ export class PagoComponent implements OnInit{
               this._blockPrincipal=0
               hideGlobalLoader()
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
+
+              this._ticketModel.idEmpresa=this.idEmpresaTk
+              this._ticketModel.idSede=this.idSedeTk
+              this._ticketModel.nroPago=respuesta.dataId
+              this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
+                next: (respuesta) => {
+
+                  if(respuesta.success==true) {
+                    this._ticketModel=respuesta.data
+
+                    Swal.fire({
+                      icon: 'success',
+                      title: mensajeAlert, 
+                      showDenyButton: true,
+                      confirmButtonText: "Aceptar",
+                      denyButtonColor: ' #607D8B',
+                      denyButtonText: `Imprimir`,
+                      confirmButtonColor: '#03A9F4',
+                    }).then((result:any) => {
+                      if (result.isConfirmed) {
+                        // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+                        this.inputSearch.input?.nativeElement.focus();
+                        this.inputSearch.input?.nativeElement.select();
+                      }
+                    
+                      if (result.isDenied) {
+                        // Si el usuario hizo clic en "Imprimir"
+                        // this.printBarra(this.codigoAp_Derivacion);
+                        this.printBoucher();
+                      }
+                    });
+                    
+                  }else{
+                    
+                  }
+                  
+
+
+
+
+
+
+                  /*if (respuesta.success==true) {
+                      this._modalFiltro.nroOrdenPago=null
+                      this._modalFiltro.nroSuministro=null
+                      this._ordenPagoModel.flagEventual=0
+                      this._ordenPagoModel.flagBarras=0
+                      this.ResumenCaja(this._ordenPagoModel.idCar)
+                      this._blockPrincipal=0
+                      hideGlobalLoader()
+                      let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
+        
+        
+        
+        
+        
+                      
+                      
+                      Swal.fire({
+                        icon: 'success',
+                        title: mensajeAlert, 
+                        showDenyButton: true,
+                        confirmButtonText: "Aceptar",
+                        denyButtonColor: ' #607D8B',
+                        denyButtonText: `Imprimir`,
+                        confirmButtonColor: '#03A9F4',
+                      }).then((result:any) => {
+                        if (result.isConfirmed) {
+                          // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+                          this.inputSearch.input?.nativeElement.focus();
+                          this.inputSearch.input?.nativeElement.select();
+                        }
+                      
+                        if (result.isDenied) {
+                          // Si el usuario hizo clic en "Imprimir"
+                          // this.printBarra(this.codigoAp_Derivacion);
+                          this.printBoucher();
+                        }
+                      });
+                      
+        
+                  } else {
+                    hideGlobalLoader()
+                    this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
+                    this._blockPrincipal=0
+        
+                    setTimeout(() => {
+                      this.inputSearch.input?.nativeElement.focus();
+                      this.inputSearch.input?.nativeElement.select();
+                    }, 100);
+                  }*/
+                },
+                error: (err) => {
+                  hideGlobalLoader()
+                  this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
+                  this._blockPrincipal=0
+        
+                  setTimeout(() => {
+                    this.inputSearch.input?.nativeElement.focus();
+                    this.inputSearch.input?.nativeElement.select();
+                  }, 100);
+                }
+              });
+
+
+
+
+
+
               
-              Swal.fire({
+             /* Swal.fire({
                 icon: 'success',
                 title: mensajeAlert, 
                 showDenyButton: true,
@@ -559,7 +671,7 @@ export class PagoComponent implements OnInit{
                   // this.printBarra(this.codigoAp_Derivacion);
                   this.printBoucher();
                 }
-              });
+              }); //hasta aqui era la ultimo
               
               //this.funcionesService.popupExitoCrud(mensajeAlert);
               /*this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
@@ -605,9 +717,103 @@ export class PagoComponent implements OnInit{
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
               this.funcionesService.popupExitoCrud(mensajeAlert);
               this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
+
+              this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
+                next: (respuesta) => {
+                  if(respuesta.success==true) {
+                    respuesta.data=this._ticketModelImpresion
+
+                    Swal.fire({
+                      icon: 'success',
+                      title: mensajeAlert, 
+                      showDenyButton: true,
+                      confirmButtonText: "Aceptar",
+                      denyButtonColor: ' #607D8B',
+                      denyButtonText: `Imprimir`,
+                      confirmButtonColor: '#03A9F4',
+                    }).then((result:any) => {
+                      if (result.isConfirmed) {
+                        // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+                        this.inputSearch.input?.nativeElement.focus();
+                        this.inputSearch.input?.nativeElement.select();
+                      }
+                    
+                      if (result.isDenied) {
+                        // Si el usuario hizo clic en "Imprimir"
+                        // this.printBarra(this.codigoAp_Derivacion);
+                        this.printBoucher();
+                      }
+                    });
+                    
+                  }else{
+                    
+                  }
+                  console.log(respuesta)
+                  /*if (respuesta.success==true) {
+                      this._modalFiltro.nroOrdenPago=null
+                      this._modalFiltro.nroSuministro=null
+                      this._ordenPagoModel.flagEventual=0
+                      this._ordenPagoModel.flagBarras=0
+                      this.ResumenCaja(this._ordenPagoModel.idCar)
+                      this._blockPrincipal=0
+                      hideGlobalLoader()
+                      let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
+        
+        
+        
+        
+        
+                      
+                      
+                      Swal.fire({
+                        icon: 'success',
+                        title: mensajeAlert, 
+                        showDenyButton: true,
+                        confirmButtonText: "Aceptar",
+                        denyButtonColor: ' #607D8B',
+                        denyButtonText: `Imprimir`,
+                        confirmButtonColor: '#03A9F4',
+                      }).then((result:any) => {
+                        if (result.isConfirmed) {
+                          // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+                          this.inputSearch.input?.nativeElement.focus();
+                          this.inputSearch.input?.nativeElement.select();
+                        }
+                      
+                        if (result.isDenied) {
+                          // Si el usuario hizo clic en "Imprimir"
+                          // this.printBarra(this.codigoAp_Derivacion);
+                          this.printBoucher();
+                        }
+                      });
+                      
+        
+                  } else {
+                    hideGlobalLoader()
+                    this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
+                    this._blockPrincipal=0
+        
+                    setTimeout(() => {
+                      this.inputSearch.input?.nativeElement.focus();
+                      this.inputSearch.input?.nativeElement.select();
+                    }, 100);
+                  }*/
+                },
+                error: (err) => {
+                  hideGlobalLoader()
+                  this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
+                  this._blockPrincipal=0
+        
+                  setTimeout(() => {
+                    this.inputSearch.input?.nativeElement.focus();
+                    this.inputSearch.input?.nativeElement.select();
+                  }, 100);
+                }
+              });
+
                     
 
-              Swal.fire({
+              /*Swal.fire({
                 icon: 'success',
                 title: mensajeAlert, 
                 showDenyButton: true,
@@ -627,7 +833,7 @@ export class PagoComponent implements OnInit{
                   // this.printBarra(this.codigoAp_Derivacion);
                   this.printBoucher();
                 }
-              });
+              });//servia 
               /*setTimeout(() => {
                 this.inputSearch.input?.nativeElement.focus();
                 this.inputSearch.input?.nativeElement.select();
@@ -825,7 +1031,7 @@ export class PagoComponent implements OnInit{
   }
 
     // Llamar al servicio para obtener el PDF con los datos
-    this.recaudacionService.getPdfWithData(requestData).subscribe((pdfBlob) => {
+    /*this.recaudacionService.getPdfWithData(this._ticketModel).subscribe((pdfBlob) => {
       // Crear un URL de objeto para el archivo Blob (PDF)
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
@@ -843,8 +1049,10 @@ export class PagoComponent implements OnInit{
         document.body.appendChild(iframe);
       }, (error) => {
         console.error('Error al obtener el PDF', error);
-      });
-      /*this.recaudacionService.getPdfWithData(requestData).subscribe({
+      }); FUNCIONA CON DIALOG DE IMPRESION*/
+
+
+      this.recaudacionService.getPdfWithData(requestData).subscribe({
         next: async (pdfBlob: Blob) => {
           try {
             // Convertir el Blob a Base64
@@ -863,7 +1071,7 @@ export class PagoComponent implements OnInit{
         error: (error) => {
           console.error('Error al obtener el PDF', error);
         }
-      });*/
+      });
     }
   
 
