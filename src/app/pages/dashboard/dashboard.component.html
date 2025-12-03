@@ -1,43 +1,45 @@
-<!-- dashboard.component.html -->
+
 <div class="grid grid-cols-12 gap-8 mt-1">
-  <!-- <label>Hola Alex, Alex P.</label> -->
-  <!-- <prisma-button variant="primary" (click)="handleClick()">
-    Botón desde styleguide
-  </prisma-button> -->
-  <!-- <ng-container #sharedContainer></ng-container> -->
-  <!-- <button pButton pRipple severity="success" (click)="testMethod()">
-    <WindowMaximizeIcon pButtonIcon />
-    <span pButtonLabel>label</span>
-  </button> -->
   <div class="col-span-12 md:col-span-8">
-    <introduce-widget />
+    <!--<introduce-widget />-->
+    <div class="card h-full">
+      <div class="p-2 h-full flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+              <div class="flex gap-4 flex-col justify-between w-full md:flex-row ">
+                  <div class="flex gap-4 items-center">
+                      <div class="text-4xl">👋</div>
+                      <div class="flex flex-col gap-1 text-surface-600 dark:text-surface-200">
+                          <span class="text-2xl font-semibold">Hola,<span class="text-color"> {{nombreTk}} </span></span>
+                          <span>Equipo de Recaudacion<span class="font-bold text-primary"> EPS MANTARO</span></span>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="flex flex-col gap-2 text-primary mt-6 md:mt-0">
+              <span class="font-bold text-sm">Pagos en Efectivo</span>
+              <div class="grid grid-cols-12 gap-4 grid-nogutter font-medium">
+                  <!--<span *ngFor="let tipoServicio of _tipoServicio" class="col-span-6 text-6xl md:col-span-4 flex items-center">
+                      {{ tipoServicio.conteo }}
+                      <span class="text-base ml-2">{{ tipoServicio.nombre }}</span>
+                  </span>-->
+              </div>
+          </div>
+      </div>
+    </div>
   </div>
-  <div class="col-span-12 md:col-span-4">
-    <upgrade-widget />
-    <!-- <stats-widget></stats-widget> -->
+<div class="col-span-12 md:col-span-4">
+  <!--<upgrade-widget />-->
+  <div class="h-full bg-blue-500  flex justify-between items-center pl-8 py-4 rounded-md overflow-hidden">
+    <div class="flex flex-col justify-center">
+        <div><span class="font-bold text-white dark:text-surface-900 ">Total de Pagos</span></div>
+        <div>
+            <!--<span class="font-bold text-white dark:text-surface-900 mt-1 text-4xl m-0"> {{totalTipoServicio}} </span>-->
+        </div>
+    </div>
+    <div>
+     <!--<img  style="width: 300px; height: 250px;"[attr.draggable]="false"  src="http://localhost:1007/assets/images/dashboard.png"  alt="" />-->
+    </div>
   </div>
-  <div class="col-span-12">
-    <my-workspace-widget />
-    <!-- <recent-activity-widget></recent-activity-widget> -->
-  </div>
-  <div class="col-span-12">
-    <!-- <project-progress-widget></project-progress-widget> -->
-    <project-overview-widget />
-  </div>
+</div>
 
-  <!-- Estadísticas -->
-  
-
-  <!-- Grilla principal -->
-  <!-- <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
-    <- Gráfico de Ventas -->
-    <!-- <p-card header="Ventas Mensuales" class="lg:col-span-2">
-      <p-chart type="line" [data]="salesChartData" [options]="chartOptions"></p-chart>
-    </p-card> -->
-
-    <!-- Progreso de Proyectos --
-    
-  </div> -->
-
-  <!-- Actividad Reciente -->
 </div>

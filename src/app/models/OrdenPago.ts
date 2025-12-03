@@ -300,5 +300,6 @@ export class OrdenPago{
 	motivoAnulacion: string | null = null;
 	impTotalAnula: string | null = null;
 	fechaEmision: string | null = null;
+	codigoAlternativo: string | null = null;
 	
 }

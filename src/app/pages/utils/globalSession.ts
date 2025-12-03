@@ -17,6 +17,10 @@ export class GlobalSession {
     return Session.get('USUARIO');
   }
 
+  static get nombre(): any {
+    return Session.get('NOMBRE');
+  }
+
   
 
   static clear(): void {
@@ -24,5 +28,6 @@ export class GlobalSession {
     Session.remove('IDSEDE');
     Session.remove('IDUSUARIO');
     Session.remove('USUARIO');
+    Session.remove('NOMBRE');
   }
 }

@@ -22,6 +22,7 @@ import { RecentActivityWidget } from './components/recentactivitywidget';
 import { isSidebarMenuItemsVisible } from '@test/mf-utils-modules';
 import { UpgradeWidget } from './components/upgradewidget';
 import { MyWorkspaceWidget } from './components/myworkspacewidget';
+import { GlobalSession } from '../utils/globalSession';
 
 @Component({
   selector: 'app-dashboard',
@@ -44,25 +45,13 @@ import { MyWorkspaceWidget } from './components/myworkspacewidget';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
-  // @ViewChild('sharedContainer', { read: ViewContainerRef, static: true })
-  // vcRef!: ViewContainerRef;
+  idEmpresaTk = GlobalSession.idEmpresa;
+  idSedeTk = GlobalSession.idSede;
+  usuarioTk = GlobalSession.usuario;
+  idUsuarioTk = GlobalSession.idUsuario;
+  nombreTk = GlobalSession.nombre;
+  
 
-  // constructor(private injector: Injector) {}
-
-  // async ngAfterViewInit() {
-  //   const mod = await System.import('@prisma/mf-shared-ui');
-  //   const SharedButtonComponent = mod.SharedButtonComponent;
-
-  //   const compRef = this.vcRef.createComponent(SharedButtonComponent, {
-  //     injector: this.injector,
-  //   });
-
-  //   compRef.instance.label = 'Desde Dashboard';
-  //   compRef.instance.variant = 'primary';
-  //   compRef.instance.onClick.subscribe(() => {
-  //     console.log('Botón compartido clickeado desde dashboard');
-  //   });
-  // }
   testMethod() {
     console.log('Test method ejecutado');
     isSidebarMenuItemsVisible(['admin', 'user']);

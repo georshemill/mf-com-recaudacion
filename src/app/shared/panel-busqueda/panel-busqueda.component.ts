@@ -117,6 +117,7 @@ export class PanelBusquedaComponent implements OnInit  {
                 nroDocIdentidad:data.data[0].nroDocIdentidad,
                 idSede:data.data[0].idSede,
                 nroSuministro:data.data[0].nroSuministro,
+                codigoAntiguo:data.data[0].codigoAntiguo,
             
               };
               this.BusquedaCliente.emit(resultado);

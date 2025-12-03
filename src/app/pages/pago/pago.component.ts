@@ -25,6 +25,7 @@ import { Router } from '@angular/router';
 import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 import printJS from 'print-js';
 import { Ticket } from '../../models/Ticket';
+import { BusquedAnulacionPago } from '../../models/BusquedAnulacionPago';
 
 
 
@@ -75,6 +76,9 @@ export class PagoComponent implements OnInit{
   _validaPassModel:ValidaPassPago=new ValidaPassPago
   _ticketModel:Ticket=new Ticket
   _ticketModelImpresion:Ticket=new Ticket
+  _listXAnulacion:BusquedAnulacionPago[] = []
+  _tituloCar: string=""
+
 
   flagGeneraPago: number = 0;
   carId: number = 0;
@@ -89,8 +93,11 @@ export class PagoComponent implements OnInit{
   usuarioTk = GlobalSession.usuario;
   idUsuarioTk = GlobalSession.idUsuario;
 
-
-
+  expandedRows: Record<number, boolean> = {};  
+  tabs = [
+    { title: 'Generar Cancelacion Recibo', value: "0", icon: 'pi pi-home'},
+    { title: 'Pagos Registrados', value: "1", icon: 'pi pi-address-book' },
+  ]
 
    constructor(private recaudacionService:RecaudacionService,
               private funcionesService:FuncionesService,
@@ -123,10 +130,23 @@ export class PagoComponent implements OnInit{
       this._formaPago=respuesta.data
     })
 
-    this.recaudacionService.dropdownCar(this.idEmpresaTk!,this.idSedeTk!,this.usuarioTk).subscribe((respuesta) => {
+    /*this.recaudacionService.dropdownCar(this.idEmpresaTk!,this.idSedeTk!,this.usuarioTk).subscribe((respuesta) => {
       this._car=respuesta.data
-    })
+    })*/
 
+    this.recaudacionService.dropdownCar(this.idEmpresaTk!, this.idSedeTk!, this.usuarioTk).subscribe((respuesta) => {
+      this._car = respuesta.data;
+      
+      // Verifica que _car no esté vacío y accede al primer registro
+      if (this._car && this._car.length > 0) {
+        this._tituloCar = this._car[0].descripcion;
+      } else {
+      }
+    });
+
+    this.listAnulacion() 
+
+    this._ordenPagoModel.idCar=1
     this.formCar=true
 
   }
@@ -137,6 +157,26 @@ export class PagoComponent implements OnInit{
       this._resumenCajaModel=respuesta.data
     })
   
+  }
+
+  listAnulacion(){
+
+    this.recaudacionService.ConsultaPagosAnulacion({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:this.fechActual!,
+                                                    usuarioCreacion:this.usuarioTk,nroPago:null, anulado:0}).subscribe((respuesta) => {
+        this._listXAnulacion=respuesta.data
+    })
+
+  }
+
+  expandAll() {
+    this.expandedRows = this._listXAnulacion.reduce((acc, p) => {
+      acc[p.nroSuministro] = true; 
+      return acc;
+    }, {} as Record<number, boolean>); 
+  }
+
+  collapseAll() {
+      this.expandedRows = {};
   }
 
   //MODAL LOGIN PAGOS
@@ -539,6 +579,7 @@ export class PagoComponent implements OnInit{
               this._ordenPagoModel.flagBarras=0
               this.ResumenCaja(this._ordenPagoModel.idCar)
               this._blockPrincipal=0
+              this.listAnulacion() 
               hideGlobalLoader()
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
 
@@ -1087,6 +1128,41 @@ export class PagoComponent implements OnInit{
       });*/
     }
   
+  onRowImpresion(x:any){
+
+    this._ticketModel.idEmpresa=this.idEmpresaTk
+    this._ticketModel.idSede=this.idSedeTk
+    this._ticketModel.nroPago=x
+    
+      this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
+                next: (respuesta) => {
+
+                  if(respuesta.success==true) {
+                    this._ticketModel=respuesta.data
+                  
+                    this.printBoucher();
+                  }
+                }
+                })
+              
+
+  }
+  
+  cancelarForm(){
+
+    this._modalFiltro.nroOrdenPago=null
+            this._modalFiltro.nroSuministro=null
+            this._ordenPagoModel.flagEventual=0
+            this._ordenPagoModel.flagBarras=0
+            this._blockPrincipal=0
+            hideGlobalLoader()
+
+            setTimeout(() => {
+              this.inputSearch.input?.nativeElement.focus();
+              this.inputSearch.input?.nativeElement.select();
+            }, 100);
+
+  }
 
   ModalClose(){
     this._filtroCliente = [];
@@ -1102,6 +1178,11 @@ export class PagoComponent implements OnInit{
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
+  onGlobalFilterPagos(table: Table, event: Event) {
+    table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+  }
+
 
 
 

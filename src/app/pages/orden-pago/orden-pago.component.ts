@@ -13,6 +13,7 @@ import { Personas } from '../../models/Personas';
 import { MessageService } from 'primeng/api';
 import { GlobalSession } from '../utils/globalSession'
 import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
+import { BusquedaOrdenPago } from '../../models/BusquedaOrdenPago';
 
 
 
@@ -46,6 +47,8 @@ export class OrdenPagoComponent implements OnInit{
   datos: string=""
   campo: string=""
   parametro: string=""
+  _listBusquedaPago:BusquedaOrdenPago[] = []
+  codigoAntiguo:number=0
   
 
   
@@ -53,6 +56,12 @@ export class OrdenPagoComponent implements OnInit{
   idSedeTk = GlobalSession.idSede;
   usuarioTk = GlobalSession.usuario;
   idUsuarioTk = GlobalSession.idUsuario;
+
+
+  tabs = [
+    { title: 'Generar Órden de Pago', value: "0", icon: 'pi pi-home'},
+    { title: 'Órdenes de Pagos', value: "1", icon: 'pi pi-address-book' },
+  ]
   
 
    constructor(private recaudacionService:RecaudacionService,
@@ -77,6 +86,10 @@ export class OrdenPagoComponent implements OnInit{
     this.recaudacionService.dropdownComprobante().subscribe((respuesta) => {
       this._comprobante=respuesta.data
     })
+
+    this.recaudacionService.ListDeudaPagosTAB({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk}).subscribe((respuesta) => {
+      this._listBusquedaPago=respuesta.data
+    })
   }
 
 
@@ -84,10 +97,12 @@ export class OrdenPagoComponent implements OnInit{
 
     //showGlobalLoader()
    
+    console.log(x)
     if(x.nroSuministro>0){
       this._ordenPagoModel.idSede=x.idSede
       this._ordenPagoModel.idEmpresa=1
       this._ordenPagoModel.nroSuministro=x.nroSuministro
+      this.codigoAntiguo=x.codigoAntiguo
     }else{
       this._blockPrincipal=0
     }
@@ -95,10 +110,12 @@ export class OrdenPagoComponent implements OnInit{
     this.recaudacionService.ConsultaOrdenPago(this._ordenPagoModel).subscribe({
       next: (data) => {
         if (data.data != null) {
+            this._blockPrincipal=1
             this._ordenPagoModel = data.data;
+            this._ordenPagoModel.codigo_antiguo=this.codigoAntiguo
             //this._deudaList= data.data.deudaList
             this._deudaList = data.data.deudaList.map(x => ({ ...x, flagEditable: false }));
-            this._blockPrincipal=1
+            
             this._ordenPagoModel.idPersona=null
             this.calcularTotal()
             hideGlobalLoader()
@@ -316,5 +333,10 @@ export class OrdenPagoComponent implements OnInit{
       }
     });
   }
+
+
+onGlobalFilterOrdenes(table: Table, event: Event) {
+  table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+}
 
 }

@@ -28,13 +28,12 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/anulacion/anulacion.component').then((m) => m.AnulacionComponent),
       },
-
-      /*{
-        path: 'comercial/catastro/OrdenTrabajo',
-        loadComponent: () =>
-          import('./pages/catastro/orden-trabajo/orden-trabajo.component').then((c) => c.OrdenTrabajoComponent),
-      },
       {
+        path: 'comercial/recaudacion/CuadreCaja',
+        loadComponent: () =>
+          import('./pages/cuadre-caja/cuadre-caja.component').then((m) => m.CuadreCajaComponent),
+      },
+      /*{
         path: 'comercial/catastro/HorarioAbastecimiento',
         loadComponent: () =>
           import('./pages/catastro/horario-abastecimiento/horario-abastecimiento.component').then((c) => c.HorarioAbastecimientoComponent),
