@@ -82,6 +82,8 @@ import { ResumenCaja } from '../models/ResumenCaja';
 import { ValidaPassPago } from '../models/ValidaPassPago';
 import { BusquedAnulacionPago } from '../models/BusquedAnulacionPago';
 import { Ticket } from '../models/Ticket';
+import { GestionCuadre } from '../models/GestionCuadre';
+import { CuadrexImporte } from '../models/CuadrexImporte';
 
 
 
@@ -521,6 +523,29 @@ export class RecaudacionService {
         // Realiza un POST con el body en formato JSON
         return this.http.post(url, data, { headers, responseType: 'blob' });
       }
+
+
+    //CUADRE DE CAJA
+
+    CuadrexConcepto(model:Partial<GestionCuadre>): Observable<ListResponse<GestionCuadre[]>> {
+        return this.http.post<ListResponse<GestionCuadre[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/CuadreCaja/LisTipoDeuda`,model);
+    }
+
+    CuadrexSede(model:Partial<GestionCuadre>): Observable<ListResponse<GestionCuadre[]>> {
+        return this.http.post<ListResponse<GestionCuadre[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/CuadreCaja/ListCajaxSede`,model);
+    }
+
+    CuadrexFormaPago(model:Partial<GestionCuadre>): Observable<ListResponse<GestionCuadre[]>> {
+        return this.http.post<ListResponse<GestionCuadre[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/CuadreCaja/ListFormaPago`,model);
+    }
+
+    CuadrexComprobante(model:Partial<GestionCuadre>): Observable<ListResponse<GestionCuadre[]>> {
+        return this.http.post<ListResponse<GestionCuadre[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/CuadreCaja/ListCajaxComprobante`,model);
+    }
+    
+    CuadrexImporte(model:Partial<CuadrexImporte>): Observable<ListResponse<CuadrexImporte[]>> {
+        return this.http.post<ListResponse<CuadrexImporte[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/CuadreCaja/ListCajaxImporte`,model);
+    }
     
 
 

@@ -1,1 +1,397 @@
-<p>cuadre-caja works!</p>
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">📊</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-xl font-semibold">CUADRE DE CAJA</div>
+                <div class="font-bold text-primary">Gestion de Caja</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <fieldset class="border border-gray-300 rounded-lg p-5">
+            <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+              Búsqueda Personalizada
+            </legend>
+            <div class="grid grid-cols-12 gap-4 ">
+                <div class="col-span-12 md:col-span-3 md:col-start-3">
+                    <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
+                        <p-select [options]="_sede" optionLabel="nombre"  optionValue="idSede" filterBy="descripcion" [filter]="true"
+                                  [(ngModel)]="_cuadreModel.idSedeBsq"  class="w-full" appendTo="body"  ></p-select> 
+                        <label>Sede</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-4 ">
+                    <p-floatlabel variant="on" >
+                        <p-datepicker  dateFormat="yy-mm-dd" [(ngModel)]="_cuadreModel.fechaDpl" [showIcon]="true" appendTo="body"  styleClass="w-full"/>
+                        <label >Fecha Búsqueda</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-search"  severity="info" (click)="Busqueda()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                </div>
+            </div>
+        </fieldset>
+        <br>
+        <p-tabs value="0">
+            <p-tablist>
+                @for (tab of tabs; track tab.value) {
+                    <p-tab [value]="tab.value" class="flex items-center !gap-2 text-inherit"><i [class]="tab.icon"></i>{{ tab.title }}</p-tab>
+                }
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0">
+                    <p-accordion [(activeIndex)]="activeAccordionIndex" [multiple]="true" *ngIf="blockTable==1">
+                        <p-accordion-panel>
+                            <p-accordion-header>RESUMEN POR CONCEPTOS</p-accordion-header>
+                            <p-accordion-content>
+                                <div class="card flex flex-col gap-4 w-full">
+                                    <div class="grid grid-cols-12 gap-4 ">
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Total x Concepto</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <p-table #dt [value]="_cuadrexTipo"  [rows]="20"  scrollable="true" scrollHeight="600px"
+                                                            [rowHover]="true"dataKey="id" [showCurrentPageReport]="true" resizableColumns="true" size="small"
+                                                            >
+                                                            <ng-template #caption>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="header">
+                                                                <tr >
+                                                                    <th class="text-center" >ID</th>
+                                                                    <th class="text-center" >Tipo Deuda</th>
+                                                                    <th class="text-center" >Importe</th>
+                                                                </tr>
+                                                            </ng-template>
+                                                            <ng-template #body let-concepto>
+                                                                <tr>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.idTipoDeuda}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.tipoDeuda}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.importe | number : '1.2-2'}}
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        
+                                                        </p-table>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Grafica x Conceptos</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <div class="flex flex-col gap-2 h-[20rem] -mb-6 relative">
+                                                            <p-chart type="doughnut" [data]="dataTorta" [options]="optionsTorta"  height="250" />
+                                                        </div>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                    </p-accordion>
+                    <br>
+                    <p-accordion [(activeIndex)]="activeAccordionIndex" [multiple]="true" *ngIf="blockTable==1">
+                        <p-accordion-panel>
+                            <p-accordion-header>RESUMEN FORMA DE PAGO</p-accordion-header>
+                            <p-accordion-content>
+                                <div class="card flex flex-col gap-4 w-full">
+                                    <div class="grid grid-cols-12 gap-4 ">
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Total x Forma Pago</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <p-table #dt [value]="_cuadrexForma"  [rows]="20"  scrollable="true" scrollHeight="600px"
+                                                            [rowHover]="true"dataKey="id" [showCurrentPageReport]="true" resizableColumns="true" size="small"
+                                                            >
+                                                            <ng-template #caption>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="header">
+                                                                <tr >
+                                                                    <th class="text-center" >ID</th>
+                                                                    <th class="text-center" >Forma Pago</th>
+                                                                    <th class="text-center" >Nro Transacciones</th>
+                                                                    <th class="text-center" >Anulados</th>
+                                                                    <th class="text-center" >Importe</th>
+                                                                </tr>
+                                                            </ng-template>
+                                                            <ng-template #body let-concepto>
+                                                                <tr>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.idFormaPago}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.formaPago}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.nroTransacciones}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.anulado}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.impTotal | number : '1.2-2'}}
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        </p-table>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Grafica x Forma Pago</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <div class="flex flex-col gap-2 h-[20rem] -mb-6 relative">
+                                                            <p-chart type="polarArea" [data]="data" [options]="options"  height="250" />
+                                                        </div>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                    </p-accordion>
+                    <br>
+                    <p-accordion [(activeIndex)]="activeAccordionIndex" [multiple]="true" *ngIf="blockTable==1">
+                        <p-accordion-panel>
+                            <p-accordion-header>RESUMEN POR SEDE</p-accordion-header>
+                            <p-accordion-content>
+                                <div class="card flex flex-col gap-4 w-full">
+                                    <div class="grid grid-cols-12 gap-4 ">
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Total x Sede</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <p-table #dt [value]="_cuadrexSede"  [rows]="20"  scrollable="true" scrollHeight="600px"
+                                                            [rowHover]="true"dataKey="id" [showCurrentPageReport]="true" resizableColumns="true" size="small"
+                                                            >
+                                                            <ng-template #caption>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="header">
+                                                                <tr >
+                                                                    <th class="text-center" >ID</th>
+                                                                    <th class="text-center" >Sede</th>
+                                                                    <th class="text-center" >Nro Transacciones</th>
+                                                                    <th class="text-center" >Importe</th>                                            </tr>
+                                                            </ng-template>
+                                                            <ng-template #body let-concepto>
+                                                                <tr>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.idSede}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.nombreSede}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.nroTransacciones}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.impTotal | number : '1.2-2'}}
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        
+                                                        </p-table>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Grafica x Sede</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <div class="flex flex-col gap-2 h-[20rem] -mb-6 relative">
+                                                            <p-chart type="doughnut" [data]="dataTorta2" [options]="optionsTorta2"  height="250" />
+                                                        </div>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                    </p-accordion>
+                    <br>
+                    <p-accordion [(activeIndex)]="activeAccordionIndex" [multiple]="true" *ngIf="blockTable==1">
+                        <p-accordion-panel>
+                            <p-accordion-header>RESUMEN POR COMPROBANTE</p-accordion-header>
+                            <p-accordion-content>
+                                <div class="card flex flex-col gap-4 w-full">
+                                    <div class="grid grid-cols-12 gap-4 ">
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Total x Comprobante</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <p-table #dt [value]="_cuadrexComprobante"  [rows]="20"  scrollable="true" scrollHeight="600px"
+                                                            [rowHover]="true"dataKey="id" [showCurrentPageReport]="true" resizableColumns="true" size="small"
+                                                            >
+                                                            <ng-template #caption>
+                                                            </ng-template>
+                                                            <ng-template pTemplate="header">
+                                                                <tr >
+                                                                    <th class="text-center" >ID</th>
+                                                                    <th class="text-center" >Serie Doc</th>
+                                                                    <th class="text-center" >Tipo Comprobante</th>
+                                                                    <th class="text-center" >Nro Transacciones</th>
+                                                                    <th class="text-center" >Anulados</th>
+                                                                    <th class="text-center" >Importe</th> 
+                                                                </tr>
+                                                            </ng-template>
+                                                            <ng-template #body let-concepto>
+                                                                <tr>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.idTipoComprobante}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.serieDoc}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.tipoComprobante}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.nroTransacciones}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.anulado}}
+                                                                    </td>
+                                                                    <td  class="text-center">
+                                                                        {{concepto.impTotal | number : '1.2-2'}}
+                                                                    </td>
+                                                                </tr>
+                                                            </ng-template>
+                                                        
+                                                        </p-table>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                        <div  class="col-span-12 md:col-span-6" >
+                                            <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
+                                                <p-accordion-panel >
+                                                    <p-accordion-header>Grafica x Comprobante</p-accordion-header>
+                                                    <p-accordion-content>
+                                                        <div class="flex flex-col gap-2 h-[20rem] -mb-6 relative">
+                                                            <p-chart type="doughnut" [data]="dataTorta3" [options]="optionsTorta3"  height="250" />
+                                                        </div>
+                                                    </p-accordion-content>
+                                                </p-accordion-panel>
+                                            </p-accordion>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-accordion-content>
+                        </p-accordion-panel>
+                    </p-accordion>
+
+                </p-tabpanel>
+                <p-tabpanel value="1">
+                    <p-table #dtPagos class="tabla-1" [value]="_cuadrexImporte" dataKey="impTotal" [tableStyle]="{ 'min-width': '60rem' }"
+                                [globalFilterFields]="['from','nroPago', 'propietario','nroSuministro','impTotal']" 
+                                [expandedRowKeys]="expandedRows"  size="small"><!--(onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)"-->
+
+                                <ng-template #caption>
+                                    <div class="flex flex-wrap items-center justify-between gap-3">
+                                        <!--<h5 class="text-1xl font-semibold text-800">LISTADO DE PAGOS</h5>-->
+                                        <div class="flex gap-2 items-center">
+                                            <p-button label="Expandir Detalle" icon="pi pi-plus" text (onClick)="expandAll()" />
+                                            <p-button label="Reducir Detalle" icon="pi pi-minus" text (onClick)="collapseAll()" />
+                                        </div>
+                                        <div class="flex flex-col md:flex-row gap-4">
+                                            <p-inputgroup>
+                                                <p-inputgroup-addon >
+                                                    <i class="pi pi-search" ></i>
+                                                </p-inputgroup-addon><!--(input)="onGlobalFilterPagos(dtPagos, $event)"-->
+                                                <input pInputText style="background-color: rgb(134, 191, 213)"   placeholder="Buscar" class="w-full sm:w-auto" />
+                                            </p-inputgroup>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                                <!-- Cabecera -->
+                                <ng-template #header>
+                                    <tr>
+                                    <th style="width: 5rem"></th>
+                                    <th >Nro Transacciones</th>
+                                    <th style="text-align: center;">Monto Recibo</th>
+                                    <th style="text-align: center;">Monto Total</th>
+                                    <!--<th style="text-align: center;">Accion</th>-->
+                                    </tr>
+                                </ng-template>
+                                <!-- Cuerpo -->
+                                <ng-template #body let-anulados let-expanded="expanded">
+                                    <tr>
+                                    <td style="width: 4%">
+                                        <p-button type="button"  [pRowToggler]="anulados"  [text]="true" size="small" 
+                                        severity="secondary" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                        />
+                                    </td>
+                                    <td style="width: 5%">{{ anulados.nroTransacciones }}</td>
+                                    <td style="text-align: center;width: 10%">
+                                        {{ anulados.impTotal | number: '1.2-2' }}
+                                    </td>
+                                    <td style="text-align: right;width: 2%">
+                                        {{ anulados.impCobrado | number: '1.2-2' }}
+                                    </td>
+                                    <!--<td style="text-align: center;width: 8%"> 
+                                        <i class="pi pi-print" style="font-size: 1.2rem;color: rgb(76, 89, 203); cursor:pointer;"
+                                         ></i>< ! --(click)="onRowImpresion(anulados.nroPago )"-- >
+                                    </td>-->
+                                    </tr>
+                                </ng-template>
+                                <!-- Fila expandida (detalle) -->
+                                <ng-template #expandedrow let-anulados>
+                                    <tr>
+                                    <td colspan="7">
+                                        <div class="p-4">
+                                        <h5>DETALLE DE PAGO</h5>
+                                        <p-table [value]="anulados.detallePagos" dataKey="nroSuministro" class="tabla-2">
+                                            <ng-template #header>
+                                            <tr>
+                                                <th>Suministro</th>
+                                                <th>Propietario</th>
+                                                <th>NroPago</th>
+                                                <th>Dia Pago</th>
+                                            </tr>
+                                            </ng-template>
+                                            <ng-template #body let-det>
+                                            <tr>
+                                                <td>{{ det.nroSuministro }}</td>
+                                                <td>{{ det.propietario }}</td>
+                                                <td>{{ det.nroPago }}</td>
+                                                <td class="text-right">{{ det.diaPago | date:'yyyy-MM-dd HH:mm:ss' }}</td><!--| number: '1.2-2' -->
+                                            </tr>
+                                            </ng-template>
+                                        </p-table>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                </ng-template>
+                    </p-table>
+                </p-tabpanel>
+                <p-tabpanel value="2">
+2
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</div>
