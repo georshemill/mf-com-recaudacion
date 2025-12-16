@@ -553,12 +553,14 @@ export class PagoComponent implements OnInit{
     return;
     }
     //this.funcionesService.popupConfirmacion("Anulacion","Desea Anular la Solicitud?","Anular").then((result)=>{
-      this.funcionesService.popupConfirmacion("Desea Realizar el Pago ?","","Pagar").then((result)=>{
+      /*this.funcionesService.popupConfirmacion("Desea Realizar el Pago ?","","Pagar").then((result)=>{
         if(result.isConfirmed){
           this.dialogVuelto=false
           this.guardar()
         }
-      });
+      });*/
+      this.dialogVuelto=false
+      this.guardar()
   }
 
   guardar(){
@@ -578,6 +580,7 @@ export class PagoComponent implements OnInit{
               this._ordenPagoModel.flagEventual=0
               this._ordenPagoModel.flagBarras=0
               this.ResumenCaja(this._ordenPagoModel.idCar)
+              this._ordenPagoModel.idFormaPago=1
               this._blockPrincipal=0
               this.listAnulacion() 
               hideGlobalLoader()
@@ -677,9 +680,12 @@ export class PagoComponent implements OnInit{
                 error: (err) => {
                   hideGlobalLoader()
                   this.funcionesService.popupError("Aviso de Usuario","ERROR DE EJECUCION");
+                  this._ordenPagoModel.idFormaPago=1
                   this._blockPrincipal=0
+
         
                   setTimeout(() => {
+                    this._ordenPagoModel.idFormaPago=1
                     this.inputSearch.input?.nativeElement.focus();
                     this.inputSearch.input?.nativeElement.select();
                   }, 100);
@@ -753,6 +759,7 @@ export class PagoComponent implements OnInit{
               this._ordenPagoModel.flagEventual=0
               this._ordenPagoModel.flagBarras=0
               this.ResumenCaja(this._ordenPagoModel.idCar)
+              this._ordenPagoModel.idFormaPago=1
               this._blockPrincipal=0
               hideGlobalLoader()
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"

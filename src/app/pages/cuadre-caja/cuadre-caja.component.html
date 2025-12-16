@@ -83,7 +83,7 @@
                                                 </p-accordion-panel>
                                             </p-accordion>
                                         </div>
-                                        <div  class="col-span-12 md:col-span-6" >
+                                        <div  class="col-span-12 md:col-span-6" *ngIf="blockTable==1" >
                                             <p-accordion [(activeIndex)]="accordions.solicitante" [multiple]="true">
                                                 <p-accordion-panel >
                                                     <p-accordion-header>Grafica x Conceptos</p-accordion-header>

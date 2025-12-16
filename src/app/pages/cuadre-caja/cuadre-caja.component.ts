@@ -105,6 +105,8 @@ init(){
 
 Busqueda(){
 
+  console.log(this._cuadreModel.fechaDpl)
+
   if(!this._cuadreModel.idSedeBsq?.toString().trim() //&&!this._cuadreModel.nrodocumentoBsq?.toString().trim()&&
        //!this._cuadreModel.nrosuministroBsq?.toString().trim() 
        && !this._cuadreModel.fechaDpl?.toString().trim()){
@@ -124,8 +126,20 @@ Busqueda(){
     this._cuadreModel.idSede=this.idSedeTk
     this._cuadreModel.idCar=1//idCar,
     this._cuadreModel.usuarioCreacion=this.usuarioTk
-    this._cuadreModel.fecha=this.funcionesService.devolverFecha(this._cuadreModel.fechaDpl)
-    
+    //this._cuadreModel.fecha=this._cuadreModel.fechaDpl//this.funcionesService.devolverFecha(this._cuadreModel.fechaDpl)
+    const fecha = this._cuadreModel.fechaDpl;
+
+    // Regex para formato YYYY-MM-DD
+    const formatoISO = /^\d{4}-\d{2}-\d{2}$/;
+
+    if (formatoISO.test(fecha!)) {
+      this._cuadreModel.fecha = fecha;
+    } else {
+      this._cuadreModel.fecha = this.funcionesService.devolverFecha(fecha);
+    }
+
+
+
   this.recaudacionService.CuadrexConcepto(this._cuadreModel).subscribe({
       next: (data) => {
         if (data.data.length != 0) {
