@@ -62,6 +62,7 @@ export class PagoComponent implements OnInit{
   totalMonto: number = 0;
   _personas:Personas[] = []
   blockTable:number=0
+  blockPago:number=0
   nrodocumento: string=""
   datos: string=""
   campo: string=""
@@ -245,6 +246,7 @@ export class PagoComponent implements OnInit{
         if (data.data != null) {
             this._ordenPagoModel = data.data;
             this._deudaList= data.data.deudaList
+            this.blockPago = Array.isArray(this._deudaList) && this._deudaList.length > 0 ? 1 : 0;
             this._blockPrincipal=1
             this._ordenPagoModel.idPersona=null
             this.calcularTotal()
@@ -277,6 +279,7 @@ export class PagoComponent implements OnInit{
             if (data.data != null) {
               this._ordenPagoModel = data.data;
               this._deudaList= data.data.deudaList
+              this.blockPago = Array.isArray(this._deudaList) && this._deudaList.length > 0 ? 1 : 0;
               this._blockPrincipal=1
               this._ordenPagoModel.idPersona=null
               this.calcularTotal()
@@ -314,6 +317,7 @@ export class PagoComponent implements OnInit{
             if (data.data != null) {
               this._ordenPagoModel = data.data;
               this._deudaList= data.data.deudaList
+              this.blockPago = Array.isArray(this._deudaList) && this._deudaList.length > 0 ? 1 : 0;
               this._blockPrincipal=1
               this._ordenPagoModel.idPersona=null
               this.calcularTotal()
@@ -355,6 +359,7 @@ export class PagoComponent implements OnInit{
             if (data.data != null) {
               this._ordenPagoModel = data.data;
               this._deudaList= data.data.deudaList
+              this.blockPago = Array.isArray(this._deudaList) && this._deudaList.length > 0 ? 1 : 0;
               this._blockPrincipal=1
               this._ordenPagoModel.idPersona=null
               this.calcularTotal()
@@ -973,6 +978,7 @@ export class PagoComponent implements OnInit{
             if (data.data != null) {
               this._ordenPagoModel = data.data;
               this._deudaList= data.data.deudaList
+              this.blockPago = Array.isArray(this._deudaList) && this._deudaList.length > 0 ? 1 : 0;
               this._blockPrincipal=1
               this._ordenPagoModel.idPersona=null
               this.calcularTotal()

@@ -327,8 +327,8 @@
                                                     <p-button label="Facturaciones" icon="pi pi-chart-line" variant="outlined" severity="success" (click)="colateral()"></p-button>
                                                 </div>
                                                 
-                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1">
-                                                    <p-button label="Pagar Deuda" icon="pi pi-send" severity="info"  (onClick)="validaForm()"></p-button>
+                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1 ">
+                                                    <p-button label="Pagar Deuda" icon="pi pi-send" severity="info" [disabled]="blockPago==0" (onClick)="validaForm()"></p-button>
                                                 </div>
                                                 <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1">
                                                     <p-button label="Cancelar" icon="pi pi-times" severity="danger"  (onClick)="cancelarForm()"></p-button>
@@ -385,6 +385,7 @@
                                                         <td style="min-width: 4rem" class="text-center">
                                                             <p-button icon="pi pi-trash" severity="danger" size="small" (click)="removeCate(i)"/>
                                                         </td>
+                                                        
                                                     </tr>
                                                 </ng-template>
                                                 <ng-template #footer>
@@ -976,7 +977,8 @@
         <div class="field">
             <label class="font-semibold text-lg">Efectivo</label>
             <p-inputNumber #inputEfectivo mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [(ngModel)]="efectivo" (ngModelChange)="calcularVuelto()"
-                        class="w-full"[inputStyle]="{ 'text-align': 'right','color': '#16a34a','font-weight': 'bold', 'font-size': '3.0rem'}">
+                        class="w-full"[inputStyle]="{ 'text-align': 'right','color': '#16a34a','font-weight': 'bold', 'font-size': '3.0rem'}"
+                        (keydown.enter)="pagarDeduda()">
             </p-inputNumber>
         </div>
         <div class="field">
