@@ -37,8 +37,15 @@ export class CuadreCajaComponent {
   _cuadrexComprobante:GestionCuadre[] = []
   _cuadrexImporte:CuadrexImporte[] = []
   blockTable:number=0
+  blockPadron:number=0
+  urlView: string=""
+  displayPDF:boolean=false
+  Fechatotal: string=""
+
+  totalMontoxConcepto: number = 0;
 
   filtroCar: number = 0;
+
   _car:Car[] = []
   expandedRows: Record<number, boolean> = {};  
 
@@ -65,6 +72,18 @@ export class CuadreCajaComponent {
   nombreXSede: string[] = [];
   cantidadXComprobante: number[] = [];
   nombreXComprobante: string[] = [];
+
+  totales = {
+    totalConcepto: 0,
+    impAlca: 0,
+    impIgv: 0,
+    impInteres: 0,
+    impOtrosConceptos: 0,
+    impTotalMes: 0,
+    redondeoActual: 0,
+    redondeoAnterior: 0,
+    impCargoFijo: 0
+  };
 
 
 tabs = [
@@ -159,6 +178,11 @@ Busqueda(){
       next: (data) => {
         if (data.data.length != 0) {
           this._cuadrexTipo = data.data;
+          this.totalMontoxConcepto = this._cuadrexTipo.reduce(
+            (sum, item) => sum + item.importe,
+            0
+          );
+          
           this.cantidadConcepto= this._cuadrexTipo.map(item => item.importe);
           this.nombreConcepto= this._cuadrexTipo.map(item => item.tipoDeuda);
           this.initChartTorta();
@@ -267,21 +291,22 @@ Busqueda(){
 
     // Regex para formato YYYY-MM-DD
     const formatoISO1 = /^\d{4}-\d{2}-\d{2}$/;
-    let Fechatotal
+   
 
     if (formatoISO1.test(fecha1!)) {
-      Fechatotal = fecha;
+      this.Fechatotal = fecha!;
     } else {
-      Fechatotal = this.funcionesService.devolverFecha(fecha);
+      this.Fechatotal = this.funcionesService.devolverFecha(fecha);
     }
                                           
-  this.recaudacionService.CuadrexImporte({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:Fechatotal!,
+  this.recaudacionService.CuadrexImporte({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:this.Fechatotal!,
                                           idCar:this.filtroCar,usuarioCreacion:this.usuarioTk}).subscribe({
 
     next: (data) => {
         if (data.data.length != 0) {
           this._cuadrexImporte = data.data;
           this.blockTable=1
+          this.blockPadron=1
 
           hideGlobalLoader()
         } else {
@@ -299,6 +324,14 @@ Busqueda(){
         //this._gestionSolicitudModel.nrosolicitudBsq=null
       }
     });
+
+}
+
+viewPDF(){
+  this.urlView="http://apisistemas.ddns.net/comercialWEB/recaudacion/cuadreCaja.php?idempresa="+this.idEmpresaTk+"&idsede="+this.idSedeTk+"&idCar="+this.filtroCar+"&fecha="+this.Fechatotal+"&usuarioCreacion="+this.usuarioTk+""
+  
+  //http://apisistemas.ddns.net/comercialWEB/recaudacion/cuadreCaja.php?idempresa=1&idSede=1&idCar=1&fecha=2026-01-12&usuarioCreacion=CAJACH
+  this.displayPDF=true
 
 }
 

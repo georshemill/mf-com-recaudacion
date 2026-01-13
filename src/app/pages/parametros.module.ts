@@ -35,6 +35,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { TabsModule } from 'primeng/tabs';
 import { DatePickerModule } from 'primeng/datepicker';
 import { UppercaseDirective } from './utils/uppercase.directive';
+import { SafePipe } from './utils/safe.pipe';
 
 
 @NgModule({
@@ -73,7 +74,8 @@ import { UppercaseDirective } from './utils/uppercase.directive';
         InputGroup,
         UppercaseDirective,
         ToggleSwitchModule,
-        CardModule
+        CardModule,
+        SafePipe,
     ],
     exports: [
       InputTextModule,
@@ -110,7 +112,8 @@ import { UppercaseDirective } from './utils/uppercase.directive';
       InputGroup,
       UppercaseDirective,
       ToggleSwitchModule,
-      CardModule
+      CardModule,
+      SafePipe,
     ]
 })
 export class ParametrosModule {
