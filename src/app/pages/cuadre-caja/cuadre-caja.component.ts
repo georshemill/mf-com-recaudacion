@@ -11,6 +11,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { ChartModule, UIChart } from 'primeng/chart';
 import { LayoutService } from '../../layout/service/layout.service';
 import { CuadrexImporte } from '../../models/CuadrexImporte';
+import { Car } from '../../models/Car';
 
 @Component({
   selector: 'app-cuadre-caja',
@@ -27,6 +28,7 @@ export class CuadreCajaComponent {
   idUsuarioTk = GlobalSession.idUsuario;
   
   fechActual=new Date();
+  fechActualFiltro = new Date().toLocaleDateString('en-CA');
   _sede:Sede[] = []
   _cuadreModel:GestionCuadre=new GestionCuadre
   _cuadrexForma:GestionCuadre[] = []
@@ -36,6 +38,8 @@ export class CuadreCajaComponent {
   _cuadrexImporte:CuadrexImporte[] = []
   blockTable:number=0
 
+  filtroCar: number = 0;
+  _car:Car[] = []
   expandedRows: Record<number, boolean> = {};  
 
   //GRAFICAS
@@ -100,12 +104,23 @@ init(){
   })
 
 
+  this.recaudacionService.dropdownCar(this.idEmpresaTk!, this.idSedeTk!, this.usuarioTk).subscribe((respuesta) => {
+    this._car = respuesta.data;
+    
+    // Verifica que _car no esté vacío y accede al primer registro
+    if (this._car && this._car.length > 0) {
+      this.filtroCar = this._car[0].idCar;
+    } else {
+    }
+  });
+
+
 
 }
 
 Busqueda(){
 
-  console.log(this._cuadreModel.fechaDpl)
+  //console.log(this._cuadreModel.fechaDpl)
 
   if(!this._cuadreModel.idSedeBsq?.toString().trim() //&&!this._cuadreModel.nrodocumentoBsq?.toString().trim()&&
        //!this._cuadreModel.nrosuministroBsq?.toString().trim() 
@@ -245,8 +260,24 @@ Busqueda(){
       }
     });
 
-  this.recaudacionService.CuadrexImporte({idEmpresa:this.idEmpresaTk,idSede:3,fecha:"2025-04-08",
-                                          idCar:0,usuarioCreacion:"MIGRA"}).subscribe({
+  /*this.recaudacionService.CuadrexImporte({idEmpresa:this.idEmpresaTk,idSede:3,fecha:"2025-04-08",
+                                          idCar:0,usuarioCreacion:"MIGRA"}).subscribe({*/
+
+                                          const fecha1 = this._cuadreModel.fechaDpl;
+
+    // Regex para formato YYYY-MM-DD
+    const formatoISO1 = /^\d{4}-\d{2}-\d{2}$/;
+    let Fechatotal
+
+    if (formatoISO1.test(fecha1!)) {
+      Fechatotal = fecha;
+    } else {
+      Fechatotal = this.funcionesService.devolverFecha(fecha);
+    }
+                                          
+  this.recaudacionService.CuadrexImporte({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:Fechatotal!,
+                                          idCar:this.filtroCar,usuarioCreacion:this.usuarioTk}).subscribe({
+
     next: (data) => {
         if (data.data.length != 0) {
           this._cuadrexImporte = data.data;

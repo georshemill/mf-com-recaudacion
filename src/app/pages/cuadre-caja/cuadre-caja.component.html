@@ -14,11 +14,18 @@
               Búsqueda Personalizada
             </legend>
             <div class="grid grid-cols-12 gap-4 ">
-                <div class="col-span-12 md:col-span-3 md:col-start-3">
+                <div class="col-span-12 md:col-span-3 ">
                     <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
                         <p-select [options]="_sede" optionLabel="nombre"  optionValue="idSede" filterBy="descripcion" [filter]="true"
                                   [(ngModel)]="_cuadreModel.idSedeBsq"  class="w-full" appendTo="body"  ></p-select> 
                         <label>Sede</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-3 ">
+                    <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
+                        <p-select [options]="_car" optionLabel="descripcion"  optionValue="idCar" filterBy="descripcion" [filter]="true"
+                                  [(ngModel)]="filtroCar"  class="w-full" appendTo="body"  ></p-select> 
+                        <label>CAR</label>
                     </p-floatlabel>
                 </div>
                 <div class="col-span-12 md:col-span-4 ">

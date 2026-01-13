@@ -130,6 +130,10 @@ export class PagoComponent implements OnInit{
       this._formaPago=respuesta.data
     })
 
+    this.recaudacionService.dropdownLocalidad().subscribe((respuesta) => {
+      this._localidad=respuesta.data
+    })
+
     /*this.recaudacionService.dropdownCar(this.idEmpresaTk!,this.idSedeTk!,this.usuarioTk).subscribe((respuesta) => {
       this._car=respuesta.data
     })*/
