@@ -941,6 +941,8 @@ export class PagoComponent implements OnInit{
             if (data.data.length != 0) {
               this._filtroCliente = data.data;
               this.blockTable = 1;
+              this._ordenPagoModel.idFormaPago=1
+              this.onChangeFormaPago(1)
               hideGlobalLoader()
             } else {
               hideGlobalLoader()
@@ -976,6 +978,8 @@ export class PagoComponent implements OnInit{
               this.calcularTotal()
               this.dialogCliente=false
               this.flagGeneraPago=0
+              this._ordenPagoModel.idFormaPago=1
+              this.onChangeFormaPago(1)
               hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){

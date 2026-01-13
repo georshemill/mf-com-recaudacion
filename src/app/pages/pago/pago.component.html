@@ -103,7 +103,7 @@
                                             </p-inputgroup-addon>
                                         </p-inputgroup>
                                     </div>
-                                    <div class="col-span-12 md:col-span-1 flex items-center" >
+                                    <div class="col-span-12 md:col-span-2 flex items-center" >
                                         <p-checkbox  binary="true" [ngModel]="_ordenPagoModel.flagEventual === 1"
                                                     (onChange)="setCheckboxValue('flagEventual', $event.checked)" />
                                         <label for="ny" class="ml-2">Eventual</label>
@@ -113,7 +113,7 @@
                                                     (onChange)="setCheckboxValue('flagBarras', $event.checked)" />
                                         <label for="ny" class="ml-2">Codigo de Barras</label>
                                     </div>
-                                    <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                    <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
                                         <div class="flex items-center gap-2">
                                             <div class="text-3xl">💵</div>
                                             <div class="text-surface-600 dark:text-surface-200">
@@ -137,14 +137,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                    <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
                                         <div class="flex items-center gap-2">
                                             <div class="text-surface-600 dark:text-surface-200">
                                               <span class="font-semibold">Código Antiguo: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.codigoAlternativo}}</span></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                    <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
                                         <div class="flex items-center gap-2">
                                             <div class="text-2xl">🏠</div>
                                             <div class="text-surface-600 dark:text-surface-200">
@@ -274,23 +274,23 @@
                                                 Acciones
                                             </legend>
                                             <div class="grid grid-cols-12 gap-4 ">
-                                                <div class="col-span-12 md:col-span-7 flex items-center" *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-12 flex items-center" *ngIf="_blockPrincipal==1">
                                                     <!--[ngModel]="_gestionSolicitudModel.flagRepresentante === 1"
                                                                 (onChange)="setCheckboxValue('flagRepresentante', $event.checked)"-->
                                                     <p-checkbox  binary="true" />
                                                     <label for="ny" class="ml-2">Cargar Colateral del CORE por defecto</label><!--Cargar -->
                                                 </div>
-                                                <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
                                                     <p-button label="Nuevo Colateral" icon="pi pi-plus" variant="outlined" severity="warn" (click)="colateral()"></p-button>
                                                 </div>
-                                                <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
                                                     <p-button label="Facturaciones" icon="pi pi-chart-line" variant="outlined" severity="success" (click)="colateral()"></p-button>
                                                 </div>
                                                 
-                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-6 " *ngIf="_blockPrincipal==1">
                                                     <p-button label="Pagar Deuda" icon="pi pi-send" severity="info"  (onClick)="validaForm()"></p-button>
                                                 </div>
-                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-6 " *ngIf="_blockPrincipal==1">
                                                     <p-button label="Cancelar" icon="pi pi-times" severity="danger"  (onClick)="cancelarForm()"></p-button>
                                                 </div>
                                             </div>
