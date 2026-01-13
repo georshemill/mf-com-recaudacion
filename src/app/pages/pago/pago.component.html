@@ -1,10 +1,11 @@
 <div class="card overflow-x-auto">
-    <div class="flex justify-center gap-3 mb-6">
-        <!--<i class="pi pi-user text-3xl text-primary-50"></i>
-        <h2 class="text-xl font-semibold text-primary-50">Acceso CAR</h2>-->
+    <!-- ANTIGUO
+     <div class="flex justify-center gap-3 mb-6">
+        < !--<i class="pi pi-user text-3xl text-primary-50"></i>
+        <h2 class="text-xl font-semibold text-primary-50">Acceso CAR</h2>-- >
         <div class="text-3xl">🗃️</div>
         <div class="text-surface-600 dark:text-surface-200">
-          <!--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.propietario}}</span>-->
+          < !--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.propietario}}</span>-- >
           <span class="font-semibold">CAR: <span class="font-bold text-primary text-3xl">{{_tituloCar}}</span></span>
         </div>
     </div>
@@ -16,6 +17,33 @@
                 <div class="font-bold text-primary">Gestion de Pagos</div>
             </div>
         </div>
+    </div>
+    -->
+    <div class="flex align-items-center mb-6">
+        <!-- IZQUIERDA -->
+        <div class="flex gap-3 align-items-center flex-1">
+            <div class="text-3xl">💰</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-xl font-semibold">
+                    CANCELACION DE RECIBO
+                </div>
+                <div class="font-bold text-primary">
+                    Gestión de Pagos
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-2 align-items-center justify-content-center flex-1">
+            <div class="text-3xl">🗃️</div>
+            <div class="text-surface-600 dark:text-surface-200">
+                <span class="font-semibold">
+                    CAR:
+                    <span class="font-bold text-primary text-3xl">
+                        {{ _tituloCar }}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="flex-1"></div>
     </div>
     <div class="grid grid-cols-12 gap-4 ">
         <div class="col-span-12 md:col-span-2" >
@@ -103,7 +131,7 @@
                                             </p-inputgroup-addon>
                                         </p-inputgroup>
                                     </div>
-                                    <div class="col-span-12 md:col-span-2 flex items-center" >
+                                    <div class="col-span-12 md:col-span-1 flex items-center" >
                                         <p-checkbox  binary="true" [ngModel]="_ordenPagoModel.flagEventual === 1"
                                                     (onChange)="setCheckboxValue('flagEventual', $event.checked)" />
                                         <label for="ny" class="ml-2">Eventual</label>
@@ -113,7 +141,7 @@
                                                     (onChange)="setCheckboxValue('flagBarras', $event.checked)" />
                                         <label for="ny" class="ml-2">Codigo de Barras</label>
                                     </div>
-                                    <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
+                                    <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
                                         <div class="flex items-center gap-2">
                                             <div class="text-3xl">💵</div>
                                             <div class="text-surface-600 dark:text-surface-200">
@@ -137,7 +165,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
+                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
                                         <div class="flex items-center gap-2">
                                             <div class="text-surface-600 dark:text-surface-200">
                                               <span class="font-semibold">Código Antiguo: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.codigoAlternativo}}</span></span>
@@ -153,17 +181,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-span-12 md:col-span-4 md:col-start-5" *ngIf="_blockPrincipal==1" >
+                                    <!--<div class="col-span-12 md:col-span-4 md:col-start-5" *ngIf="_blockPrincipal==1" >
                                         <div class="flex items-center gap-2">
                                             <div class="text-2xl">🛠️</div>
                                             <div class="text-surface-600 dark:text-surface-200">
-                                              <!--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.estadoServicio}}</span>-->
+                                              <! --<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.estadoServicio}}</span>-- >
                                               <span class="font-semibold">Estado Servicio: <span  class="product-badge  fs-12" 
                                               [ngClass]="{'status-instock': _ordenPagoModel.idTipoEstadoServicio == 1, 'status-outofstock': _ordenPagoModel.idTipoEstadoServicio != 1}">
                                               {{_ordenPagoModel.estadoServicio}}</span> </span> 
                                             </div>
                                           </div>
-                                    </div>
+                                    </div>-->
                                     
                                     
                                     <!--<div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
@@ -274,20 +302,32 @@
                                                 Acciones
                                             </legend>
                                             <div class="grid grid-cols-12 gap-4 ">
-                                                <div class="col-span-12 md:col-span-12 flex items-center" *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-8 flex items-center" *ngIf="_blockPrincipal==1">
                                                     <!--[ngModel]="_gestionSolicitudModel.flagRepresentante === 1"
                                                                 (onChange)="setCheckboxValue('flagRepresentante', $event.checked)"-->
                                                     <p-checkbox  binary="true" />
                                                     <label for="ny" class="ml-2">Cargar Colateral del CORE por defecto</label><!--Cargar -->
                                                 </div>
-                                                <div class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1" >
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="text-2xl">🛠️</div>
+                                                        <div class="text-surface-600 dark:text-surface-200">
+                                                          <!--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.estadoServicio}}</span>-->
+                                                          <span class="font-semibold">Estado Servicio: <span  class="product-badge  fs-12" 
+                                                          [ngClass]="{'status-instock': _ordenPagoModel.idTipoEstadoServicio == 1, 'status-outofstock': _ordenPagoModel.idTipoEstadoServicio != 1}">
+                                                          {{_ordenPagoModel.estadoServicio}}</span> </span> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
                                                     <p-button label="Nuevo Colateral" icon="pi pi-plus" variant="outlined" severity="warn" (click)="colateral()"></p-button>
                                                 </div>
-                                                <div class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
                                                     <p-button label="Facturaciones" icon="pi pi-chart-line" variant="outlined" severity="success" (click)="colateral()"></p-button>
                                                 </div>
                                                 
-                                                <div class="col-span-12 md:col-span-6 " *ngIf="_blockPrincipal==1">
+                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1">
                                                     <p-button label="Pagar Deuda" icon="pi pi-send" severity="info"  (onClick)="validaForm()"></p-button>
                                                 </div>
                                                 <div class="col-span-12 md:col-span-6 " *ngIf="_blockPrincipal==1">
