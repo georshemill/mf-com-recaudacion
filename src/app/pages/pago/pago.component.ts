@@ -151,7 +151,7 @@ export class PagoComponent implements OnInit{
     this.listAnulacion() 
 
     this._ordenPagoModel.idCar=1
-    //this.formCar=true
+    this.formCar=true
 
   }
 
