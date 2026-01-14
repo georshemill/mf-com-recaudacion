@@ -499,6 +499,10 @@ export class RecaudacionService {
         return this.http.post<ListResponse<Ticket>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ConsultaTicket`,model);
     }
 
+    AmortizaAuto(model: OrdenPago): Observable<ListResponse<OrdenPago>> {
+        return this.http.post<ListResponse<OrdenPago>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/AmortizacionAutomatica`,model);
+    }
+
 
 
     ValidaLoginPago(model:Partial<ValidaPassPago>): Observable<Boolean> {

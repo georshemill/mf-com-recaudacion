@@ -33,6 +33,7 @@ export class OrdenPagoComponent implements OnInit{
   _blockPrincipal:number=0
   dialogColateral:boolean=false
   dialogEventual:boolean=false
+  dialogAmortizacion:boolean=false
   _colateral:Colateral[] = []
   _comprobante:Comprobante[] = []
   _serieComprobante:SerieComprobante[] = []
@@ -49,6 +50,18 @@ export class OrdenPagoComponent implements OnInit{
   parametro: string=""
   _listBusquedaPago:BusquedaOrdenPago[] = []
   codigoAntiguo:number=0
+  //_deudaInicial:Deuda[] = []
+  _deudaInicial: Deuda | null = null;
+  _deudaInicialList: Deuda[] = [];
+  _amortizalList: Deuda[] = [];
+  _saldoInicial: OrdenPago | null = null;
+  _saldoList: OrdenPago[] = [];
+  validaTotal:number=0
+  nroFacturacionAmortiza:number=0
+  deudaTempAmortiz: Deuda | null = null;
+
+  eliminaListado: number = 0;
+
   
 
   
@@ -97,7 +110,7 @@ export class OrdenPagoComponent implements OnInit{
 
     //showGlobalLoader()
    
-    console.log(x)
+//    console.log(x)
     if(x.nroSuministro>0){
       this._ordenPagoModel.idSede=x.idSede
       this._ordenPagoModel.idEmpresa=1
@@ -334,6 +347,106 @@ export class OrdenPagoComponent implements OnInit{
     });
   }
 
+  amortiza(x:any,posicion:any){
+    console.log(x)
+    this.validaTotal=x.impTotalMes
+    this.nroFacturacionAmortiza=x.nroFacturacion
+    this._deudaInicial = JSON.parse(JSON.stringify(x));
+    this._deudaInicialList = [this._deudaInicial!];
+    this.dialogAmortizacion=true
+    //console.log("deuda"+this._deudaInicial)
+    this.eliminaListado=posicion
+    
+    
+
+  }
+
+  amortizaFinal(){
+
+    if( this.validaTotal < this._ordenPagoModel.importeAmortiz! ){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "El Importe debe ser Menor que el Total",life: 3000});
+    return;
+    }
+
+    if( this._ordenPagoModel.importeAmortiz==null ){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "El Importe debe ser Mayor de 0",life: 3000});
+    return;
+    }
+
+    this._ordenPagoModel.idEmpresa=this.idEmpresaTk
+    this._ordenPagoModel.idSede=this.idSedeTk
+    //this._ordenPagoModel.nroSuministro=2002759
+    this._ordenPagoModel.nroFacturacion=this.nroFacturacionAmortiza
+    this._ordenPagoModel.nroCuota=null
+    this._ordenPagoModel.tipoSaldo=1
+    this._ordenPagoModel.importe=this._ordenPagoModel.importeAmortiz
+
+    this.recaudacionService.AmortizaAuto(this._ordenPagoModel).subscribe({
+      next: (data) => {
+        if (data.data != null) {
+            //console.log(data)
+            this._saldoInicial=data.data
+            this._saldoList = [this._saldoInicial!];
+
+            this.deudaTempAmortiz = new Deuda;
+            this.deudaTempAmortiz.impIGV = this._saldoInicial.impIGV!
+            this.deudaTempAmortiz.baseImponible = this._saldoInicial.baseImponible!
+            this.deudaTempAmortiz.descripcion = this._saldoInicial.descripcion
+            this.deudaTempAmortiz.impTotalMes = this._saldoInicial.impTotalMes!
+            this.deudaTempAmortiz.idConcepto =this._saldoInicial.idConcepto
+            this.deudaTempAmortiz.flagEnReclamo = false
+            this.deudaTempAmortiz.flagNoFacturado = false
+            this.deudaTempAmortiz.nuevo = true; 
+            /*     
+            this._ordenPagoModel = data.data;
+            this._ordenPagoModel.codigo_antiguo=this.codigoAntiguo
+            //this._deudaList= data.data.deudaList
+            this._deudaList = data.data.deudaList.map(x => ({ ...x, flagEditable: false }));
+            
+            this._ordenPagoModel.idPersona=null
+            this.calcularTotal()*/
+            hideGlobalLoader()
+            
+        } else {
+          hideGlobalLoader()
+          this.funcionesService.popupError("Búsqueda sin información", "");
+          this._blockPrincipal=0
+        }
+      },
+      error: (err) => {
+        hideGlobalLoader()
+        this.funcionesService.popupError("Error", err);
+        this._blockPrincipal=0
+      }
+    });
+  }
+
+  AceptAmortiza(){
+    //console.log(this.deudaTempAmortiz)
+
+    if( this._saldoList.length === 0 ){
+      this.messageService.add({
+        severity: "warn",summary: "Aviso de usuario",
+        detail: "Debe Generar Amortizacion",life: 3000});
+    return;
+    }
+
+    this.dialogAmortizacion=false
+    this.removeCate(this.eliminaListado)
+    this._deudaList = this._deudaList ?? [];
+    this._deudaList.push(this.deudaTempAmortiz!)
+    this.calcularTotal()
+  }
+
+  cancelarAmortiza(){
+    this._saldoList=[]
+    this.dialogAmortizacion=false
+
+  }
 
 onGlobalFilterOrdenes(table: Table, event: Event) {
   table.filterGlobal((event.target as HTMLInputElement).value, 'contains');

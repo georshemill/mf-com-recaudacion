@@ -301,5 +301,16 @@ export class OrdenPago{
 	impTotalAnula: string | null = null;
 	fechaEmision: string | null = null;
 	codigoAlternativo: string | null = null;
-	
+	//AMORTIZACION
+	importeAmortiz:number | null = null;
+	nroFacturacion:number | null = null;
+	nroCuota:number | null = null;
+	tipoSaldo:number | null = null;
+	importe:number | null = null;
+
+	impIGV:number | null = null;
+	baseImponible:number | null = null;
+    descripcion: string | null = null;
+    impTotalMes:number | null = null;
+    idConcepto:number | null = null;
 }

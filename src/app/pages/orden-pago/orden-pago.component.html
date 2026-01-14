@@ -215,6 +215,7 @@
                                                     <th style="width: 10%" class="text-center">Base Imponible</th>
                                                     <th style="width: 10%" class="text-center">Importe Total</th>
                                                     <th class="text-center">Fecha Prórroga</th>
+                                                    <th class="text-center" >Amortizacion</th>
                                                     <th class="text-center" >Eliminar</th>
                                                     <!--<th class="text-center">Recibo</th>-->
                                                 </tr>
@@ -265,6 +266,13 @@
                                                     <td class="text-center">  
                                                         {{ pago.fechaProrroga | date:'yyyy-MM-dd'}}
                                                     </td>
+                                                    <!--<td pFrozenColumn frozenAlign="right" style="text-align: center;">
+                                                            <i class="pi pi-dollar" style="font-size: 1.3rem;color: rgb(25, 172, 11); cursor:pointer;" 
+                                                            (click)="amortiza(pago)"></i>
+                                                        </td>        -->
+                                                    <td style="text-align: center;">
+                                                        <p-button icon="pi pi-money-bill" severity="success" size="small" (click)="amortiza(pago,i)"/>
+                                                    </td>
                                                     <td style="min-width: 4rem" class="text-center">
                                                         <p-button icon="pi pi-trash" severity="danger" size="small" (click)="removeCate(i)"/>
                                                     </td>
@@ -277,7 +285,7 @@
                                                     <td  class="footer-total" colspan="1" style="text-align: right;"><!--class="font-bold p-2 fs-5"-->
                                                         S/ {{totalMonto | number : '1.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                                     </td>
-                                                    <td class="footer-total" colspan="2"></td>
+                                                    <td class="footer-total" colspan="3"></td>
                                                 </tr>
                                             </ng-template>
                                         </p-table>  
@@ -344,13 +352,6 @@
                                             <td style="text-align: right;">  
                                                 {{listado.impTotal | number:'1.2-2'}}
                                             </td>
-<!--
-<td pFrozenColumn frozenAlign="right" style="text-align: center;">
-                                                            <i class="pi pi-dollar" style="font-size: 1.3rem;color: rgb(25, 172, 11); cursor:pointer;" 
-                                                            ></i><! --(click)="onRowSelectOrden(listado)"-- >
-                                                        </td>                                            
--->
-
                                             <td style="text-align: center;">
                                                 <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
                                                     
@@ -499,3 +500,256 @@
 </p-dialog>
 
 
+<p-dialog header="Amortizacion" [(visible)]="dialogAmortizacion"  modal="modal" showEffect="fade" dismissableMask="false"  
+        draggable="false"  resizable="false"  contentStyleClass="dialog-content">
+        
+        <div class="col-12">
+            <div class="card">
+                    <fieldset class="border border-gray-300 rounded-lg p-5"><!--para usar con  scss class="fieldset border rounded-lg p-5"-->
+                        <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                            Importes Antes de amortizar
+                        </legend>
+                        <p-table #dt [value]="_deudaInicialList" responsiveLayout="scroll" 
+                                    [rowHover]="true"dataKey="id"  resizableColumns="true" size="small" >
+                                    <ng-template pTemplate="header">
+                                        <tr class="fs-12">
+                                            <th style="text-align: center;" >Agua</th>
+                                            <th  style="text-align: center;">Alcantarillado</th>
+                                            <th style="text-align: center;">Cargo Fijo</th>
+                                            <th style="width: 12%" >Importe Otros Conceptos</th>
+                                            <th style="text-align: center;" >Importe IGV</th>
+                                            <th style="text-align: center;">Importe Intereses</th>
+                                            <th style="text-align: center;">Red. Ant.</th>
+                                            <th style="text-align: center;" >Red. Act.</th>
+                                            <th style="text-align: center;">Total</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-amortIni>
+                                        <tr >
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impAgua | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">  
+                                                {{ amortIni.impAlcantarillado | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;" >
+                                                {{ amortIni.impCargoFijo | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;" >
+                                                {{ amortIni.impOtrosConceptos | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impIGV | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impInteres | number:'1.2-2'}}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.redondeoAnterior | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.redondeoActual | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impTotalMes | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                        </p-table>
+                    </fieldset>
+                    <br>
+                    <fieldset class="border border-gray-300 rounded-lg p-5"><!--para usar con  scss class="fieldset border rounded-lg p-5"-->
+                        <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                            Importes Amortizar
+                        </legend>
+                        <p-table #dt [value]="_amortizalList" responsiveLayout="scroll" 
+                                    [rowHover]="true"dataKey="id" size="small" resizableColumns="true" >
+                                    <ng-template pTemplate="header">
+                                        <tr class="fs-12">
+                                            <th style="text-align: center;" >Agua</th>
+                                            <th  style="text-align: center;">Alcantarillado</th>
+                                            <th style="text-align: center;">Cargo Fijo</th>
+                                            <th style="width: 12%" >Importe Otros Conceptos</th>
+                                            <th style="text-align: center;" >Importe IGV</th>
+                                            <th style="text-align: center;">Importe Intereses</th>
+                                            <th style="text-align: center;">Red. Ant.</th>
+                                            <th style="text-align: center;" >Red. Act.</th>
+                                            <th style="text-align: center;">Total</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-amortIni>
+                                        <tr >
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impAgua | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">  
+                                                {{ amortIni.impAlcantarillado | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;" >
+                                                {{ amortIni.impCargoFijo | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;" >
+                                                {{ amortIni.impOtrosConceptos | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impIGV | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impInteres | number:'1.2-2'}}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.redondeoAnterior | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.redondeoActual | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impTotalMes | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                        </p-table>
+                        <br>
+                        <div class="grid grid-cols-12 gap-4">
+                            <div class="col-span-12 md:col-span-2 d-flex justify-content-center ">
+                                <div class="grid grid-cols-12 gap-4">
+                                    <div class="col-span-12 md:col-span-12">
+                                        <p-floatlabel variant="on"><!--(keydown.enter)="BusquedaPersona()"-->
+                                            <input pInputText class="w-full"   [(ngModel)]="_ordenPagoModel.importeAmortiz"  />
+                                            <label >Importe para Amortizar</label>
+                                        </p-floatlabel>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-12 md:col-span-4 " >
+                                <p-button label="Amortizar" icon="pi pi-dollar" severity="info" (onClick)="amortizaFinal()" ></p-button>
+                            </div>
+                            
+                        </div>
+
+                    </fieldset>
+                    <br>
+                    <fieldset class="border border-gray-300 rounded-lg p-5"><!--para usar con  scss class="fieldset border rounded-lg p-5"-->
+                        <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                            Saldo pendiente
+                        </legend>
+                        <p-table #dt [value]="_saldoList" responsiveLayout="scroll" 
+                                    [rowHover]="true"dataKey="id" size="small" resizableColumns="true" >
+                                    <ng-template pTemplate="header">
+                                        <tr class="fs-12">
+                                            <th style="text-align: center;" >Agua</th>
+                                            <th  style="text-align: center;">Alcantarillado</th>
+                                            <th style="text-align: center;">Cargo Fijo</th>
+                                            <th style="width: 12%" >Importe Otros Conceptos</th>
+                                            <th style="text-align: center;" >Importe IGV</th>
+                                            <th style="text-align: center;">Importe Intereses</th>
+                                            <th style="text-align: center;">Red. Ant.</th>
+                                            <th style="text-align: center;" >Red. Act.</th>
+                                            <th style="text-align: center;">Total</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-amortIni>
+                                        <tr >
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impAgua | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">  
+                                                {{ amortIni.impAlcantarillado | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;" >
+                                                {{ amortIni.impCargoFijo | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;" >
+                                                {{ amortIni.impOtrosConceptos | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impIGV | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impInteres | number:'1.2-2'}}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.redondeoAnterior | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.redondeoActual | number:'1.2-2' }}
+                                            </td>
+                                            <td style="text-align: right;">
+                                                {{ amortIni.impTotalMes | number:'1.2-2' }}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                        </p-table>
+                    </fieldset>
+                    <br>
+                    <div class="grid grid-cols-12 gap-4 ">
+                        <div class="col-span-12 md:col-span-1 md:col-start-6" >
+                            <p-button label="Aceptar" icon="pi pi-check" severity="success" (onClick)="AceptAmortiza()" ></p-button>
+                        </div>
+                        <div class="col-span-12 md:col-span-2 " >
+                            <p-button label="Cancelar" icon="pi pi-times" severity="danger" (onClick)="cancelarAmortiza()" ></p-button>
+                        </div>
+
+                    </div>
+                    
+
+
+
+
+
+                <p-tabs value="0" *ngIf="blockTable==1">
+                    <p-tablist>
+                        <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado Personas</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0" >
+                            <div class="card">
+                                <p-table #dt [value]="_personas" responsiveLayout="scroll" [rows]="20" [globalFilterFields]="['from', 'title', 'apellidos','nroDocIdentidad']"
+                                    [paginator]="true"[rowsPerPageOptions]="[10, 20, 30]"[rowHover]="true"dataKey="id" [showCurrentPageReport]="true"
+                                    currentPageReportTemplate="Se Encontraron {first} de {last} Total {totalRecords} Registros"
+                                    resizableColumns="true" size="small" >
+                                    
+                                    <ng-template pTemplate="header">
+                                        <tr class="fs-12">
+                                            <th style="width: 4%" class="text-center" >IdPersona</th>
+                                            <th  class="text-center">Tipo Documento</th>
+                                            <th class="text-center">Nro Documento</th>
+                                            <th style="width: 12%" >Persona</th>
+                                            <th style="width: 12%" class="text-center" >Razon Social</th>
+                                            <th style="width: 7%" class="text-center" >Estado</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-personas>
+                                        <tr >
+                                            <td style="min-width: 4rem" class="text-center">
+                                                {{ personas.idPersona}}
+                                            </td>
+                                            <td class="text-center">  
+                                                {{ personas.idTipoDocIdentidad}}
+                                            </td>
+                                            <td style="min-width: 4rem" >
+                                                {{ personas.nroDocIdentidad}}
+                                            </td>
+                                            <td style="min-width: 4rem" >
+                                                {{ personas.nombreCompleto}}
+                                            </td>
+                                            <td style="min-width: 4rem" class="text-center">
+                                                {{ personas.razonSocial}}
+                                            </td>
+                                            <td style="min-width: 12rem" class="text-center">
+                                                <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
+                                                    <span  class="product-badge  fs-12" [ngClass]="{'status-instock': personas.estado == true, 'status-outofstock': personas.estado == false}">
+                                                    <span  class="fs-12 pi " [ngClass]="{'pi-check': personas.estado == true, ' pi-times': personas.estado == false}"></span> {{personas.estado == true ? 'Activo' : 'Inactivo'}}</span>
+                                                    &nbsp;&nbsp;<i class="pi pi-send" style="color: rgb(82, 162, 242); cursor:pointer;" (click)="onRowSelectPersona(personas)"></i> 
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+            </div>
+        </div>
+</p-dialog>
