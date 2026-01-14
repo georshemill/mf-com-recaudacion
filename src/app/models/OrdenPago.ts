@@ -320,4 +320,5 @@ export class OrdenPago{
 	redondeoAnterior:number | null = null;
 	redondeoActual:number | null = null;
 	impInicial:number | null = null;
+	impAgua:number | null = null;
 }

@@ -405,6 +405,7 @@ export class OrdenPagoComponent implements OnInit{
             this.deudaTempAmortiz.nroFacturacion =this._saldoInicial.nroFacturacion
             this.deudaTempAmortiz.tipoSaldo=this._saldoInicial.tipoSaldo!
             this.deudaTempAmortiz.serieDoc=this._saldoInicial.serieDoc
+            this.deudaTempAmortiz.impAgua =this._saldoInicial.impAgua!
             this.deudaTempAmortiz.impAlcantarillado =this._saldoInicial.impAlcantarillado!
             this.deudaTempAmortiz.impCargoFijo =this._saldoInicial.impCargoFijo!
             this.deudaTempAmortiz.impOtrosConceptos=this._saldoInicial.impOtrosConceptos!
