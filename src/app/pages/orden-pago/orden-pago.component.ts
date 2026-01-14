@@ -404,6 +404,15 @@ export class OrdenPagoComponent implements OnInit{
             //FALTANTE
             this.deudaTempAmortiz.nroFacturacion =this._saldoInicial.nroFacturacion
             this.deudaTempAmortiz.tipoSaldo=this._saldoInicial.tipoSaldo!
+            this.deudaTempAmortiz.serieDoc=this._saldoInicial.serieDoc
+            this.deudaTempAmortiz.impAlcantarillado =this._saldoInicial.impAlcantarillado!
+            this.deudaTempAmortiz.impCargoFijo =this._saldoInicial.impCargoFijo!
+            this.deudaTempAmortiz.impOtrosConceptos=this._saldoInicial.impOtrosConceptos!
+            this.deudaTempAmortiz.impInteres =this._saldoInicial.impInteres!
+            this.deudaTempAmortiz.redondeoAnterior=this._saldoInicial.redondeoAnterior!
+            this.deudaTempAmortiz.redondeoActual =this._saldoInicial.redondeoActual!
+            this.deudaTempAmortiz.impInicial =this._saldoInicial.impInicial!
+            //this.deudaTempAmortiz.=this._saldoInicial.
             
             /*     
             this._ordenPagoModel = data.data;

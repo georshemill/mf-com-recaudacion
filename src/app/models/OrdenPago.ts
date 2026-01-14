@@ -313,4 +313,11 @@ export class OrdenPago{
     descripcion: string | null = null;
     impTotalMes:number | null = null;
     idConcepto:number | null = null;
+	impAlcantarillado:number | null = null;
+	impCargoFijo:number | null = null;
+	impOtrosConceptos:number | null = null;
+	impInteres:number | null = null;
+	redondeoAnterior:number | null = null;
+	redondeoActual:number | null = null;
+	impInicial:number | null = null;
 }
