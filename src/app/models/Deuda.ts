@@ -30,4 +30,5 @@ export class Deuda{
 	baseImponible:number| 0 = 0;
     flagEditable:boolean | false = false;
     nuevo!:boolean
+    
 }

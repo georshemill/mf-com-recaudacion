@@ -388,7 +388,7 @@ export class OrdenPagoComponent implements OnInit{
     this.recaudacionService.AmortizaAuto(this._ordenPagoModel).subscribe({
       next: (data) => {
         if (data.data != null) {
-            //console.log(data)
+            console.log(data.data)
             this._saldoInicial=data.data
             this._saldoList = [this._saldoInicial!];
 
@@ -401,6 +401,10 @@ export class OrdenPagoComponent implements OnInit{
             this.deudaTempAmortiz.flagEnReclamo = false
             this.deudaTempAmortiz.flagNoFacturado = false
             this.deudaTempAmortiz.nuevo = true; 
+            //FALTANTE
+            this.deudaTempAmortiz.nroFacturacion =this._saldoInicial.nroFacturacion
+            this.deudaTempAmortiz.tipoSaldo=this._saldoInicial.tipoSaldo!
+            
             /*     
             this._ordenPagoModel = data.data;
             this._ordenPagoModel.codigo_antiguo=this.codigoAntiguo
