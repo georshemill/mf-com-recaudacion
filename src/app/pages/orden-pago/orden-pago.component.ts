@@ -284,13 +284,34 @@ export class OrdenPagoComponent implements OnInit{
     this._ordenPagoModel.usuarioCreacion=this.usuarioTk
 
     this._ordenPagoModel.deudaList=this._deudaList
-
-    const importeCero = this._deudaList.some((f) => f.impTotalMes === 0);
+    /*const importeCero = this._deudaList.some((f) => f.impTotalMes === 0);
     if (importeCero) {
       this.messageService.add({
         severity: "warn", 
         summary: "Aviso de usuario",
-        detail: "El Conpecto Agregado debe ser mayor a 0.", 
+        detail: "El Concepto Agregado debe ser mayor a 0.", 
+        life: 3000
+      });
+      return;
+    }*/
+
+    const importeCero = this._deudaList.some((f) => f.nuevo === true && f.impTotalMes === 0);
+    if (importeCero) {
+      this.messageService.add({
+        severity: "warn", 
+        summary: "Aviso de usuario",
+        detail: "El Concepto Agregado debe ser mayor a 0.", 
+        life: 3000
+      });
+      return;
+    }
+
+    const importeCero1 = this.totalMonto==0//this._deudaList.some((f) => f.nuevo === true && f.impTotalMes === 0);
+    if (importeCero1) {
+      this.messageService.add({
+        severity: "warn", 
+        summary: "Aviso de usuario",
+        detail: "El Monto Total por Pagar ser mayor a 0.", 
         life: 3000
       });
       return;
