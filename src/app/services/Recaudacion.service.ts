@@ -453,8 +453,8 @@ export class RecaudacionService {
         return this.http.get<ListResponse<Comprobante[]>>(`https://gateway1.emapasalas.net.pe/TipoComprobante/dropdown`);
     }
 
-    dropdownSerieComprobante(idlocalidad: string): Observable<ListResponse<SerieComprobante[]>> {
-        return this.http.get<ListResponse<SerieComprobante[]>>(`https://gateway1.emapasalas.net.pe/SerieComprobante/dropdown/${idlocalidad}`);
+    dropdownSerieComprobante(idSede: number,idComprobante: string): Observable<ListResponse<SerieComprobante[]>> {
+        return this.http.get<ListResponse<SerieComprobante[]>>(`https://gateway1.emapasalas.net.pe/SerieComprobante/dropdown/${idSede}/${idComprobante}`);
     }
 
     GeneraOrdenPago(model: OrdenPago): Observable<Mensaje> {

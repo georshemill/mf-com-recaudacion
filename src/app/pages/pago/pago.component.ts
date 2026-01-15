@@ -413,7 +413,7 @@ export class PagoComponent implements OnInit{
   
   changeComprobante(x:any){
 
-    this.recaudacionService.dropdownSerieComprobante(x).subscribe((respuesta) => {
+    this.recaudacionService.dropdownSerieComprobante(this.idSedeTk,x).subscribe((respuesta) => {
       this._serieComprobante=respuesta.data
     })
 
