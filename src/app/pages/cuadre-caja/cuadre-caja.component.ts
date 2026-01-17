@@ -39,6 +39,7 @@ export class CuadreCajaComponent {
   blockTable:number=0
   blockPadron:number=0
   urlView: string=""
+  urlImpresion: string=""
   displayPDF:boolean=false
   Fechatotal: string=""
 
@@ -121,6 +122,10 @@ init(){
   this.recaudacionService.dropdownSede().subscribe((respuesta) => {
     this._sede=respuesta.data
   })
+
+  this.recaudacionService.ConsultaParamae({idEmpresa: this.idEmpresaTk,idSede: this.idSedeTk,tipoParametro: "REPORTES",codigoParametro:"URL"}).subscribe(data => {
+    this.urlImpresion= data.data.valorParametro
+  });
 
 
   this.recaudacionService.dropdownCar(this.idEmpresaTk!, this.idSedeTk!, this.usuarioTk).subscribe((respuesta) => {
@@ -328,7 +333,7 @@ Busqueda(){
 }
 
 viewPDF(){
-  this.urlView="http://apisistemas.ddns.net/comercialWEB/recaudacion/cuadreCaja.php?idempresa="+this.idEmpresaTk+"&idsede="+this.idSedeTk+"&idCar="+this.filtroCar+"&fecha="+this.Fechatotal+"&usuarioCreacion="+this.usuarioTk+""
+  this.urlView=`${this.urlImpresion}/recaudacion/cuadreCaja.php?idempresa=${this.idEmpresaTk}&idsede=${this.idSedeTk}&idCar=${this.filtroCar}&fecha=${this.Fechatotal}&usuarioCreacion=${this.usuarioTk}`;
   
   //http://apisistemas.ddns.net/comercialWEB/recaudacion/cuadreCaja.php?idempresa=1&idSede=1&idCar=1&fecha=2026-01-12&usuarioCreacion=CAJACH
   this.displayPDF=true

@@ -84,6 +84,7 @@ import { BusquedAnulacionPago } from '../models/BusquedAnulacionPago';
 import { Ticket } from '../models/Ticket';
 import { GestionCuadre } from '../models/GestionCuadre';
 import { CuadrexImporte } from '../models/CuadrexImporte';
+import { Paramae } from '../models/Paramae';
 
 
 
@@ -580,6 +581,10 @@ export class RecaudacionService {
 
     BusquedaConexion(model: GestionCatastro): Observable<ListResponse<GestionCatastro>> {
         return this.http.post<ListResponse<GestionCatastro>>(`https://gateway8053.emapasalas.net.pe/CatastroClientes/CatastroConexion/SearchClienteConexion`,model);
+    }
+
+    ConsultaParamae(model:Partial <Paramae>): Observable<ListResponse<Paramae>> {
+        return this.http.post<ListResponse<Paramae>>(`https://gateway1.emapasalas.net.pe/Paramae/ConsultaTipo`,model);
     }
 
 

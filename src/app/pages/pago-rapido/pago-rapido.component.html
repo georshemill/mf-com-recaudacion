@@ -1,0 +1,1001 @@
+<div class="card overflow-x-auto">
+    <!-- ANTIGUO
+     <div class="flex justify-center gap-3 mb-6">
+        < !--<i class="pi pi-user text-3xl text-primary-50"></i>
+        <h2 class="text-xl font-semibold text-primary-50">Acceso CAR</h2>-- >
+        <div class="text-3xl">🗃️</div>
+        <div class="text-surface-600 dark:text-surface-200">
+          < !--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.propietario}}</span>-- >
+          <span class="font-semibold">CAR: <span class="font-bold text-primary text-3xl">{{_tituloCar}}</span></span>
+        </div>
+    </div>
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-3xl">💰</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-xl font-semibold">CANCELACION DE RECIBO</div>
+                <div class="font-bold text-primary">Gestion de Pagos</div>
+            </div>
+        </div>
+    </div>
+    -->
+    <div class="flex align-items-center mb-6">
+        <!-- IZQUIERDA -->
+        <div class="flex gap-3 align-items-center flex-1">
+            <div class="text-3xl">💰</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-xl font-semibold">
+                    CANCELACION DE RECIBO
+                </div>
+                <div class="font-bold text-primary">
+                    Gestión de Pagos
+                </div>
+            </div>
+        </div>
+        <div class="flex gap-2 align-items-center justify-content-center flex-1">
+            <div class="text-3xl">🗃️</div>
+            <div class="text-surface-600 dark:text-surface-200">
+                <span class="font-semibold">
+                    CAR:
+                    <span class="font-bold text-primary text-3xl">
+                        {{ _tituloCar }}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <div class="flex-1"></div>
+    </div>
+    <div class="grid grid-cols-12 gap-4 ">
+        <div class="col-span-12 md:col-span-2" >
+                 <br>
+                <p-card class="col-12 md:col-12 lg:col-3 card-dashboard "  styleClass="green-card">
+                  <div class="card-content">
+                    <div>
+                      <h5 class="flex justify-center" >Total Cobrado Hoy</h5>
+                      <h2 class="flex justify-center" style="font-size: 2rem;">S/ {{_resumenCajaModel.impTotal | number:'1.2-2'}} </h2>
+                    </div>
+                    <small>Fecha Recaudacion {{fechActual}} </small>
+                  </div>
+                </p-card>
+                <br>
+                <p-card class="col-12 md:col-12 lg:col-3 card-dashboard "  styleClass="blue-card">
+                    <div class="card-content">
+                      <div>
+                        <h5 class="flex justify-center" >Numero de Transacciones</h5>
+                        <h4 class="flex justify-center" style="font-size: 2rem;">{{_resumenCajaModel.nroTransacciones}}</h4>
+                      </div>
+                    </div>
+                </p-card>
+                  <br>
+                  <p-card class="col-12 md:col-12 lg:col-3 card-dashboard "  styleClass="red-card">
+                    <div class="card-content">
+                      <div>
+                        <h5 class="flex justify-center">Anulados Hoy</h5>
+                        <h4 class="flex justify-center" style="font-size: 2rem;">{{_resumenCajaModel.nroAnulados}}</h4>
+                      </div>
+                    </div>
+                  </p-card>
+                  <br>
+                 <!--<p-card class="col-12 md:col-12 lg:col-3 card-dashboard "  styleClass="amarillo-card">
+                    <div class="card-content">
+                      <div>
+                        <h5>Total Cobrado Hoy</h5>
+                        <h2>S/ 1,000.00</h2>
+                      </div>
+                      <small>Periodo comercial Setiembre 2025</small>
+                    </div>
+                  </p-card>-->
+           
+            
+           
+                
+        </div>
+        <div class="col-span-12 md:col-span-10" >
+            <div class="col-12">
+                <br>
+                <p-tabs value="0">
+                    <p-tablist>
+                        @for (tab of tabs; track tab.value) {
+                            <p-tab [value]="tab.value" class="flex items-center !gap-2 text-inherit"><i [class]="tab.icon"></i>{{ tab.title }}</p-tab>
+                        }
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0">
+                            <fieldset class="border border-gray-300 rounded-lg p-5">
+                                <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                                  Búsqueda Personalizada
+                                </legend>
+                                <div class="grid grid-cols-12 gap-4 ">
+                                    <!--<p-button  icon="pi pi-id-card" severity="secondary" (click)="printBoucher()" />-->
+                                    <div class="col-span-12 md:col-span-2">
+                                        <p-inputgroup>
+                                            <p-floatlabel variant="on">
+                                                <p-inputnumber  #inputSearch class="w-full" [(ngModel)]="_modalFiltro.nroSuministro" (keydown.enter)="BusquedaOrdenDirecta()" [useGrouping]="false" 
+                                                                (onInput)="_modalFiltro.nroOrdenPago = null;"/>
+                                                <label >Búsqueda Suministro</label>
+                                            </p-floatlabel>
+                                            <p-inputgroup-addon>
+                                                <p-button  icon="pi pi-id-card" severity="secondary" (click)="dialogCliente=true" />
+                                            </p-inputgroup-addon>
+                                        </p-inputgroup>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2">
+                                        <p-inputgroup>
+                                            <p-floatlabel variant="on">
+                                                <p-inputnumber  class="w-full" [(ngModel)]="_modalFiltro.nroOrdenPago" (keydown.enter)="BusquedaOrdenDirectaCaja()" [useGrouping]="false" 
+                                                                (onInput)="_modalFiltro.nroSuministro = null;"/>
+                                                <label >Búsqueda Orden Pago</label>
+                                            </p-floatlabel>
+                                            <p-inputgroup-addon>
+                                                <p-button  icon="pi pi-dollar" severity="secondary" (click)="dialogOrden=true" />
+                                            </p-inputgroup-addon>
+                                        </p-inputgroup>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-1 flex items-center" >
+                                        <p-checkbox  binary="true" [ngModel]="_ordenPagoModel.flagEventual === 1"
+                                                    (onChange)="setCheckboxValue('flagEventual', $event.checked)" />
+                                        <label for="ny" class="ml-2">Eventual</label>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-3 flex items-center" >
+                                        <p-checkbox  binary="true" [ngModel]="_ordenPagoModel.flagBarras === 1"
+                                                    (onChange)="setCheckboxValue('flagBarras', $event.checked)" />
+                                        <label for="ny" class="ml-2">Codigo de Barras</label>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-3xl">💵</div>
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-bold text-red-500 text-3xl">S/ {{totalMonto | number : '1.2-2'}}</span>
+                                            </div>
+                                          </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-2xl">👋</div>
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <!--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.propietario}}</span>-->
+                                              <span class="font-semibold">Propietario: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.propietario}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Suministro: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.nroSuministro}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Código Antiguo: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.codigoAlternativo}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-3" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-2xl">🏠</div>
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <!--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.direccion}}</span>-->
+                                              <span class="font-semibold">Dirección: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.direccion}} - ({{_ordenPagoModel.sucursal}})</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--<div class="col-span-12 md:col-span-4 md:col-start-5" *ngIf="_blockPrincipal==1" >
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-2xl">🛠️</div>
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <! --<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.estadoServicio}}</span>-- >
+                                              <span class="font-semibold">Estado Servicio: <span  class="product-badge  fs-12" 
+                                              [ngClass]="{'status-instock': _ordenPagoModel.idTipoEstadoServicio == 1, 'status-outofstock': _ordenPagoModel.idTipoEstadoServicio != 1}">
+                                              {{_ordenPagoModel.estadoServicio}}</span> </span> 
+                                            </div>
+                                          </div>
+                                    </div>-->
+                                    
+                                    
+                                    <!--<div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Localidad: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.sucursal}}</span></span>Dirección
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Tipo Documento: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.tipoDocIdentidad}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Nro Documento: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.nroDocIdentidad}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Tipo Corte A: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.corteAgua}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2 md:col-start-3" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Tipo Corte D: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.corteDesague}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2 " *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Fecha Corte: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.fechaCorte}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-span-12 md:col-span-2" *ngIf="_blockPrincipal==1">
+                                        <div class="flex items-center gap-2">
+                                            <div class="text-surface-600 dark:text-surface-200">
+                                              <span class="font-semibold">Fecha Reapertura: <span class="font-bold text-primary text-1xl">{{_ordenPagoModel.fechaReapertura}}</span></span>
+                                            </div>
+                                        </div>
+                                    </div>-->
+                                </div>    
+                            </fieldset>
+                            <br>
+                            <div  class="col-span-12 md:col-span-12">
+                                <div class="grid grid-cols-12 gap-4 ">
+                                    <div  class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
+                                        <fieldset class="border border-gray-300 rounded-lg p-5">
+                                            <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                                              Facturacion
+                                            </legend>
+                                            <div class="grid grid-cols-12 gap-4 ">
+                                                <div class="col-span-12 md:col-span-4">
+                                                    <p-floatlabel variant="on">
+                                                        <p-select  [options]="_comprobante" optionLabel="descripcion" optionValue="idTipoComprobante" (onChange)="changeComprobante($event.value)"
+                                                            filterBy="descripcion" [filter]="true" [(ngModel)]="_ordenPagoModel.idTipoComprobante"  [disabled]="true" class="w-full" appendTo="body"  ></p-select> 
+                                                        <label>Documento</label>
+                                                    </p-floatlabel>
+                                                </div>
+                                                <div class="col-span-12 md:col-span-4">
+                                                    <p-floatlabel variant="on">
+                                                        <p-select [options]="_serieComprobante" optionLabel="serieDoc"  optionValue="serieDoc" [disabled]="true"
+                                                            filterBy="serieDoc" [filter]="true" [(ngModel)]="_ordenPagoModel.serieDoc"  class="w-full" appendTo="body"  ></p-select> 
+                                                        <label>Serie</label>
+                                                    </p-floatlabel>
+                                                </div>
+                                                <div class="col-span-12 md:col-span-4">
+                                                    <p-floatlabel variant="on">
+                                                        <input pInputText class="w-full" disabled/>
+                                                        <label >Nro Documento</label>
+                                                    </p-floatlabel>
+                                                </div>
+                                                <div class="col-span-12 md:col-span-6">
+                                                    <p-floatlabel variant="on">
+                                                        <p-select [options]="_formaPago" optionLabel="descripcion"  optionValue="idFormaPago"  (onChange)="onChangeFormaPago($event.value)" 
+                                                            filterBy="descripcion" [filter]="true" [(ngModel)]="_ordenPagoModel.idFormaPago"   class="w-full" appendTo="body"  ></p-select> 
+                                                        <label>Forma Pago</label>
+                                                    </p-floatlabel>
+                                                </div>
+                                                <div class="col-span-12 md:col-span-6">
+                                                    <p-floatlabel variant="on">
+                                                        <input pInputText class="w-full"  [(ngModel)]="_ordenPagoModel.impFormaPago" [disabled]="_ordenPagoModel.idFormaPago== 1"/>
+                                                        <label >Importe Pago</label>
+                                                    </p-floatlabel>
+                                                </div>
+                                                <div class="col-span-12 md:col-span-12">
+                                                    <p-floatlabel variant="on"><!--[(ngModel)]="_ordenPagoModel.idFormaPago" -->
+                                                        <input pInputText class="w-full"    />
+                                                        <label >Referencia</label>
+                                                    </p-floatlabel>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div  class="col-span-12 md:col-span-6" *ngIf="_blockPrincipal==1">
+                                        <fieldset class="border border-gray-300 rounded-lg p-5">
+                                            <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                                                Acciones
+                                            </legend>
+                                            <div class="grid grid-cols-12 gap-4 ">
+                                                <div class="col-span-12 md:col-span-8 flex items-center" *ngIf="_blockPrincipal==1">
+                                                    <!--[ngModel]="_gestionSolicitudModel.flagRepresentante === 1"
+                                                                (onChange)="setCheckboxValue('flagRepresentante', $event.checked)"-->
+                                                    <p-checkbox  binary="true" />
+                                                    <label for="ny" class="ml-2">Cargar Colateral del CORE por defecto</label><!--Cargar -->
+                                                </div>
+                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1" >
+                                                    <div class="flex items-center gap-2">
+                                                        <div class="text-2xl">🛠️</div>
+                                                        <div class="text-surface-600 dark:text-surface-200">
+                                                          <!--<span class="font-bold text-primary text-1xl">{{_ordenPagoModel.estadoServicio}}</span>-->
+                                                          <span class="font-semibold">Estado Servicio: <span  class="product-badge  fs-12" 
+                                                          [ngClass]="{'status-instock': _ordenPagoModel.idTipoEstadoServicio == 1, 'status-outofstock': _ordenPagoModel.idTipoEstadoServicio != 1}">
+                                                          {{_ordenPagoModel.estadoServicio}}</span> </span> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!--<div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                                    <p-button label="Nuevo Colateral" icon="pi pi-plus" variant="outlined" severity="warn" (click)="colateral()"></p-button>
+                                                </div>-->
+                                                <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
+                                                    <p-button label="Facturaciones" icon="pi pi-chart-line" variant="outlined" severity="success" (click)="colateral()"></p-button>
+                                                </div>
+                                                
+                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1 ">
+                                                    <p-button label="Pagar Deuda" icon="pi pi-send" severity="info" [disabled]="blockPago==0" (onClick)="validaForm()"></p-button>
+                                                </div>
+                                                <div class="col-span-12 md:col-span-4 " *ngIf="_blockPrincipal==1">
+                                                    <p-button label="Cancelar" icon="pi pi-times" severity="danger"  (onClick)="cancelarForm()"></p-button>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                            </div>
+                            <p-tabs value="0" *ngIf="_blockPrincipal==1">
+                                <p-tablist>
+                                    <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Orden Pago</p-tab>
+                                </p-tablist>
+                                <p-tabpanels>
+                                    <p-tabpanel value="0" >
+                                        <div class="card">
+                                            <p-table  #dt [value]="_deudaList" scrollable="true" resizableColumns="true" scrollHeight="500px"  size="small"> 
+                                                <ng-template pTemplate="header">
+                                                    <tr >
+                                                        <th class="text-center">Ítem</th>
+                                                        <th class="text-center">Detalle</th>
+                                                        <th class="text-center">Reclamo</th>
+                                                        <th class="text-center">NF</th>
+                                                        <th style="width: 10%" class="text-center">Importe Total</th>
+                                                        <th class="text-center">Fecha Prórroga</th>
+                                                        <th class="text-center" >Eliminar</th>
+                                                        <!--<th class="text-center">Recibo</th>-->
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template #body let-pago let-rowIndex="rowIndex" let-i="rowIndex">
+                                                    <tr >
+                                                        <td class="text-center">  
+                                                            {{ rowIndex +1}}
+                                                        </td>
+                                                        <td class="text-center">  
+                                                            {{pago.descripcion}}
+                                                        </td>
+                                                        <td  class="text-center">
+                                                            <span >
+                                                                <p-checkbox [ngModel]="pago.flagEnReclamo!= false" [disabled]="true" binary="true" ></p-checkbox >
+                                                            </span>
+                                                        </td>
+                                                        <td  class="text-center">
+                                                            <span >
+                                                                <p-checkbox [ngModel]="pago.flagNoFacturado!= false" [disabled]="true" binary="true" ></p-checkbox >
+                                                            </span>
+                                                        </td>
+                                                        <td  style="text-align: right;">
+                                                            S/ {{ pago.impTotalMes | number:'1.2-2' }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </td>
+                                                        <td class="text-center">  
+                                                            {{ pago.fechaProrroga | date:'yyyy-MM-dd'}}
+                                                        </td>
+                                                        <td style="min-width: 4rem" class="text-center">
+                                                            <p-button icon="pi pi-trash" severity="danger" size="small" (click)="removeCate(i)"/>
+                                                        </td>
+                                                        
+                                                    </tr>
+                                                </ng-template>
+                                                <ng-template #footer>
+                                                    <tr>
+                                                        <td colspan="2"></td>
+                                                        <td colspan="2" class="font-bold p-2" style="text-align: right;">Total</td>
+                                                        <td class="font-bold p-2 fs-5" colspan="1" style="text-align: right;">
+                                                            S/ {{totalMonto | number : '1.2-2'}}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                        </td>
+                                                        <td colspan="2"></td>
+                                                </ng-template>
+                                            </p-table>  
+                                        </div>
+                                    </p-tabpanel>
+                                </p-tabpanels>
+                            </p-tabs>
+                        </p-tabpanel>
+                        <p-tabpanel value="1">
+                            <p-table #dtPagos class="tabla-1" [value]="_listXAnulacion" dataKey="nroSuministro" [tableStyle]="{ 'min-width': '60rem' }"
+                                [globalFilterFields]="['from','nroPago', 'propietario','nroSuministro','impTotal']" 
+                                [expandedRowKeys]="expandedRows"  size="small"><!--(onRowExpand)="onRowExpand($event)" (onRowCollapse)="onRowCollapse($event)"-->
+
+                                <ng-template #caption>
+                                    <div class="flex flex-wrap items-center justify-between gap-3">
+                                        <!--<h5 class="text-1xl font-semibold text-800">LISTADO DE PAGOS</h5>-->
+                                        <div class="flex gap-2 items-center">
+                                            <p-button label="Expandir Detalle" icon="pi pi-plus" text (onClick)="expandAll()" />
+                                            <p-button label="Reducir Detalle" icon="pi pi-minus" text (onClick)="collapseAll()" />
+                                        </div>
+                                        <div class="flex flex-col md:flex-row gap-4">
+                                            <p-inputgroup>
+                                                <p-inputgroup-addon >
+                                                    <i class="pi pi-search" ></i>
+                                                </p-inputgroup-addon>
+                                                <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterPagos(dtPagos, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                            </p-inputgroup>
+                                        </div>
+                                    </div>
+                                </ng-template>
+
+                                <!-- Cabecera -->
+                                <ng-template #header>
+                                    <tr>
+                                    <th style="width: 5rem"></th>
+                                    <th >Nro Pago</th>
+                                    <th style="text-align: center;">Nro Suministro</th>
+                                    <th style="text-align: center;">Propietario</th>
+                                    <th style="text-align: center;">Dia Pago</th>
+                                    <th class="text-center">Importe Total</th>
+                                    <th style="text-align: center;">Accion</th>
+                                    </tr>
+                                </ng-template>
+                                <!-- Cuerpo -->
+                                <ng-template #body let-anulados let-expanded="expanded">
+                                    <tr>
+                                    <td style="width: 4%">
+                                        <p-button type="button"  [pRowToggler]="anulados"  [text]="true" size="small" 
+                                        severity="secondary" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+                                        />
+                                    </td>
+                                    <td style="width: 5%">{{ anulados.nroPago }}</td>
+                                    <td style="text-align: center;width: 10%">
+                                        {{ anulados.nroSuministro }}
+                                    </td>
+                                    <td style="text-align: left;width: 25%">
+                                        {{ anulados.propietario }}
+                                    </td>
+                                    <td style="text-align: center;width: 10%">
+                                        {{ anulados.diaPago | date: 'yyyy-MM-dd HH:mm:ss' }}
+                                    </td>
+                                    <td style="text-align: right;width: 6%">
+                                        {{ anulados.impTotal | number: '1.2-2' }}
+                                    </td>
+                                    <td style="text-align: center;width: 8%"> 
+                                        <i class="pi pi-print" style="font-size: 1.2rem;color: rgb(76, 89, 203); cursor:pointer;"
+                                         (click)="onRowImpresion(anulados.nroPago )"></i>
+                                    </td>
+                                    </tr>
+                                </ng-template>
+                                <!-- Fila expandida (detalle) -->
+                                <ng-template #expandedrow let-anulados>
+                                    <tr>
+                                    <td colspan="7">
+                                        <div class="p-4">
+                                        <h5>DETALLE DE PAGO</h5>
+                                        <p-table [value]="anulados.detalleList" dataKey="nroSuministro" class="tabla-2">
+                                            <ng-template #header>
+                                            <tr>
+                                                <th>Descripción</th>
+                                                <th>SerieDoc</th>
+                                                <th>NroDoc</th>
+                                                <th>Imp. TotalMes</th>
+                                            </tr>
+                                            </ng-template>
+                                            <ng-template #body let-det>
+                                            <tr>
+                                                <td>{{ det.descripcion }}</td>
+                                                <td>{{ det.serieDoc }}</td>
+                                                <td>{{ det.nroDoc }}</td>
+                                                <td class="text-right">{{ det.impTotalMes | number: '1.2-2' }}</td>
+                                            </tr>
+                                            </ng-template>
+                                        </p-table>
+                                        </div>
+                                    </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+
+
+            </div>
+        </div>
+
+    </div>
+    
+    
+</div>
+<p-dialog header="Asignacion Colateral" [(visible)]="dialogColateral"  modal="modal" showEffect="fade" dismissableMask="true"  position="left" 
+        draggable="false"  resizable="false" [style]="{height:'1100px',width:'450px'}" contentStyleClass="dialog-content">
+    
+    <p-table #dtConceptos [value]="_colateral" [globalFilterFields]="['from','descripcion','baseImponible']"  
+            scrollable="true" scrollHeight="flex" size="small">
+        <ng-template #caption>
+          <div class="flex flex-wrap items-center justify-between gap-4">
+              <div class="flex flex-col md:flex-row gap-4">
+                  <p-inputgroup>
+                      <input pInputText placeholder="Buscar" (input)="onGlobalFilter(dtConceptos, $event)" class="w-full sm:w-auto" 
+                      style="height:35px;width:400px; font-size:12px; padding:2px 6px;"/>
+                  </p-inputgroup>
+              </div>
+          </div>
+      </ng-template>
+
+      <ng-template pTemplate="header">
+          <tr>
+              <th class="text-center">ID</th>
+              <th class="text-center">DESCRIPCION</th>
+              <th class="text-center">IMPORTE</th>
+          </tr>
+      </ng-template>
+
+      <ng-template pTemplate="body" let-calles>
+          <tr [pSelectableRow]="calles">
+              <td class="text-center">{{calles.idConcepto}}</td>
+              <td class="text-center">{{calles.descripcion}}</td>
+              <td class="text-right">{{calles.baseImponible | number : '1.2-2'}}
+                <i class="pi pi-send" style="color: rgb(25, 172, 11); cursor:pointer;" 
+                   (click)="onRowSelect(calles)"></i>
+              </td>
+          </tr>
+      </ng-template>
+  </p-table>
+</p-dialog>
+
+<p-dialog header="Búsqueda Orden de Pago" [(visible)]="dialogOrden"  modal="modal" showEffect="fade" dismissableMask="false"  
+        draggable="false"  resizable="false"  contentStyleClass="dialog-content">
+        
+        <div class="col-12">
+            <div class="card">
+                <p-tabs value="0" >
+                    <p-tablist>
+                        <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado Ordenes</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0" >
+                            <div class="card">
+                                <p-table #dtOrdenes [value]="_listBusquedaPago" 
+                                        scrollable="true" scrollHeight="400px" resizableColumns="true" size="small" 
+                                        [globalFilterFields]="['from','nroOrdenPago','propietario','nroSuministro']">
+                                <ng-template #caption>
+                                    <div class="flex flex-wrap items-center justify-between gap-3">
+                                        <h5 class="text-1xl font-semibold text-900">LISTADO DE ORDEN DE PAGO</h5>
+                                        <div class="flex gap-2 items-center">
+                                        </div>
+                                        <div class="flex flex-col md:flex-row gap-4">
+                                            <p-inputgroup>
+                                                <p-inputgroup-addon >
+                                                    <i class="pi pi-search" ></i>
+                                                </p-inputgroup-addon>
+                                                <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilterOrdenes(dtOrdenes, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                            </p-inputgroup>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header">
+                                    <tr >
+                                        <th class="text-center">Sede</th>
+                                        <th class="text-center">Nro OrdenPago</th>
+                                        <th class="text-center">Nro Suministro</th>
+                                        <th style="text-align: center;">Propietario</th>
+                                        <th class="text-center">Fecha Prepago</th>
+                                        <th class="text-center">Importe Total</th>
+                                        <th style="text-align: center;">Estado</th>
+                                        <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100">Asignacion</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template #body let-listado>
+                                    <tr  [pSelectableRow]="listado">
+                                        <td>
+                                            {{listado.idSede }}
+                                        </td>
+                                        <td style="text-align: center;">  
+                                            {{listado.nroOrdenPago}}
+                                        </td>
+                                        <td style="text-align: center;">  
+                                            {{listado.nroSuministro}}
+                                        </td>
+                                        <td style="text-align: center;">  
+                                            {{listado.propietario}}
+                                        </td>                                    
+                                        <td style="text-align: center;">  
+                                            {{listado.fechaPrepago | date:'yyyy-MM-dd' }}
+                                        </td>
+                                        <td style="text-align: right;">  
+                                            {{listado.impTotal | number:'1.2-2'}}
+                                        </td>
+                                        <td style="text-align: center;">
+                                            <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
+                                                
+                                                <span  class="product-badge  fs-12" [ngClass]="{'status-instock': listado.idEstado == 1, 'status-outofstock': listado.idEstado != 1}">
+                                                <span  class="fs-12 pi " [ngClass]="{'pi-check': listado.idEstado == 1, ' pi-times': listado.idEstado != 1}"></span> {{listado.estado}}</span> 
+                                            </span>
+                                        </td>
+                                        <td pFrozenColumn frozenAlign="right" style="text-align: center;">
+                                            <i class="pi pi-send" style="font-size: 1.3rem;color: rgb(25, 172, 11); cursor:pointer;" 
+                                            (click)="onRowSelectOrden(listado)"></i>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                            </div>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+            </div>
+        </div>
+</p-dialog>
+<p-dialog header="Asignacion Eventual" [(visible)]="dialogEventual"  modal="modal" showEffect="fade" dismissableMask="false"  
+        draggable="false"  resizable="false"  contentStyleClass="dialog-content">
+        
+        <div class="col-12">
+            <div class="card">
+                <fieldset class="border border-gray-300 rounded-lg p-5">
+                    <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+                      Búsqueda por Datos de Usuario
+                    </legend>
+                    <div class="grid grid-cols-12 gap-4">
+                        <div class="col-span-12 md:col-span-12 d-flex justify-content-center md:col-start-2">
+                            <div class="grid grid-cols-12 gap-4">
+                              <div class="col-span-12 md:col-span-3">
+                                  <p-floatlabel variant="on">
+                                      <input pInputText class="w-full" (keydown.enter)="BusquedaPersona()"  [(ngModel)]="nrodocumento" (input)="datos = '';" />
+                                      <label >Nro Documento</label>
+                                  </p-floatlabel>
+                              </div>
+                              <div class="col-span-12 md:col-span-5">
+                                  <p-floatlabel variant="on">
+                                      <input  pInputText  class="w-full" [(ngModel)]="datos" (keydown.enter)="BusquedaPersona()"  (input)="nrodocumento = '';datos = (datos || '').toUpperCase()"/>
+                                      <label >Datos Personales</label>
+                                  </p-floatlabel>
+                              </div>
+                              <div class="col-span-12 md:col-span-2">
+                                  <button pButton pRipple icon="pi pi-search"  severity="info" (click)="BusquedaPersona()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                              </div>
+                            </div>
+                          </div>
+                    </div>
+                </fieldset>
+                <p-tabs value="0" *ngIf="blockTable==1">
+                    <p-tablist>
+                        <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado Personas</p-tab>
+                    </p-tablist>
+                    <p-tabpanels>
+                        <p-tabpanel value="0" >
+                            <div class="card">
+                                <p-table #dt [value]="_personas" responsiveLayout="scroll" [rows]="20" [globalFilterFields]="['from', 'title', 'apellidos','nroDocIdentidad']"
+                                    [paginator]="true"[rowsPerPageOptions]="[10, 20, 30]"[rowHover]="true"dataKey="id" [showCurrentPageReport]="true"
+                                    currentPageReportTemplate="Se Encontraron {first} de {last} Total {totalRecords} Registros"
+                                    resizableColumns="true" size="small" >
+                                    
+                                    <ng-template pTemplate="header">
+                                        <tr class="fs-12">
+                                            <th style="width: 4%" class="text-center" >IdPersona</th>
+                                            <th  class="text-center">Tipo Documento</th>
+                                            <th class="text-center">Nro Documento</th>
+                                            <th style="width: 12%" >Persona</th>
+                                            <th style="width: 12%" class="text-center" >Razon Social</th>
+                                            <th style="width: 7%" class="text-center" >Estado</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template #body let-personas>
+                                        <tr >
+                                            <td style="min-width: 4rem" class="text-center">
+                                                {{ personas.idPersona}}
+                                            </td>
+                                            <td class="text-center">  
+                                                {{ personas.idTipoDocIdentidad}}
+                                            </td>
+                                            <td style="min-width: 4rem" >
+                                                {{ personas.nroDocIdentidad}}
+                                            </td>
+                                            <td style="min-width: 4rem" >
+                                                {{ personas.nombreCompleto}}
+                                            </td>
+                                            <td style="min-width: 4rem" class="text-center">
+                                                {{ personas.razonSocial}}
+                                            </td>
+                                            <td style="min-width: 12rem" class="text-center">
+                                                <span class="font-medium white-space-nowrap overflow-hidden text-overflow-ellipsis block" style="max-width: 30rem">
+                                                    <span  class="product-badge  fs-12" [ngClass]="{'status-instock': personas.estado == true, 'status-outofstock': personas.estado == false}">
+                                                    <span  class="fs-12 pi " [ngClass]="{'pi-check': personas.estado == true, ' pi-times': personas.estado == false}"></span> {{personas.estado == true ? 'Activo' : 'Inactivo'}}</span>
+                                                    &nbsp;&nbsp;<i class="pi pi-send" style="color: rgb(82, 162, 242); cursor:pointer;" (click)="onRowSelectPersona(personas)"></i> 
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </p-tabpanel>
+                    </p-tabpanels>
+                </p-tabs>
+            </div>
+        </div>
+</p-dialog>
+<p-dialog header="BUSQUEDA DE CLIENTE" [modal]="true" [(visible)]="dialogCliente" (onHide)="ModalClose()" modal="modal" showEffect="fade"   [style]="{height:'700px',width:'1200px'}" [maximizable]="true" >
+    <br>
+    <div class="card" >
+        <div class="grid grid-cols-12 gap-4 ">
+            <div class="col-span-12 md:col-span-2 flex items-center" >
+                <p-checkbox   binary="true"  [(ngModel)]="_modalFiltroCliente.checkSucursal" (ngModelChange)="actualizaSucursal($event)" />
+                <label for="ny" class="ml-2">Todos las Sucursales</label>
+            </div> 
+            <div  class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" [disabled]="blockLocalidad!= 0"
+                            filterBy="descripcion" [filter]="true"   class="w-full"  [(ngModel)]="_modalFiltroCliente.idSucursal" ></p-select> 
+                    <label>Localidad</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" [(ngModel)]="_modalFiltroCliente.direccion" appUppercase autocomplete="off" />
+                    <label>Calle</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-4" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" [(ngModel)]="_modalFiltroCliente.urbanizacion" appUppercase autocomplete="off" />
+                    <label>Urbanizacion</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()"  [(ngModel)]="_modalFiltroCliente.nroSuministro" 
+                            (input)="_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.propietario='';
+                            _modalFiltroCliente.nroDocIdentidad = '';_modalFiltroCliente.recibo = '';"  />
+                    <label>Nro Suministro</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.codigoAntiguo"
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.propietario='';
+                    _modalFiltroCliente.nroDocIdentidad = '';_modalFiltroCliente.recibo = '';" />
+                    <label>Codigo Antiguo</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.nroMedidor"
+                        (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.propietario='';
+                                _modalFiltroCliente.nroDocIdentidad = '';_modalFiltroCliente.recibo = '';" />
+                    <label>Nro Medidor</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-3" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()"[(ngModel)]="_modalFiltroCliente.nroDocIdentidad" 
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.propietario='';
+                            _modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.recibo = '';" />
+                    <label>Nro Documento Identidad</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-3" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.recibo"
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.propietario='';
+                            _modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.nroDocIdentidad = '';" />
+                    <label>Nro Recibo</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-10" >
+                <p-floatlabel variant="on">
+                    <input pInputText  class="w-full" (keydown.enter)="Busqueda()" [(ngModel)]="_modalFiltroCliente.propietario" appUppercase
+                    (input)="_modalFiltroCliente.nroSuministro = null;_modalFiltroCliente.codigoAntiguo = '';_modalFiltroCliente.recibo='';
+                                    _modalFiltroCliente.nroMedidor = null;_modalFiltroCliente.nroDocIdentidad = '';" />
+                    <label>Propietario</label>
+                </p-floatlabel>
+            </div>
+            <div class="col-span-12 md:col-span-2">
+                <button pButton pRipple icon="pi pi-search"  severity="info"  label="Buscar Cliente" iconPos="right" (keydown.enter)="Busqueda()"  (click)="Busqueda()" class="p-button p-button-warning  mr-2" ></button>
+            </div>
+        </div>
+        <br>
+        <p-tabs value="0" *ngIf="blockTable==1">
+            <p-tablist>
+                <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Listado de Búsqueda</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0" >
+                    <div class="card">
+                        <p-table #dt [value]="_filtroCliente" scrollable="true" 
+                                    scrollHeight="400px" resizableColumns="true" size="small">
+                            <ng-template #caption>
+                                <div class="flex flex-wrap items-center justify-between gap-3">
+                                    <h5 class="text-1xl font-semibold text-900">LISTADO DE CLIENTES</h5>
+                                    <div class="flex gap-2 items-center">
+                                    </div>
+                                    <div class="flex flex-col md:flex-row gap-4">
+                                        <p-inputgroup>
+                                            <p-inputgroup-addon >
+                                                <i class="pi pi-search" ></i>
+                                            </p-inputgroup-addon>
+                                            <input pInputText style="background-color: rgb(134, 191, 213)" (input)="onGlobalFilter(dt, $event)"  placeholder="Buscar" class="w-full sm:w-auto" />
+                                        </p-inputgroup>
+                                    </div>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th class="text-center">Sucursal</th>
+                                    <th class="text-center">Nro Suministro</th>
+                                    <th class="text-center">Nro Medidor</th>
+                                    <th class="text-center">Codigo Antiguo</th>
+                                    <th class="text-center">Propietario</th>
+                                    <th class="text-center">Nro Documento</th>
+                                    <th class="text-center">Calle</th>
+                                    <th class="text-center" >Nro Calle</th>
+                                    <th class="text-center" >Referencia</th>
+                                    <th class="text-center" >Asociacion</th>
+                                    <th class="text-center" >Estado</th>
+                                    <th class="text-center" >Tipo Usuario</th>
+                                    <th class="text-center" >Tipo Servicio</th>
+                                    <th class="text-center" >Sector</th>
+                                    <th class="text-center" >Nro. Mza</th>
+                                    <th class="text-center" >Nro Lote</th>
+                                    <th class="text-center" >Ciclo</th>
+                                    <th class="text-center" >RutaDistrib</th>
+                                    <th class="text-center" >Orden</th>
+                                    <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100"> Acciones</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-listado>
+                                <tr  [pSelectableRow]="listado">
+                                    <td>{{listado.sucursal }}</td>
+                                    <td class="text-center">  
+                                        {{listado.nroSuministro}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroMedidor}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.codigoAntiguo}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.propietario}}
+                                    </td>                                    
+                                    <td class="text-center">  
+                                        {{listado.nroDocIdentidad}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.direccion2}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroCalle}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.referencia}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.urbanizacion}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.estadoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.tipoUsuario}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.tipoServicio}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.sector}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.idManzana}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.nroLote}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.ciclo}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.idRutaReparto}}
+                                    </td>
+                                    <td class="text-center">  
+                                        {{listado.ordenRutaReparto}}
+                                    </td>
+                                    <!--<td  pFrozenColumn frozenAlign="right" style="right: 0;"  class="frozen-right-cell">
+                                        <button pButton icon="pi pi-pencil" class="p-button-sm"(click)="onRowSelect({ data: listado })"></button>
+                                    </td>-->
+                                    <td pFrozenColumn frozenAlign="right" style="right: 0;"  class="frozen-right-cell">
+                                        <i class="pi pi-send" style="font-size: 1.3rem;color: rgb(25, 172, 11); cursor:pointer;" 
+                                        (click)="onRowSelectCliente(listado)"></i>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+</p-dialog>
+<!--ARMANDO LOGIN -->
+
+<p-dialog  [(visible)]="formCar" maskStyleClass="backdrop-blur-sm"  [modal]="true" [draggable]="false"
+            [resizable]="false" [closable]="false" styleClass="!border-0 !bg-transparent">
+    <ng-template #headless>
+        <div class="flex flex-col px-8 py-8 gap-6 rounded-2xl mx-auto" style="width: 400px; border-radius: 12px;
+                     background-image: radial-gradient(circle at left top, rgb(129 133 153), rgb(61 117 199));" >
+
+        <div class="flex justify-center gap-3 mb-6">
+            <i class="pi pi-user text-3xl text-primary-50"></i>
+            <h2 class="text-xl font-semibold text-primary-50">Acceso CAR</h2>
+        </div>
+        
+            <div class="flex flex-col gap-5">
+                <p-floatlabel variant="on" class="w-full">
+                    <input 
+                        pInputText 
+                        type="password" [(ngModel)]="_ordenPagoModel.validaPass"
+                        class="!bg-white/20 !border-0 !px-5 !py-3 !text-primary-50 w-full rounded-lg" 
+                    />
+                    <label>Confirmar Contraseña</label>
+                </p-floatlabel>
+
+                <p-floatlabel variant="on" class="w-full">
+                    <p-select  
+                        [options]="_car" 
+                        optionLabel="descripcion" 
+                        optionValue="idCar"
+                        filterBy="descripcion"
+                        [(ngModel)]="_ordenPagoModel.idCar"
+                        [filter]="true"
+                        appendTo="body"
+                        class="w-full !bg-white/20 !border-0 !text-primary-50 rounded-lg" 
+                    ></p-select>
+                    <label>CAR</label>
+                </p-floatlabel>
+
+                <div class="flex justify-center gap-3 mt-6"><!--flex items-center gap-4-->
+                    <p-button label="Ingresar" [text]="true" (onClick)="validaLogin()"
+                        styleClass="!px-5 !py-2 !text-primary-50 !border !border-white/30 hover:!bg-white/10"/>
+
+                    <p-button label="Cancelar" [text]="true" (onClick)="cancelarLogin()"
+                        styleClass="!px-5 !py-2 !text-primary-50 !border !border-white/30 hover:!bg-white/10" />
+                </div>
+            </div>
+        </div>
+    </ng-template>
+</p-dialog>
+
+
+<p-dialog header="Vuelto" [closable]="false" [(visible)]="dialogVuelto" [modal]="true"  
+        [style]="{ width: '600px' }" [draggable]="false" [resizable]="false">
+
+    <div class="flex flex-col gap-3 p-3">
+        <div class="field">
+            <label class="font-semibold text-lg">Total a Pagar</label>
+            <p-inputNumber mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [disabled]=true [(ngModel)]="totalMonto"
+                            class="w-full" [inputStyle]="{'text-align': 'right', 'color': '#070606','font-weight': 'bold', 'font-size': '3.0rem' }">
+            </p-inputNumber>
+        </div>
+        <div class="field">
+            <label class="font-semibold text-lg">Efectivo</label>
+            <p-inputNumber #inputEfectivo mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [(ngModel)]="efectivo" (ngModelChange)="calcularVuelto()"
+                        class="w-full"[inputStyle]="{ 'text-align': 'right','color': '#16a34a','font-weight': 'bold', 'font-size': '3.0rem'}"
+                        (keydown.enter)="pagarDeduda()">
+            </p-inputNumber>
+        </div>
+        <div class="field">
+        <label class="font-semibold text-lg">Vuelto</label>
+        <p-inputNumber mode="decimal" [minFractionDigits]="2" [maxFractionDigits]="2" [disabled]=true [(ngModel)]="vuelto"
+                            class="w-full" [inputStyle]="{'text-align': 'right', 'color': '#e60000','font-weight': 'bold', 'font-size': '3.0rem' }">
+        </p-inputNumber>
+        </div>
+
+        <div class="flex justify-center gap-3 mt-4">
+            <p-button  label="Guardar" icon="pi pi-save" severity="success" (onClick)="pagarDeduda()"></p-button>
+            <p-button label="Cancelar" icon="pi pi-times" severity="danger" (onClick)="cancelarVuelto()"></p-button>
+        </div>
+    </div>
+</p-dialog>
+
+
+
+
+
