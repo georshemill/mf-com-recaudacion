@@ -1021,6 +1021,13 @@ export class PagoComponent implements OnInit{
 
   }
 
+  onchangeCar(x:any){
+
+    const resultado = this._car.filter(item => item.idCar === x);
+    this._tituloCar =resultado[0].descripcion;
+  
+  }
+
   actualizaSucursal(x:any){
     if(x==true){
       this._modalFiltro.idSucursal=0

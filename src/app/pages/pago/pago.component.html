@@ -43,7 +43,18 @@
                 </span>
             </div>
         </div>
-        <div class="flex-1"></div>
+        <div class="flex gap-2 align-items-right justify-content-right ">
+            <div class="text-3xl">🧑🏻‍💻</div>
+            <div class="text-surface-600 dark:text-surface-200">
+                <span class="font-semibold">
+                    USUARIO:
+                    <span class="font-bold text-primary text-3xl">
+                        {{ usuarioTk }}
+                    </span>
+                </span>
+            </div>
+        </div>
+        <!--<div class="flex-1"></div>  VA CUANDO NO SE USA USUAROI-->
     </div>
     <div class="grid grid-cols-12 gap-4 ">
         <div class="col-span-12 md:col-span-2" >
@@ -944,6 +955,7 @@
                         optionValue="idCar"
                         filterBy="descripcion"
                         [(ngModel)]="_ordenPagoModel.idCar"
+                        (onChange)="onchangeCar($event.value)"
                         [filter]="true"
                         appendTo="body"
                         class="w-full !bg-white/20 !border-0 !text-primary-50 rounded-lg" 
