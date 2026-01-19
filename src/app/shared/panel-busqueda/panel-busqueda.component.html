@@ -3,7 +3,9 @@
         <div class="col-span-12 md:col-span-12">
             <p-inputgroup>
                 <p-floatlabel variant="on">
-                    <p-inputnumber  class="w-full" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" [(ngModel)]="_modalFiltro.nroSuministro" (keydown.enter)="BusquedaDirecta()" />
+                    <p-inputnumber  class="w-full" mode="decimal" inputId="withoutgrouping" [useGrouping]="false" [(ngModel)]="_modalFiltro.nroSuministro"
+                    (input)="_modalFiltro.codigoAntiguo = '';_modalFiltro.nroMedidor = null;_modalFiltro.propietario='';
+                                    _modalFiltro.nroDocIdentidad = '';_modalFiltro.recibo = '';" (keydown.enter)="BusquedaDirecta()" />
                     <label >Busqueda</label>
                 </p-floatlabel>
                 <p-inputgroup-addon>

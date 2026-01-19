@@ -127,7 +127,12 @@ export class OrdenPagoComponent implements OnInit{
             this._ordenPagoModel = data.data;
             this._ordenPagoModel.codigo_antiguo=this.codigoAntiguo
             //this._deudaList= data.data.deudaList
-            this._deudaList = data.data.deudaList.map(x => ({ ...x, flagEditable: false }));
+
+            if (Array.isArray(data.data.deudaList) && data.data.deudaList.length > 0) {
+              this._deudaList = data.data.deudaList.map(x => ({ ...x, flagEditable: false }));
+            }else{
+              this._deudaList = []
+            }
             
             this._ordenPagoModel.idPersona=null
             this.calcularTotal()

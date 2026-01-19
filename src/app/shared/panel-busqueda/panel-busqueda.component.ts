@@ -80,6 +80,11 @@ export class PanelBusquedaComponent implements OnInit  {
   BusquedaDirecta(){
     showGlobalLoader()
     this._modalFiltro.idEmpresa=1
+    //this.modalFiltro.codigoAntiguo = nu
+    this._modalFiltro.nroMedidor=null
+    this._modalFiltro.propietario=""
+    this._modalFiltro.nroDocIdentidad = ""
+    this._modalFiltro.recibo = ""
 
     this.catastroService.BusquedaCliente(this._modalFiltro).subscribe({
           next: (data) => {
