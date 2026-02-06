@@ -85,6 +85,7 @@ import { Ticket } from '../models/Ticket';
 import { GestionCuadre } from '../models/GestionCuadre';
 import { CuadrexImporte } from '../models/CuadrexImporte';
 import { Paramae } from '../models/Paramae';
+import { ReciboDuplicado } from '../models/ReciboDuplicado';
 
 
 
@@ -585,6 +586,16 @@ export class RecaudacionService {
 
     ConsultaParamae(model:Partial <Paramae>): Observable<ListResponse<Paramae>> {
         return this.http.post<ListResponse<Paramae>>(`https://gateway1.emapasalas.net.pe/Paramae/ConsultaTipo`,model);
+    }
+
+
+    //IMPRIMI DUPLICADO
+
+    generaReciboPDF(model: ReciboDuplicado): Observable<Blob> { 
+        return this.http.post(`https://gateway8063.emapasalas.net.pe/Reports/Facturacion/ReciboIndividual`, model, {
+       // return this.http.post(`http://localhost:8063/Reports/Facturacion/ReciboMasivo`, model, {
+            responseType: 'blob'
+        });
     }
 
 

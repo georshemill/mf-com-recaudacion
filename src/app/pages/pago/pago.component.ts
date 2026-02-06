@@ -26,6 +26,7 @@ import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 import printJS from 'print-js';
 import { Ticket } from '../../models/Ticket';
 import { BusquedAnulacionPago } from '../../models/BusquedAnulacionPago';
+import { ReciboDuplicado } from '../../models/ReciboDuplicado';
 
 
 
@@ -52,6 +53,7 @@ export class PagoComponent implements OnInit{
   dialogCliente:boolean=false
   dialogVuelto:boolean=false
   formCar:boolean=false
+  displayPDF:boolean=false
   _colateral:Colateral[] = []
   _comprobante:Comprobante[] = []
   _car:Car[] = []
@@ -79,6 +81,9 @@ export class PagoComponent implements OnInit{
   _ticketModelImpresion:Ticket=new Ticket
   _listXAnulacion:BusquedAnulacionPago[] = []
   _tituloCar: string=""
+  _impresionPDF:ReciboDuplicado=new ReciboDuplicado
+   urlView: string=""
+   urlImpresion: string=""
 
 
   flagGeneraPago: number = 0;
@@ -114,6 +119,11 @@ export class PagoComponent implements OnInit{
   
 
   init(){
+
+    this.recaudacionService.ConsultaParamae({idEmpresa: this.idEmpresaTk,idSede: this.idSedeTk,tipoParametro: "REPORTES",codigoParametro:"URL"}).subscribe(data => {
+      this.urlImpresion= data.data.valorParametro
+    });
+
     this.recaudacionService.ListColateral({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk}).subscribe((respuesta) => {
       this._colateral=respuesta.data
     })
@@ -1190,6 +1200,35 @@ export class PagoComponent implements OnInit{
               this.inputSearch.input?.nativeElement.select();
             }, 100);
 
+  }
+
+  viewDuplicado(){
+
+    this._impresionPDF.idEmpresa=this.idEmpresaTk
+    this._impresionPDF.nroSuministro=this._ordenPagoModel.nroSuministro!
+    this._impresionPDF.anio=null
+    this._impresionPDF.mes=null
+    this._impresionPDF.usuarioCreacion=this.usuarioTk
+
+    showGlobalLoader()
+    this.recaudacionService.generaReciboPDF(this._impresionPDF).subscribe({
+      next: (blob) => {
+          if (this.urlView) {
+              URL.revokeObjectURL(this.urlView);
+          }
+          this.urlView = URL.createObjectURL(blob);
+          hideGlobalLoader()
+          this.displayPDF=true
+      },
+      error: (error) => {
+          console.error('Error al generar PDF', error);
+      }
+    });
+  }
+
+  viewPagos(){
+    this.urlView=`${this.urlImpresion}/facturacion/recordPagosGen.php?idEmpresa=1&nroSuministro=${this._ordenPagoModel.nroSuministro}`;
+    this.displayPDF=true
   }
 
   ModalClose(){
