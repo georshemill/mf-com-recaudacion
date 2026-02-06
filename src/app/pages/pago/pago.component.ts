@@ -1122,8 +1122,8 @@ export class PagoComponent implements OnInit{
       "direccion": "AV. AGRICULTURA 796B"
   }
 
-    // Llamar al servicio para obtener el PDF con los datos
-    this.recaudacionService.getPdfWithData(this._ticketModelImpresion).subscribe((pdfBlob) => {
+    // Llamar al servicio para obtener el PDF con los datosdads
+    this.recaudacionService.getPdfWithData(this._ticketModel).subscribe((pdfBlob) => {
       // Crear un URL de objeto para el archivo Blob (PDF)
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
