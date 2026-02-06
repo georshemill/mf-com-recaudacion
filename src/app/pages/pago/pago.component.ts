@@ -611,7 +611,6 @@ export class PagoComponent implements OnInit{
               this._ticketModel.nroPago=respuesta.dataId
               this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
                 next: (respuesta) => {
-
                   if(respuesta.success==true) {
                     this._ticketModel=respuesta.data
 
@@ -789,7 +788,7 @@ export class PagoComponent implements OnInit{
               this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
                 next: (respuesta) => {
                   if(respuesta.success==true) {
-                    respuesta.data=this._ticketModelImpresion
+                    this._ticketModelImpresion=respuesta.data
 
                     Swal.fire({
                       icon: 'success',
@@ -1124,7 +1123,7 @@ export class PagoComponent implements OnInit{
   }
 
     // Llamar al servicio para obtener el PDF con los datos
-    this.recaudacionService.getPdfWithData(this._ticketModel).subscribe((pdfBlob) => {
+    this.recaudacionService.getPdfWithData(this._ticketModelImpresion).subscribe((pdfBlob) => {
       // Crear un URL de objeto para el archivo Blob (PDF)
         const pdfUrl = URL.createObjectURL(pdfBlob);
 
