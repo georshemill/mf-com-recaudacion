@@ -609,6 +609,7 @@ export class PagoComponent implements OnInit{
               this._ticketModel.idEmpresa=this.idEmpresaTk
               this._ticketModel.idSede=this.idSedeTk
               this._ticketModel.nroPago=respuesta.dataId
+              this.listAnulacion()
               this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
                 next: (respuesta) => {
                   if(respuesta.success==true) {
@@ -780,6 +781,7 @@ export class PagoComponent implements OnInit{
               this.ResumenCaja(this._ordenPagoModel.idCar)
               this._ordenPagoModel.idFormaPago=1
               this._blockPrincipal=0
+              this.listAnulacion()
               hideGlobalLoader()
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
               this.funcionesService.popupExitoCrud(mensajeAlert);
@@ -815,7 +817,7 @@ export class PagoComponent implements OnInit{
                   }else{
                     
                   }
-                  console.log(respuesta)
+                  
                   /*if (respuesta.success==true) {
                       this._modalFiltro.nroOrdenPago=null
                       this._modalFiltro.nroSuministro=null
