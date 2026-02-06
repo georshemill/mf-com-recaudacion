@@ -788,7 +788,7 @@ export class PagoComponent implements OnInit{
               this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
                 next: (respuesta) => {
                   if(respuesta.success==true) {
-                    this._ticketModelImpresion=respuesta.data
+                    this._ticketModel=respuesta.data
 
                     Swal.fire({
                       icon: 'success',
