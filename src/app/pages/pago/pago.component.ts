@@ -363,6 +363,7 @@ export class PagoComponent implements OnInit{
     this._modalFiltro.idEmpresa=x.idEmpresa
     this._modalFiltro.idSede=x.idSede
     this._modalFiltro.nroOrdenPago=x.nroOrdenPago
+    this._impresionPDF.nroSuministro=x.nroSuministro
 
     this.recaudacionService.ConsultaDeudaPagoCaja(this._modalFiltro).subscribe({
           next: (data) => {
@@ -1227,7 +1228,7 @@ export class PagoComponent implements OnInit{
   }
 
   viewPagos(){
-    this.urlView=`${this.urlImpresion}/facturacion/recordPagosGen.php?idEmpresa=1&nroSuministro=${this._ordenPagoModel.nroSuministro}`;
+    this.urlView=`${this.urlImpresion}/facturacion/recordPagosGen.php?idEmpresa=1&nroSuministro=${this._impresionPDF.nroSuministro}`;
     this.displayPDF=true
   }
 
