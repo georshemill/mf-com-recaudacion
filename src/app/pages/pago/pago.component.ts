@@ -609,7 +609,6 @@ export class PagoComponent implements OnInit{
               this._ticketModel.idEmpresa=this.idEmpresaTk
               this._ticketModel.idSede=this.idSedeTk
               this._ticketModel.nroPago=respuesta.dataId
-              this.listAnulacion()
               this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
                 next: (respuesta) => {
                   if(respuesta.success==true) {
@@ -786,6 +785,10 @@ export class PagoComponent implements OnInit{
               let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
               this.funcionesService.popupExitoCrud(mensajeAlert);
               this.messageService.add({severity: 'success',summary: 'Confirmacion',detail: 'Registro Agregado',life: 3000});
+
+              this._ticketModel.idEmpresa=this.idEmpresaTk
+              this._ticketModel.idSede=this.idSedeTk
+              this._ticketModel.nroPago=respuesta.dataId
 
               this.recaudacionService.ConsultaTicket(this._ticketModel).subscribe({
                 next: (respuesta) => {

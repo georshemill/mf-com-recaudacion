@@ -152,6 +152,9 @@
                                                     (onChange)="setCheckboxValue('flagBarras', $event.checked)" />
                                         <label for="ny" class="ml-2">Codigo de Barras</label>
                                     </div>
+                                    <div class="col-span-12 md:col-span-4 " >
+                                        <p-button label="Pagar Deuda" icon="pi pi-send" severity="info"  (onClick)="guardar()"></p-button>
+                                    </div>
                                     <div class="col-span-12 md:col-span-4" *ngIf="_blockPrincipal==1">
                                         <div class="flex items-center gap-2">
                                             <div class="text-3xl">💵</div>
