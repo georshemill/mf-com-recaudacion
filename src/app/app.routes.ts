@@ -33,18 +33,18 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/cuadre-caja/cuadre-caja.component').then((m) => m.CuadreCajaComponent),
       },
-      /*{
-        path: 'comercial/catastro/HorarioAbastecimiento',
-        loadComponent: () =>
-          import('./pages/catastro/horario-abastecimiento/horario-abastecimiento.component').then((c) => c.HorarioAbastecimientoComponent),
-      },
       {
+        path: 'comercial/recaudacion/ResumenConcepto',
+        loadComponent: () =>
+          import('./pages/resumen-concepto/resumen-concepto.component').then((c) => c.ResumenConceptoComponent),
+      },
+      /*{
         path: 'comercial/catastro/PanelBusqueda',
         loadComponent: () =>
           import('./shared/panel-busqueda/panel-busqueda.component').then((c) => c.PanelBusquedaComponent),
       },*/
       
-
+      
      
       {
         path: 'comercial/recaudacion/notfound',

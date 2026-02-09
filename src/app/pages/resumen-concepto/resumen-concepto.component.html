@@ -1,0 +1,134 @@
+<div class="card overflow-x-auto">
+    <div class="flex justify-content-between align-items-center mb-4">
+        <div class="flex gap-3 align-items-center">
+            <div class="text-4xl">📊</div>
+            <div class="flex flex-col gap-1 text-600">
+                <div class="text-xl font-semibold">RECAUDACIÓN DEL MES</div>
+                <div class="font-bold text-primary">Gestion de Recaudación</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-12">
+        <fieldset class="border border-gray-300 rounded-lg p-5">
+            <legend class="px-3 py-1 text-primary font-semibold text-base bg-gray-50 rounded-md border border-gray-200">
+              Búsqueda Personalizada
+            </legend>
+            <div class="grid grid-cols-12 gap-4 ">
+                <div  class="col-span-12 md:col-span-2" >
+                    <p-floatlabel variant="on"> 
+                        <p-select [options]="_ciclo" optionLabel="descripcion" optionValue="idCiclo"  (onChange)="changeCiclo($event.value)" 
+                            filterBy="descripcion" [filter]="true" [(ngModel)]="_resumenModel.idCiclo"    class="w-full" appendTo="body"   ></p-select> 
+                        <label>Ciclo</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" filterBy="descripcion" [filter]="true"
+                                    class="w-full" appendTo="body"  [(ngModel)]="_resumenModel.idSucursal"  ></p-select> 
+                        <label>Localidad</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_anioXciclo" optionLabel="anio"  optionValue="anio" filterBy="descripcion" [filter]="true"
+                                (onChange)="changeAnio($event.value)"   class="w-full" appendTo="body" [(ngModel)]="_resumenModel.anio" ></p-select> 
+                        <label>Año</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2 ">
+                    <p-floatlabel variant="on">
+                        <p-select [options]="_mesXciclo" optionLabel="nombreMes"  optionValue="mes" filterBy="nombreMes" [filter]="true"
+                                    class="w-full" appendTo="body" [(ngModel)]="_resumenModel.mes" ></p-select> 
+                        <label>Mes</label>
+                    </p-floatlabel>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-search"  severity="info" (click)="searchResumen()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
+                </div>
+            </div> 
+        </fieldset>
+        <br>
+        <p-tabs value="0">
+            <p-tablist>
+                <p-tab value="0" ><i class="pi pi-spin pi-spinner-dotted" style="font-size: 1rem;color: green"></i>Resumen Concepto</p-tab>
+            </p-tablist>
+            <p-tabpanels>
+                <p-tabpanel value="0" >
+                    <div class="card" *ngIf="blockFiltro ==1">
+                        <p-table #dt [value]="_listaResumen"  [rows]="20" [globalFilterFields]="['from', 'title', 'propietario','nrosuministro']" scrollable="true" scrollHeight="600px"
+                             [rowHover]="true"dataKey="id"  resizableColumns="true" size="small"
+                            >
+                            <ng-template pTemplate="header">
+                                <tr >
+                                    <th class="text-center" >IdConcepto</th>
+                                    <th class="text-center" >IdTipoConcepto</th>
+                                    <th class="text-center" >Descripcion</th>
+                                    <th class="text-center" >Mes</th>
+                                    <th style="text-align: center;">Atrazado</th>
+                                    <th  class="text-center">Venta Directa</th>
+                                    <th class="text-center">Fraccionamiento</th>
+                                    <th class="text-center" >Incobrable</th>
+                                    <th class="text-center" >Incobrable Fracc</th>
+                                    <th style="text-align: center;" >Importe</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template #body let-resumen>
+                                <tr >
+                                    <td  class="text-center">
+                                        {{resumen.idConcepto}}
+                                    </td>
+                                    <td  class="text-center">
+                                        {{resumen.idTipoConcepto}}
+                                    </td>
+                                    <td  class="text-center">
+                                        {{resumen.descripcion}}
+                                    </td>
+                                    <td style="text-align: right;">  
+                                        {{resumen.mes | number:'1.2-2'}}
+                                    </td>
+                                    <td style="text-align: right;">  
+                                        {{resumen.atrazado | number:'1.2-2'}}
+                                    </td>
+                                    <td style="text-align: right;">
+                                        {{resumen.ventadirecta | number:'1.2-2'}}
+                                    </td>
+                                    <td style="text-align: right;">
+                                        {{resumen.fraccionamiento | number:'1.2-2'}}
+                                    </td>
+                                    <td style="text-align: right;">
+                                        {{resumen.incobrable | number:'1.2-2'}}
+                                    </td>
+                                    <td style="text-align: right;">  
+                                        {{resumen.incobrablefracc | number:'1.2-2'  }}
+                                    </td>
+                                    <td style="text-align: right;">  
+                                        {{resumen.importe | number:'1.2-2' }}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <tr>
+                                    <td [colSpan]="3" style="text-align: right;" class="font-bold p-3 pb-0">TOTAL</td>
+                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.mes | number:'1.2-2' }}</td>
+                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{totales.atrazado | number:'1.2-2'}}</td>
+                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.ventadirecta | number:'1.2-2' }}</td>
+                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.fraccionamiento | number:'1.2-2' }}</td>
+                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.incobrable | number:'1.2-2' }}</td>
+                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.incobrablefracc | number:'1.2-2' }}</td>
+                                    <td style="text-align: right;" class="font-bold p-3 pb-0">{{ totales.importe | number:'1.2-2' }}</td>
+                                   
+                                  
+                                  </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </p-tabpanel>
+            </p-tabpanels>
+        </p-tabs>
+    </div>
+
+
+
+
+
+</div>

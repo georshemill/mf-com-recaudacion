@@ -86,6 +86,9 @@ import { GestionCuadre } from '../models/GestionCuadre';
 import { CuadrexImporte } from '../models/CuadrexImporte';
 import { Paramae } from '../models/Paramae';
 import { ReciboDuplicado } from '../models/ReciboDuplicado';
+import { Ciclo } from '../models/Ciclo';
+import { Calendario } from '../models/Calendario';
+import { ResumenConcepto } from '../models/ResumenConcepto';
 
 
 
@@ -146,6 +149,25 @@ export class RecaudacionService {
     dropdownManzanas(idlocalidad: number,idsector: number): Observable<ListResponse<Manzanas[]>> {///dropdown/{idLocalidad}/{idSector}
         return this.http.get<ListResponse<Manzanas[]>>(`https://gateway1.emapasalas.net.pe/Manzanas/dropdown/${idlocalidad}/${idsector}`);
     }
+
+    dropdownCiclo(idSede: number): Observable<ListResponse<Ciclo[]>> { //BASICO
+        return this.http.get<ListResponse<Ciclo[]>>(`https://gateway1.emapasalas.net.pe/Ciclo/dropdown/${idSede}`);
+    }
+
+    dropdownAnio(idCiclo: number): Observable<ListResponse<Calendario[]>> { 
+        return this.http.get<ListResponse<Calendario[]>>(`https://gateway1.emapasalas.net.pe/Ciclo/dropdownAnioXciclo/${idCiclo}`);
+    }
+
+    dropdownMes(idCiclo: number,anio:number): Observable<ListResponse<Calendario[]>> { 
+        return this.http.get<ListResponse<Calendario[]>>(`https://gateway1.emapasalas.net.pe/Ciclo/dropdownMesXciclo/${idCiclo}/${anio}`);
+    }
+
+    searchResumenConcepto(model: ResumenConcepto): Observable<ListResponse<ResumenConcepto[]>> { 
+        return this.http.post<ListResponse<ResumenConcepto[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ReportResumenConcepto`,model);
+    }
+
+  
+
 
     dropdownFichaIncompleta(): Observable<ListResponse<FichaIncompleta[]>> {
         return this.http.get<ListResponse<FichaIncompleta[]>>(`https://gateway1.emapasalas.net.pe/TipoFicha/dropdown`);
