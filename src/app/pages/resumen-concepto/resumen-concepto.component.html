@@ -121,14 +121,18 @@
                                   </tr>
                             </ng-template>
                         </p-table>
+                        <br>
+                        <button pButton pRipple icon="pi pi-print" class="p-button-succes  mr-2"   pTooltip="Imprimir " (click)="viewTarifas()"  tooltipPosition="top" type="button" label="Resumen Tarifa"></button>
+                        <button pButton pRipple icon="pi pi-print" class="p-button-info  mr-2"   pTooltip="Imprimir " (click)="viewConcepto()"  tooltipPosition="top" type="button" label="Resumen Concepto"></button>
+                        <button pButton pRipple icon="pi pi-print" class="p-button-warn  mr-2"   pTooltip="Imprimir " (click)="viewPlanilla()"  tooltipPosition="top" type="button" label="Resumen Planilla"></button>
+                        <button pButton pRipple icon="pi pi-print" class="p-button-primary  mr-2"   pTooltip="Imprimir " (click)="viewTpDeuda()"  tooltipPosition="top" type="button" label="Resumen Tipo Deuda"></button>
                     </div>
                 </p-tabpanel>
             </p-tabpanels>
         </p-tabs>
     </div>
-
-
-
-
-
 </div>
+
+<p-dialog  [(visible)]="displayPDF" modal="modal" showEffect="fade" [style]="{height:'1600px',width:'1550px'}">
+    <iframe width="100%" height="100%"   [src]="urlView |safe:'resourceUrl'"></iframe>
+</p-dialog>

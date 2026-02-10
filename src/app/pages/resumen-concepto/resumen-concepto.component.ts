@@ -18,6 +18,7 @@ import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
   providers: [RecaudacionService]
 })
 export class ResumenConceptoComponent implements OnInit{
+  
   idEmpresaTk = GlobalSession.idEmpresa;
   idSedeTk = GlobalSession.idSede;
   usuarioTk = GlobalSession.usuario;
@@ -30,6 +31,9 @@ export class ResumenConceptoComponent implements OnInit{
   _mesXciclo:Calendario[] = []
   _listaResumen:ResumenConcepto[] = []
   blockFiltro=0 
+  urlView: string=""
+  urlImpresion: string=""
+  displayPDF:boolean=false
 
   totales = {
     mes: 0,
@@ -61,6 +65,10 @@ export class ResumenConceptoComponent implements OnInit{
 
     this.recaudacionService.dropdownCiclo(this.idSedeTk).subscribe((respuesta) => {
       this._ciclo = respuesta.data;
+    });
+
+    this.recaudacionService.ConsultaParamae({idEmpresa: this.idEmpresaTk,idSede: this.idSedeTk,tipoParametro: "REPORTES",codigoParametro:"URL"}).subscribe(data => {
+      this.urlImpresion= data.data.valorParametro
     });
 
 
@@ -157,6 +165,28 @@ export class ResumenConceptoComponent implements OnInit{
       }
     });
 
+  }
+
+  //http://apisistemas.ddns.net/comercialWEB/recaudacion/reporteCajaTarifa.php?idempresa=1&idsucursal=2&anio=2026&mes=1
+
+  viewTarifas(){
+    this.urlView=`${this.urlImpresion}/recaudacion/reporteCajaTarifa.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}` ;
+    this.displayPDF=true
+  }
+
+  viewConcepto(){
+    this.urlView=`${this.urlImpresion}/recaudacion/reporteCajaConcepto.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}` ;
+    this.displayPDF=true
+  }
+
+  viewPlanilla(){
+    this.urlView=`${this.urlImpresion}/cobranza/facturacionXPeriodo.php?IdEmpresa=1&IdSede=${this.idSedeTk}&Anio=${this._resumenModel.anio}&Mes=${this._resumenModel.mes}` ;
+    this.displayPDF=true
+  }
+
+  viewTpDeuda(){
+    this.urlView=`${this.urlImpresion}/recaudacion/cobranzaXTipoDeuda.php?idempresa=1&IdSede=${this.idSedeTk}&IdSucursal=${this._resumenModel.idSucursal}&Anio=${this._resumenModel.anio}&Mes=${this._resumenModel.mes}` ;
+    this.displayPDF=true
   }
 
 }
