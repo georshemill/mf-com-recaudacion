@@ -9,6 +9,8 @@ import { Ciclo } from '../../models/Ciclo';
 import { ResumenConcepto } from '../../models/ResumenConcepto';
 import { Calendario } from '../../models/Calendario';
 import { hideGlobalLoader, showGlobalLoader } from '@test/mf-utils-modules';
+import { ListResponse } from '../../responses/ListResponse';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-resumen-concepto',
@@ -59,9 +61,13 @@ export class ResumenConceptoComponent implements OnInit{
 
   init(){ 
 
-    this.recaudacionService.dropdownLocalidadXsede(this.idSedeTk).subscribe((respuesta) => {
-      this._localidad=respuesta.data
-    })
+    this.recaudacionService.dropdownLocalidadXsede(this.idSedeTk).pipe(
+      map((resp: ListResponse<Localidad[]>) => [
+          {idSucursal: 0,idCiclo:0, descripcion: 'TODOS'},
+          ...(resp.data ?? [])  ])
+      ).subscribe((data: Localidad[]) => {
+      this._localidad = data;
+    });
 
     this.recaudacionService.dropdownCiclo(this.idSedeTk).subscribe((respuesta) => {
       this._ciclo = respuesta.data;
