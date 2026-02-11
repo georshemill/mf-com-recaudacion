@@ -146,6 +146,10 @@ export class RecaudacionService {
         return this.http.get<ListResponse<Sector[]>>(`https://gateway1.emapasalas.net.pe/Sector/Operacional/dropdown/${idlocalidad}`);
     }
 
+    dropdownLocalidadXsede(idSede: number): Observable<ListResponse<Localidad[]>> {
+        return this.http.get<ListResponse<Localidad[]>>(`https://gateway1.emapasalas.net.pe/Localidad/dropdownxSede/${idSede}`);
+    }
+
     dropdownManzanas(idlocalidad: number,idsector: number): Observable<ListResponse<Manzanas[]>> {///dropdown/{idLocalidad}/{idSector}
         return this.http.get<ListResponse<Manzanas[]>>(`https://gateway1.emapasalas.net.pe/Manzanas/dropdown/${idlocalidad}/${idsector}`);
     }

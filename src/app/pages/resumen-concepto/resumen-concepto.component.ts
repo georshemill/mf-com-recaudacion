@@ -59,7 +59,7 @@ export class ResumenConceptoComponent implements OnInit{
 
   init(){ 
 
-    this.recaudacionService.dropdownLocalidad().subscribe((respuesta) => {
+    this.recaudacionService.dropdownLocalidadXsede(this.idSedeTk).subscribe((respuesta) => {
       this._localidad=respuesta.data
     })
 
