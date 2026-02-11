@@ -170,12 +170,12 @@ export class ResumenConceptoComponent implements OnInit{
   //http://apisistemas.ddns.net/comercialWEB/recaudacion/reporteCajaTarifa.php?idempresa=1&idsucursal=2&anio=2026&mes=1
 
   viewTarifas(){
-    this.urlView=`${this.urlImpresion}/recaudacion/reporteCajaTarifa.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}` ;
+    this.urlView=`${this.urlImpresion}/recaudacion/reporteCajaTarifa.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}&IdSede=${this.idSedeTk}` ;
     this.displayPDF=true
   }
 
   viewConcepto(){
-    this.urlView=`${this.urlImpresion}/recaudacion/reporteCajaConcepto.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}` ;
+    this.urlView=`${this.urlImpresion}/recaudacion/reporteCajaConcepto.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}&IdSede=${this.idSedeTk}` ;
     this.displayPDF=true
   }
 
