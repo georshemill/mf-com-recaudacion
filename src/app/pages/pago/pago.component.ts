@@ -1214,6 +1214,7 @@ export class PagoComponent implements OnInit{
     this._impresionPDF.anio=null
     this._impresionPDF.mes=null
     this._impresionPDF.usuarioCreacion=this.usuarioTk
+    this._impresionPDF.idSede=this.idSedeTk
 
     showGlobalLoader()
     this.recaudacionService.generaReciboPDF(this._impresionPDF).subscribe({
