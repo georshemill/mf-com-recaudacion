@@ -14,6 +14,7 @@ import { MessageService } from 'primeng/api';
 import { GlobalSession } from '../utils/globalSession'
 import { showGlobalLoader, hideGlobalLoader } from '@test/mf-utils-modules';
 import { BusquedaOrdenPago } from '../../models/BusquedaOrdenPago';
+import Swal from 'sweetalert2';
 
 
 
@@ -62,6 +63,10 @@ export class OrdenPagoComponent implements OnInit{
 
   eliminaListado: number = 0;
 
+
+  urlView: string=""
+  urlImpresion: string=""
+  displayPDF:boolean=false
   
 
   
@@ -362,11 +367,33 @@ export class OrdenPagoComponent implements OnInit{
                            if (result.isDenied) {
                              this.printBarra(this.codigoAp_Derivacion)
                              }
-                         })
-
-            
-            
+                         })                            
             */           
+
+          Swal.fire({
+                                icon: 'success',
+                                title: mensajeAlert, 
+                                showDenyButton: true,
+                                confirmButtonText: "Aceptar",
+                                denyButtonColor: ' #607D8B',
+                                denyButtonText: `Imprimir`,
+                                confirmButtonColor: '#03A9F4',
+                              }).then((result:any) => {
+                                if (result.isConfirmed) {
+                                  // Si el usuario hizo clic en "Aceptar", enfocar y seleccionar el input
+                                //  this.inputSearch.input?.nativeElement.focus();
+                                //  this.inputSearch.input?.nativeElement.select();
+                                }
+                                if (result.isDenied) {
+                                  // Si el usuario hizo clic en "Imprimir"
+                                  // this.printBarra(this.codigoAp_Derivacion);
+                                
+                                 // http://apisistemas.ddns.net/comercialWEB/recaudacion/ordenPago.php?idEmpresa=1&nroSuministro=100006&nroOrdenPago=24
+                                
+                                this.urlView=`http://apisistemas.ddns.net/comercialWEB/recaudacion/ordenPago.php?idEmpresa=1&nroSuministro=${this._ordenPagoModel.nroSuministro}&nroOrdenPago=${respuesta.dataId}` ;
+                                this.displayPDF=true
+                                }
+                              });
         } else {
           hideGlobalLoader()
           this.funcionesService.popupError("Aviso de Usuario",respuesta.message);
