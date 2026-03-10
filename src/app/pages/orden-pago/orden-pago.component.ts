@@ -388,9 +388,8 @@ export class OrdenPagoComponent implements OnInit{
                                   // Si el usuario hizo clic en "Imprimir"
                                   // this.printBarra(this.codigoAp_Derivacion);
                                 
-                                 // http://apisistemas.ddns.net/comercialWEB/recaudacion/ordenPago.php?idEmpresa=1&nroSuministro=100006&nroOrdenPago=24
-                                
-                                this.urlView=`http://apisistemas.ddns.net/comercialWEB/recaudacion/ordenPago.php?idEmpresa=1&nroSuministro=${this._ordenPagoModel.nroSuministro}&nroOrdenPago=${respuesta.dataId}` ;
+                              
+                                this.urlView=`http://apisistemas.ddns.net/comercialWEB/recaudacion/ordenPago.php?idEmpresa=1&idSede=${this.idSedeTk}&nroOrdenPago=${respuesta.dataId}` ;
                                 this.displayPDF=true
                                 }
                               });
