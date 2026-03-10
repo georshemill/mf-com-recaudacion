@@ -195,4 +195,14 @@ export class ResumenConceptoComponent implements OnInit{
     this.displayPDF=true
   }
 
+  viewDudosa(){
+    this.urlView=`${this.urlImpresion}/recaudacion/RecuperoCobranzaDudosa.php?idempresa=1&idsede=${this.idSedeTk}&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}` ;
+    this.displayPDF=true
+  }
+
+  viewFacAdicional(){
+    this.urlView=`${this.urlImpresion}/recaudacion/FacturacionAdicional.php?idempresa=1&idsede=${this.idSedeTk}&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}` ;
+    this.displayPDF=true
+  }
+
 }

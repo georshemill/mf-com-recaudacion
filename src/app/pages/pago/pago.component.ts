@@ -565,7 +565,6 @@ export class PagoComponent implements OnInit{
 
   pagarDeduda(){
     
-   
      if( this.efectivo! <this.totalMonto  ){
       this.messageService.add({
         severity: "warn",summary: "Aviso de usuario",
