@@ -518,10 +518,15 @@ export class PagoComponent implements OnInit{
 
   onRowSelectPersona(x:any){
     this._ordenPagoModel.propietario=x.nombreCompleto
+    this._ordenPagoModel.nroSuministro=null
+    this._ordenPagoModel.codigoAlternativo=null
+    this._ordenPagoModel.direccion=null
+    this._ordenPagoModel.sucursal=null
     this._ordenPagoModel.nroDocIdentidad=x.nroDocIdentidad
     this._ordenPagoModel.idPersona=x.idPersona
     //this._deudaList= data.data.deudaList
     this._deudaList = this._deudaList ?? [];
+    this._deudaList = [];
     this._blockPrincipal=1
     this.calcularTotal()
     this.dialogEventual=false
