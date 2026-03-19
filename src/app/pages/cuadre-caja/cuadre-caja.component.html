@@ -21,14 +21,14 @@
                         <label>Sede</label>
                     </p-floatlabel>
                 </div>
-                <div class="col-span-12 md:col-span-3 ">
+                <div class="col-span-12 md:col-span-2 ">
                     <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
                         <p-select [options]="_car" optionLabel="descripcion"  optionValue="idCar" filterBy="descripcion" [filter]="true"
                                   [(ngModel)]="filtroCar"  class="w-full" appendTo="body"  ></p-select> 
                         <label>CAR</label>
                     </p-floatlabel>
                 </div>
-                <div class="col-span-12 md:col-span-3 ">
+                <div class="col-span-12 md:col-span-2 ">
                     <p-floatlabel variant="on" >
                         <p-datepicker  dateFormat="yy-mm-dd" [(ngModel)]="_cuadreModel.fechaDpl" [showIcon]="true" appendTo="body"  styleClass="w-full"/>
                         <label >Fecha Búsqueda</label>
@@ -39,6 +39,9 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <button pButton pRipple icon="pi pi-print"  severity="success" (click)="viewPDF()" label="Imprimir Padron" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockPadron ==1" ></button>
+                </div>
+                <div class="col-span-12 md:col-span-2">
+                    <button pButton pRipple icon="pi pi-print"  severity="warng" (click)="viewPDF2()" label="Padron 02" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockPadron ==1" ></button>
                 </div>
             </div>
         </fieldset>

@@ -334,11 +334,14 @@ Busqueda(){
 
 viewPDF(){
   this.urlView=`${this.urlImpresion}/recaudacion/cuadreCaja.php?idempresa=${this.idEmpresaTk}&idsede=${this.idSedeTk}&idCar=${this.filtroCar}&fecha=${this.Fechatotal}&usuarioCreacion=${this.usuarioTk}`;
-  
-  //http://apisistemas.ddns.net/comercialWEB/recaudacion/cuadreCaja.php?idempresa=1&idSede=1&idCar=1&fecha=2026-01-12&usuarioCreacion=CAJACH
   this.displayPDF=true
-
 }
+
+viewPDF2(){
+  this.urlView=`${this.urlImpresion}/recaudacion/cuadreCaja_02.php?idempresa=${this.idEmpresaTk}&idsede=${this.idSedeTk}&idCar=${this.filtroCar}&fecha=${this.Fechatotal}&usuarioCreacion=${this.usuarioTk}`;
+  this.displayPDF=true
+}
+
 
 expandAll() {
   this.expandedRows = this._cuadrexImporte.reduce((acc, p) => {
