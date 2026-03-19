@@ -1237,7 +1237,7 @@ export class PagoComponent implements OnInit{
   }
 
   viewPagos(){
-    this.urlView=`${this.urlImpresion}/facturacion/recordPagosGen.php?idEmpresa=1&nroSuministro=${this._impresionPDF.nroSuministro}`;
+    this.urlView=`${this.urlImpresion}/facturacion/recordPagosGen.php?idEmpresa=1&nroSuministro=${this._ordenPagoModel.nroSuministro}`;
     this.displayPDF=true
   }
 
