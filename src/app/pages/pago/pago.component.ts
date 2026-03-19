@@ -1241,6 +1241,15 @@ export class PagoComponent implements OnInit{
     this.displayPDF=true
   }
 
+  viewOrdenes(){
+
+    this.recaudacionService.ListDeudaPagosTAB({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk}).subscribe((respuesta) => {
+      this._listBusquedaPago=respuesta.data
+    })
+    
+    this.dialogOrden=true
+  }
+
   ModalClose(){
     this._filtroCliente = [];
     this.blockTable = 0;
