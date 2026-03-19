@@ -354,6 +354,10 @@ export class OrdenPagoComponent implements OnInit{
       next: (respuesta) => {
         if (respuesta.success==true) {
           this.panelBusqueda.limpiar();
+
+            this.recaudacionService.ListDeudaPagosTAB({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk}).subscribe((respuesta) => {
+              this._listBusquedaPago=respuesta.data
+            })
             hideGlobalLoader()
             this._blockPrincipal=0
             let mensajeAlert="Se Genero Orden de Pago Nro <br><strong style='font-size: 35px; '>"+ respuesta.dataId+ "</strong>"
