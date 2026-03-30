@@ -38,11 +38,11 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/resumen-concepto/resumen-concepto.component').then((c) => c.ResumenConceptoComponent),
       },
-      /*{
-        path: 'comercial/catastro/PanelBusqueda',
+      {
+        path: 'comercial/recaudacion/PagoxDia',
         loadComponent: () =>
-          import('./shared/panel-busqueda/panel-busqueda.component').then((c) => c.PanelBusquedaComponent),
-      },*/
+          import('./pages/pago-rapido/pago-rapido.component').then((c) => c.PagoRapidoComponent),
+      },
       
       
      

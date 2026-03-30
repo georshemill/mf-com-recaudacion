@@ -321,4 +321,6 @@ export class OrdenPago{
 	redondeoActual:number | null = null;
 	impInicial:number | null = null;
 	impAgua:number | null = null;
+	diaPago: string | null = null;
+	diaPagoDpl: string | null = null;
 }

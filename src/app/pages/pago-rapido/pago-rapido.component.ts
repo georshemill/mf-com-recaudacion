@@ -34,13 +34,13 @@ type IntBooleanKeys<T> = {
 }[keyof T];
 
 @Component({
-  selector: 'app-pago',
+  selector: 'app-pago-rapido',
   imports: [ParametrosModule],
-  templateUrl: './pago.component.html',
-  styleUrl: './pago.component.scss',
+  templateUrl: './pago-rapido.component.html',
+  styleUrl: './pago-rapido.component.scss',
   providers: [RecaudacionService]
 })
-export class PagoComponent implements OnInit{
+export class PagoRapidoComponent implements OnInit{
   @ViewChild('inputSearch') inputSearch!: InputNumber;
 
   //fechActual = new Date().toISOString().slice(0, 10);
@@ -157,8 +157,11 @@ export class PagoComponent implements OnInit{
   }
 
   ResumenCaja(idCar:any){
+
+    this._ordenPagoModel.diaPago=this.funcionesService.devolverFecha(this._ordenPagoModel.diaPagoDpl)
+
     this.recaudacionService.ResumenCaja({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,usuarioCreacion:this.usuarioTk,
-                                         idCar:idCar,fecha:this.fechActual}).subscribe((respuesta) => {
+                                         idCar:idCar,fecha:this._ordenPagoModel.diaPago}).subscribe((respuesta) => {
       this._resumenCajaModel=respuesta.data
     })
   
