@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ParametrosModule } from '../parametros.module';
 import { RecaudacionService } from '../../services/Recaudacion.service';
 import { FuncionesService } from '../../services/funciones.service';
@@ -43,6 +43,7 @@ type IntBooleanKeys<T> = {
 })
 export class PagoComponent implements OnInit{
   @ViewChild('inputSearch') inputSearch!: InputNumber;
+  @ViewChild('btnPagaDeuda', { read: ElementRef }) btnPagaDeuda!: ElementRef;
 
   //fechActual = new Date().toISOString().slice(0, 10);
   fechActual = new Date().toLocaleDateString('en-CA');
@@ -149,6 +150,8 @@ export class PagoComponent implements OnInit{
       this._car=respuesta.data
     })*/
 
+    /*FUNCIONABA OLD
+    
     this.recaudacionService.dropdownCar(this.idEmpresaTk!, this.idSedeTk!, this.usuarioTk).subscribe((respuesta) => {
       this._car = respuesta.data;
       
@@ -157,11 +160,24 @@ export class PagoComponent implements OnInit{
         this._tituloCar = this._car[0].descripcion;
       } else {
       }
+    });*/
+
+    this.recaudacionService.dropdownCar(this.idEmpresaTk!, this.idSedeTk!, this.usuarioTk)
+    .subscribe((respuesta) => {
+      this._car = respuesta.data;
+
+      if (Array.isArray(this._car) && this._car.length > 0) {
+        this._tituloCar = this._car[0].descripcion;
+        this._ordenPagoModel.idCar=1
+      } else {
+        this._tituloCar = ""; 
+        this._ordenPagoModel.idCar=null
+      }
     });
 
     this.listAnulacion() 
 
-    this._ordenPagoModel.idCar=1
+    
     this.formCar=true
 
   }
@@ -197,6 +213,8 @@ export class PagoComponent implements OnInit{
   //MODAL LOGIN PAGOS
 
   validaLogin(){
+
+    console.log(this._ordenPagoModel.idCar)
 
     if( this._ordenPagoModel.validaPass==undefined || this._ordenPagoModel.validaPass==null || this._ordenPagoModel.validaPass=="" ){
       this.messageService.add({
@@ -298,6 +316,16 @@ export class PagoComponent implements OnInit{
               this.onChangeFormaPago(1)
               hideGlobalLoader()
 
+              
+             setTimeout(() => {
+              if (this.btnPagaDeuda) {
+                const boton = this.btnPagaDeuda.nativeElement.querySelector('button');
+                if (boton && !boton.disabled) {
+                  boton.focus();
+                }
+              }
+              });
+
               if(this._ordenPagoModel.mensaje!=null){
                 this.funcionesService.popupAlerta(this._ordenPagoModel.mensaje);
               }
@@ -334,6 +362,16 @@ export class PagoComponent implements OnInit{
               this.flagGeneraPago=1
               this._ordenPagoModel.idFormaPago=1
               this.onChangeFormaPago(1)
+
+              setTimeout(() => {
+                if (this.btnPagaDeuda) {
+                  const boton = this.btnPagaDeuda.nativeElement.querySelector('button');
+                  if (boton && !boton.disabled) {
+                    boton.focus();
+                  }
+                }
+              });
+
               hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){
@@ -378,6 +416,16 @@ export class PagoComponent implements OnInit{
               this.flagGeneraPago=1
               this._ordenPagoModel.idFormaPago=1
               this.onChangeFormaPago(1)
+
+              setTimeout(() => {
+                if (this.btnPagaDeuda) {
+                  const boton = this.btnPagaDeuda.nativeElement.querySelector('button');
+                  if (boton && !boton.disabled) {
+                    boton.focus();
+                  }
+                }
+              });
+
               hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){
@@ -1005,6 +1053,16 @@ export class PagoComponent implements OnInit{
               this.flagGeneraPago=0
               this._ordenPagoModel.idFormaPago=1
               this.onChangeFormaPago(1)
+
+              setTimeout(() => {
+                if (this.btnPagaDeuda) {
+                  const boton = this.btnPagaDeuda.nativeElement.querySelector('button');
+                  if (boton && !boton.disabled) {
+                    boton.focus();
+                  }
+                }
+              });
+
               hideGlobalLoader()
 
               if(this._ordenPagoModel.mensaje!=null){
