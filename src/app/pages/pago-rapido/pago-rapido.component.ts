@@ -139,19 +139,22 @@ export class PagoRapidoComponent implements OnInit{
       this._car=respuesta.data
     })*/
 
-    this.recaudacionService.dropdownCar(this.idEmpresaTk!, this.idSedeTk!, this.usuarioTk).subscribe((respuesta) => {
-      this._car = respuesta.data;
-      
-      // Verifica que _car no esté vacío y accede al primer registro
-      if (this._car && this._car.length > 0) {
-        this._tituloCar = this._car[0].descripcion;
-      } else {
-      }
-    });
+      this.recaudacionService.dropdownCar(this.idEmpresaTk!, this.idSedeTk!, this.usuarioTk)
+      .subscribe((respuesta) => {
+        this._car = respuesta.data;
+  
+        if (Array.isArray(this._car) && this._car.length > 0) {
+          this._tituloCar = this._car[0].descripcion;
+          this._ordenPagoModel.idCar=1
+        } else {
+          this._tituloCar = ""; 
+          this._ordenPagoModel.idCar=null
+        }
+      });
 
     this.listAnulacion() 
 
-    this._ordenPagoModel.idCar=1
+    //this._ordenPagoModel.idCar=1
     this.formCar=true
 
   }
