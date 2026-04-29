@@ -955,6 +955,7 @@
                         optionValue="idCar"
                         filterBy="descripcion"
                         [(ngModel)]="_ordenPagoModel.idCar"
+                        (onChange)="onCarChange($event)"
                         [filter]="true"
                         appendTo="body"
                         class="w-full !bg-white/20 !border-0 !text-primary-50 rounded-lg" 

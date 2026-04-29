@@ -159,6 +159,11 @@ export class PagoRapidoComponent implements OnInit{
 
   }
 
+  onCarChange(event: any) {
+    const seleccionado = this._car.find(c => c.idCar === event.value);
+    this._tituloCar = seleccionado ? seleccionado.descripcion : '';
+  }
+
   ResumenCaja(idCar:any){
 
     this._ordenPagoModel.diaPago=this.funcionesService.devolverFecha(this._ordenPagoModel.diaPagoDpl)
