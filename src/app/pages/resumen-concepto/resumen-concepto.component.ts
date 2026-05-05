@@ -186,12 +186,12 @@ export class ResumenConceptoComponent implements OnInit{
   }
 
   viewPlanilla(){
-    this.urlView=`${this.urlImpresion}/cobranza/facturacionXPeriodo.php?IdEmpresa=1&IdSede=${this.idSedeTk}&Anio=${this._resumenModel.anio}&Mes=${this._resumenModel.mes}` ;
+    this.urlView=`${this.urlImpresion}/cobranza/facturacionXPeriodo.php?IdEmpresa=1&idsucursal=${this._resumenModel.idSucursal}&IdSede=${this.idSedeTk}&Anio=${this._resumenModel.anio}&Mes=${this._resumenModel.mes}` ;
     this.displayPDF=true
   }
 
   viewTpDeuda(){
-    this.urlView=`${this.urlImpresion}/recaudacion/cobranzaXTipoDeuda.php?idempresa=1&IdSede=${this.idSedeTk}&IdSucursal=${this._resumenModel.idSucursal}&Anio=${this._resumenModel.anio}&Mes=${this._resumenModel.mes}` ;
+    this.urlView=`${this.urlImpresion}/recaudacion/cobranzaXTipoDeuda.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&IdSede=${this.idSedeTk}&IdSucursal=${this._resumenModel.idSucursal}&Anio=${this._resumenModel.anio}&Mes=${this._resumenModel.mes}` ;
     this.displayPDF=true
   }
 
