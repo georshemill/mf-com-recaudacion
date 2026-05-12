@@ -79,12 +79,15 @@ export class PagoRapidoComponent implements OnInit{
   _ticketModelImpresion:Ticket=new Ticket
   _listXAnulacion:BusquedAnulacionPago[] = []
   _tituloCar: string=""
+  _fechaTrabajo: string=""
 
 
   flagGeneraPago: number = 0;
   carId: number = 0;
   efectivo = 0.0;
   vuelto = 0.0;
+
+
 
   //PARA CAR
   
@@ -165,8 +168,9 @@ export class PagoRapidoComponent implements OnInit{
   }
 
   ResumenCaja(idCar:any){
+console.log("inicial"+this._ordenPagoModel.diaPagoDpl)
 
-    this._ordenPagoModel.diaPago=this.funcionesService.devolverFecha(this._ordenPagoModel.diaPagoDpl)
+    this._fechaTrabajo=this.funcionesService.devolverFecha(this._ordenPagoModel.diaPagoDpl)
 
     this.recaudacionService.ResumenCaja({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,usuarioCreacion:this.usuarioTk,
                                          idCar:idCar,fecha:this._ordenPagoModel.diaPago}).subscribe((respuesta) => {
@@ -589,10 +593,11 @@ export class PagoRapidoComponent implements OnInit{
     this._ordenPagoModel.idEmpresa=this.idEmpresaTk!
     this._ordenPagoModel.usuarioCreacion=this.usuarioTk
     this._ordenPagoModel.idCar=this.carId
+    this._ordenPagoModel.diaPago=this._fechaTrabajo
 
     if(this.flagGeneraPago==0){
 
-      this.recaudacionService.GeneraPagoCaja(this._ordenPagoModel).subscribe({
+      this.recaudacionService.GeneraPagoCajaXdia(this._ordenPagoModel).subscribe({
         next: (respuesta) => {
           if (respuesta.success==true) {
               this._modalFiltro.nroOrdenPago=null

@@ -507,6 +507,11 @@ export class RecaudacionService {
         return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/RegistroPagoCaja`, model);
     }
 
+    GeneraPagoCajaXdia(model: OrdenPago): Observable<Mensaje> {
+        return this.http.post<Mensaje>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/RegistrarPagoxDia`, model);
+    }
+
+
     dropdownCar(idEmpresa: number,idSede:number,user: string): Observable<ListResponse<Car[]>> {
         return this.http.get<ListResponse<Car[]>>(`https://gateway1.emapasalas.net.pe/Car/dropdown/${idEmpresa}/${idSede}/${user}`);
     }
