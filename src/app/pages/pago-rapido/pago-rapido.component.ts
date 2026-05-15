@@ -168,12 +168,12 @@ export class PagoRapidoComponent implements OnInit{
   }
 
   ResumenCaja(idCar:any){
-console.log("inicial"+this._ordenPagoModel.diaPagoDpl)
+
 
     this._fechaTrabajo=this.funcionesService.devolverFecha(this._ordenPagoModel.diaPagoDpl)
 
     this.recaudacionService.ResumenCaja({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,usuarioCreacion:this.usuarioTk,
-                                         idCar:idCar,fecha:this._ordenPagoModel.diaPago}).subscribe((respuesta) => {
+                                         idCar:idCar,fecha:this._fechaTrabajo}).subscribe((respuesta) => {//this._ordenPagoModel.diaPago
       this._resumenCajaModel=respuesta.data
     })
   

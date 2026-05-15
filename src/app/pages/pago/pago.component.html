@@ -122,7 +122,7 @@
                                         <p-inputgroup>
                                             <p-floatlabel variant="on">
                                                 <p-inputnumber  #inputSearch class="w-full" [(ngModel)]="_modalFiltro.nroSuministro" (keydown.enter)="BusquedaOrdenDirecta()" [useGrouping]="false" 
-                                                                (onInput)="_modalFiltro.nroOrdenPago = null;"/>
+                                                                (onInput)="_modalFiltro.nroOrdenPago = null;" #suministroInput/>
                                                 <label >Búsqueda Suministro</label>
                                             </p-floatlabel>
                                             <p-inputgroup-addon>

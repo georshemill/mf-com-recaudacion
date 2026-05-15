@@ -685,6 +685,12 @@ export class PagoComponent implements OnInit{
                         // Si el usuario hizo clic en "Imprimir"
                         // this.printBarra(this.codigoAp_Derivacion);
                         this.printBoucher();
+                        setTimeout(() => {
+
+                          this.inputSearch.input?.nativeElement.focus();
+                          this.inputSearch.input?.nativeElement.select();
+                
+                        }, 300);
                       }
                     });
                     
@@ -866,6 +872,12 @@ export class PagoComponent implements OnInit{
                         // Si el usuario hizo clic en "Imprimir"
                         // this.printBarra(this.codigoAp_Derivacion);
                         this.printBoucher();
+                        setTimeout(() => {
+
+                          this.inputSearch.input?.nativeElement.focus();
+                          this.inputSearch.input?.nativeElement.select();
+                
+                        }, 300);
                       }
                     });
                     
@@ -1031,6 +1043,7 @@ export class PagoComponent implements OnInit{
           }
         }); 
   }
+
 
   onRowSelectCliente(x:any){
 
