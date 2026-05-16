@@ -149,6 +149,12 @@ devolverFecha(fecha: any): string {
       ((fecha.getDate() < 10) ? '0' + fecha.getDate() : fecha.getDate()) ;
 }
 
+devolverFechaSeteada(fecha: any): string {
+  return '' +((fecha.getDate() < 10) ? '0' + fecha.getDate() : fecha.getDate())   + '/' +
+      ((fecha.getMonth() < 9) ? '0' + (fecha.getMonth() + 1) : (fecha.getMonth() + 1)) + '/' +
+      fecha.getFullYear();
+}
+
 devolverFecha2(fecha: any): string {
   if (!fecha) return '';
 

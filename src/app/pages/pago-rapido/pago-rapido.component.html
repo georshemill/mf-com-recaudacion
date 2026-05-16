@@ -49,7 +49,7 @@
                 <span class="font-semibold">
                     Fecha Recaudación:
                     <span class="font-bold text-primary text-3xl">
-                        {{ _fechaTrabajo }}
+                        {{ _fechaTrabajoVista }}
                     </span>
                 </span>
             </div>
@@ -65,7 +65,7 @@
                       <h5 class="flex justify-center" >Total Cobrado Hoy</h5>
                       <h2 class="flex justify-center" style="font-size: 2rem;">S/ {{_resumenCajaModel.impTotal | number:'1.2-2'}} </h2>
                     </div>
-                    <small>Fecha Recaudacion {{_ordenPagoModel.diaPago}} </small>
+                    <small>Fecha Recaudacion {{ _fechaTrabajoVista }} </small>
                   </div>
                 </p-card>
                 <br>

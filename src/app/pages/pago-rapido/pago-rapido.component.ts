@@ -80,6 +80,7 @@ export class PagoRapidoComponent implements OnInit{
   _listXAnulacion:BusquedAnulacionPago[] = []
   _tituloCar: string=""
   _fechaTrabajo: string=""
+  _fechaTrabajoVista: string=""
 
 
   flagGeneraPago: number = 0;
@@ -168,10 +169,15 @@ export class PagoRapidoComponent implements OnInit{
   }
 
   ResumenCaja(idCar:any){
+    
+    if(this._fechaTrabajo==""){
 
+      this._fechaTrabajo=this.funcionesService.devolverFecha(this._ordenPagoModel.diaPagoDpl)
+      this._fechaTrabajoVista=this.funcionesService.devolverFechaSeteada(this._ordenPagoModel.diaPagoDpl)
 
-    this._fechaTrabajo=this.funcionesService.devolverFecha(this._ordenPagoModel.diaPagoDpl)
+    }
 
+    
     this.recaudacionService.ResumenCaja({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,usuarioCreacion:this.usuarioTk,
                                          idCar:idCar,fecha:this._fechaTrabajo}).subscribe((respuesta) => {//this._ordenPagoModel.diaPago
       this._resumenCajaModel=respuesta.data
@@ -821,7 +827,7 @@ export class PagoRapidoComponent implements OnInit{
                   }else{
                     
                   }
-                  console.log(respuesta)
+           
                   /*if (respuesta.success==true) {
                       this._modalFiltro.nroOrdenPago=null
                       this._modalFiltro.nroSuministro=null
