@@ -43,6 +43,13 @@ export const routes: Routes = [
         loadComponent: () =>
           import('./pages/pago-rapido/pago-rapido.component').then((c) => c.PagoRapidoComponent),
       },
+      {
+        path: 'comercial/recaudacion/RecaudacionxFecha',
+        loadComponent: () =>
+          import('./pages/recaudacion-fecha/recaudacion-fecha.component').then((c) => c.RecaudacionFechaComponent),
+      },
+      
+
       
       
      

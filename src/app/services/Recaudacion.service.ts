@@ -89,6 +89,7 @@ import { ReciboDuplicado } from '../models/ReciboDuplicado';
 import { Ciclo } from '../models/Ciclo';
 import { Calendario } from '../models/Calendario';
 import { ResumenConcepto } from '../models/ResumenConcepto';
+import { Cajero } from '../models/Cajero';
 
 
 
@@ -164,6 +165,11 @@ export class RecaudacionService {
 
     dropdownMes(idCiclo: number,anio:number): Observable<ListResponse<Calendario[]>> { 
         return this.http.get<ListResponse<Calendario[]>>(`https://gateway1.emapasalas.net.pe/Ciclo/dropdownMesXciclo/${idCiclo}/${anio}`);
+    }
+
+
+    dropdowCajero(idEmpresa: number,idSede: number): Observable<ListResponse<Cajero[]>> {
+        return this.http.get<ListResponse<Cajero[]>>(`https://gateway1.emapasalas.net.pe/Cajero/dropdown/${idEmpresa}/${idSede}`);
     }
 
     searchResumenConcepto(model: ResumenConcepto): Observable<ListResponse<ResumenConcepto[]>> { 
@@ -560,6 +566,12 @@ export class RecaudacionService {
         // Realiza un POST con el body en formato JSON
         return this.http.post(url, data, { headers, responseType: 'blob' });
       }
+
+    //REPORTE  CAJA
+
+    CobranzaxFecha(model:Partial<GestionCuadre>): Observable<ListResponse<GestionCuadre[]>> {
+        return this.http.post<ListResponse<GestionCuadre[]>>(`https://gateway8061.emapasalas.net.pe/Recaudacion/Pagos/ReportCobranzaxFecha`,model);
+    }
 
 
     //CUADRE DE CAJA
