@@ -14,28 +14,28 @@
               Búsqueda Personalizada
             </legend>
             <div class="grid grid-cols-12 gap-4 ">
-                <div class="col-span-12 md:col-span-3 ">
-                    <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
+                <!--<div class="col-span-12 md:col-span-3 ">
+                    <p-floatlabel variant="on">< !--(onChange)="onSelectSede($event.value)"  -- >
                         <p-select [options]="_sede" optionLabel="nombre"  optionValue="idSede" filterBy="descripcion" [filter]="true"
                                   [(ngModel)]="_cuadreModel.idSedeBsq"  class="w-full" appendTo="body"  ></p-select> 
                         <label>Sede</label>
                     </p-floatlabel>
-                </div>
-                <div class="col-span-12 md:col-span-3 ">
+                </div>-->
+                <div class="col-span-12 md:col-span-4 ">
                     <p-floatlabel variant="on">
                         <p-select [options]="_localidad" optionLabel="descripcion"  optionValue="idSucursal" filterBy="descripcion" [filter]="true"
                                     class="w-full" appendTo="body"  [(ngModel)]="_cuadreModel.idSucursal"  ></p-select> 
                         <label>Localidad</label>
                     </p-floatlabel>
                 </div>
-                <div class="col-span-12 md:col-span-3 ">
+                <div class="col-span-12 md:col-span-4 ">
                     <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
                         <p-select [options]="_car" optionLabel="descripcion"  optionValue="idCar" filterBy="descripcion" [filter]="true"
                             [(ngModel)]="_cuadreModel.car"  class="w-full" appendTo="body"  ></p-select> 
                         <label>CAR</label>
                     </p-floatlabel>
                 </div>
-                <div class="col-span-12 md:col-span-3 ">
+                <div class="col-span-12 md:col-span-4 ">
                     <p-floatlabel variant="on"><!--(onChange)="onSelectSede($event.value)"  -->
                         <p-select [options]="_cajero" optionLabel="cajero"  optionValue="cajero" filterBy="cajero" [filter]="true"
                                   [(ngModel)]="_cuadreModel.cajero"  class="w-full" appendTo="body"  ></p-select> 
@@ -150,7 +150,7 @@
                                                                         {{concepto.impCanje | number : '1.2-2'}}
                                                                     </td>-->
                                                                     <td pFrozenColumn frozenAlign="right" style="right: 0;" class="frozen-right-cell">
-                                                                        <div class="flex justify-content-center w-full px-0">
+                                                                        <div class="flex justify-content-right w-full px-0">
                                                                             <span #user >
                                                                                 {{ concepto.impCanje | number : '1.2-2' }}
                                                                             </span>
