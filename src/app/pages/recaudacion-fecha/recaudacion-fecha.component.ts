@@ -243,6 +243,16 @@ accordions = {
   
 
   }
+
+  toggleOptions(event: Event, opt: HTMLElement, date: HTMLElement) {
+    if (event.type === 'mouseenter') {
+        opt.style.display = 'flex';
+        date.style.display = 'none';
+    } else {
+        opt.style.display = 'none';
+        date.style.display = 'flex';
+    }
+  }
   
   viewPDF(){
     this.urlView=`${this.urlImpresion}/recaudacion/cuadreCaja.php?idempresa=${this.idEmpresaTk}&idsede=${this.idSedeTk}&idCar=${this.filtroCar}&fecha=${this.Fechatotal}&usuarioCreacion=${this.usuarioTk}`;
