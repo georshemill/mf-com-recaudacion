@@ -102,9 +102,19 @@ accordions = {
       this._sede=respuesta.data
     })
 
-    this.recaudacionService.dropdowCajero(this.idEmpresaTk,this.idSedeTk).subscribe((respuesta) => {
+    /*this.recaudacionService.dropdowCajero(this.idEmpresaTk,this.idSedeTk).subscribe((respuesta) => {
       this._cajero=respuesta.data
-    })
+    })*/
+   
+      this.recaudacionService.dropdowCajero(this.idEmpresaTk,this.idSedeTk).pipe(
+        map((resp: ListResponse<Cajero[]>) => [
+            {idEmpresa: 0,idSede:0,idCar:"", cajero: 'TODOS',
+              flagExtranet:"",estado:"",
+            },
+            ...(resp.data ?? [])  ])
+        ).subscribe((data: Cajero[]) => {
+        this._cajero = data;
+      });
 
     this.recaudacionService.dropdownLocalidadXsede(this.idSedeTk).pipe(
           map((resp: ListResponse<Localidad[]>) => [
@@ -244,9 +254,9 @@ accordions = {
     this.displayPDF=true
   }
 
-  viewDetalle(){
+  viewDetalle(x:any){
     //http://apisistemas.ddns.net/comercialWEB/recaudacion/cuadreCaja.php?idempresa=1&idsede=2&idCar=1&fecha=2026-03-03&usuarioCreacion=LALIAGA
-    this.urlView=`${this.urlImpresion}/recaudacion/cuadreCaja.php?idempresa=${this.idEmpresaTk}&idCar=${this.filtroCar}&fecha=${this.Fechatotal}&usuarioCreacion=${this.usuarioTk}`;
+    this.urlView=`${this.urlImpresion}/recaudacion/cuadreCaja.php?idempresa=${this.idEmpresaTk}&idsede=${this.idSedeTk}&idCar=${x.idCar}&fecha=${x.diaPago}&usuarioCreacion=${x.usuarioCreacion}`;
     this.displayPDF=true
   }
 

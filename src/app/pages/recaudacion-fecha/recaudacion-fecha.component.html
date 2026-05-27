@@ -99,11 +99,11 @@
                                                                     <th class="text-center" >RedondeoAnterior</th>
                                                                     <th class="text-center" >RedondeoActual</th>
                                                                     <th class="text-center" >ImpTotalMes</th>
-                                                                    <th class="text-center" >ImpCanje</th>
+                                                                    <th pFrozenColumn frozenAlign="right" style="right: 0; z-index: 100" class="text-center" >ImpCanje</th>
                                                                 </tr>
                                                             </ng-template>
                                                             <ng-template #body let-concepto>
-                                                                <tr>
+                                                                <tr (mouseenter)="toggleOptions($event, options, user)" (mouseleave)="toggleOptions($event, options, user)">
                                                                     <td  class="text-center">
                                                                         {{concepto.nroPlanilla}}
                                                                     </td>
@@ -146,8 +146,18 @@
                                                                     <td  style="text-align: right;" >
                                                                         {{concepto.impTotalMes | number : '1.2-2'}}
                                                                     </td>
-                                                                    <td  style="text-align: right;" >
+                                                                    <!--<td  pFrozenColumn frozenAlign="right" style="right: 0;" class="frozen-right-cell">
                                                                         {{concepto.impCanje | number : '1.2-2'}}
+                                                                    </td>-->
+                                                                    <td pFrozenColumn frozenAlign="right" style="right: 0;" class="frozen-right-cell">
+                                                                        <div class="flex justify-content-center w-full px-0">
+                                                                            <span #user >
+                                                                                {{ concepto.impCanje | number : '1.2-2' }}
+                                                                            </span>
+                                                                            <div style="display: none" #options>
+                                                                                <button pButton pRipple icon="pi pi-print" class="p-button-success h-8 w-8 mr-2" (click)="viewDetalle(concepto)" pTooltip="Detalle Recaudacion" tooltipPosition="top" type="button"></button>
+                                                                            </div>
+                                                                        </div>
                                                                     </td>
                                                                 </tr>
                                                             </ng-template>
@@ -167,7 +177,7 @@
                                                                 </tr>
                                                             </ng-template>
                                                         </p-table>
-                                                        <button pButton pRipple icon="pi pi-print" class="p-button-info  mr-2" pTooltip="Imprimir " (click)="viewDetalle()"  tooltipPosition="top" type="button" label="Detalle Recaudacion"></button>
+                                                        <!--<button pButton pRipple icon="pi pi-print" class="p-button-info  mr-2" pTooltip="Imprimir " (click)="viewDetalle()"  tooltipPosition="top" type="button" label="Detalle Recaudacion"></button>-->
 
                                         </div>
                                     </div>
