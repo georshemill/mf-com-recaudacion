@@ -205,4 +205,8 @@ export class ResumenConceptoComponent implements OnInit{
     this.displayPDF=true
   }
 
+  viewXdia(){
+    this.urlView=`${this.urlImpresion}/recaudacion/reporteCajaConcepto_02.php?idempresa=1&idsucursal=${this._resumenModel.idSucursal}&anio=${this._resumenModel.anio}&mes=${this._resumenModel.mes}&idsede=${this.idSedeTk}` ;
+    this.displayPDF=true
+  }
 }
