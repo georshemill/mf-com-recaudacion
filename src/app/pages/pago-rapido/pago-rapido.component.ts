@@ -149,7 +149,7 @@ export class PagoRapidoComponent implements OnInit{
   
         if (Array.isArray(this._car) && this._car.length > 0) {
           this._tituloCar = this._car[0].descripcion;
-          this._ordenPagoModel.idCar=1
+          this._ordenPagoModel.idCar=this._car[0].idCar//11
         } else {
           this._tituloCar = ""; 
           this._ordenPagoModel.idCar=null
