@@ -47,6 +47,8 @@ export class PagoComponent implements OnInit{
 
   //fechActual = new Date().toISOString().slice(0, 10);
   fechActual = new Date().toLocaleDateString('en-CA');
+  fechReporte = new Date()
+  fechaBusqueda: string=""
   _blockPrincipal:number=0
   dialogColateral:boolean=false
   dialogOrden:boolean=false
@@ -121,6 +123,8 @@ export class PagoComponent implements OnInit{
 
   init(){
 
+    this.fechaBusqueda=this.funcionesService.devolverFecha(this.fechReporte)
+
     this.recaudacionService.ConsultaParamae({idEmpresa: this.idEmpresaTk,idSede: this.idSedeTk,tipoParametro: "REPORTES",codigoParametro:"URL"}).subscribe(data => {
       this.urlImpresion= data.data.valorParametro
     });
@@ -192,10 +196,20 @@ export class PagoComponent implements OnInit{
 
   listAnulacion(){
 
-    this.recaudacionService.ConsultaPagosAnulacion({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:this.fechActual!,
+    this.recaudacionService.ConsultaPagosAnulacion({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:this.fechaBusqueda!,
                                                     usuarioCreacion:this.usuarioTk,nroPago:null, anulado:0}).subscribe((respuesta) => {
         this._listXAnulacion=respuesta.data
     })
+
+  }
+
+
+  buscarPorFecha(x:any){
+
+    this.recaudacionService.ConsultaPagosAnulacion({idEmpresa:this.idEmpresaTk,idSede:this.idSedeTk,fecha:this.funcionesService.devolverFecha(x)!,
+      usuarioCreacion:this.usuarioTk,nroPago:null, anulado:0}).subscribe((respuesta) => {
+    this._listXAnulacion=respuesta.data
+})
 
   }
 

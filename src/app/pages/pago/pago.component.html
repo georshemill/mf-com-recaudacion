@@ -444,6 +444,13 @@
                                         <div class="flex gap-2 items-center">
                                             <p-button label="Expandir Detalle" icon="pi pi-plus" text (onClick)="expandAll()" />
                                             <p-button label="Reducir Detalle" icon="pi pi-minus" text (onClick)="collapseAll()" />
+                                            <div class="col-span-12 md:col-span-4 "><!--md:col-start-4  -->
+                                                <p-floatlabel variant="on" >
+                                                    <p-datepicker  dateFormat="yy-mm-dd" [showIcon]="true" appendTo="body"  styleClass="w-full"
+                                                            [(ngModel)]="fechaBusqueda" (onSelect)="buscarPorFecha($event)"/>
+                                                    <label >Fecha de Busqueda</label>
+                                                </p-floatlabel>
+                                            </div>
                                         </div>
                                         <div class="flex flex-col md:flex-row gap-4">
                                             <p-inputgroup>
