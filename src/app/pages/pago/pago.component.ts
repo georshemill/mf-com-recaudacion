@@ -228,7 +228,7 @@ export class PagoComponent implements OnInit{
 
   validaLogin(){
 
-    console.log(this._ordenPagoModel.idCar)
+
 
     if( this._ordenPagoModel.validaPass==undefined || this._ordenPagoModel.validaPass==null || this._ordenPagoModel.validaPass=="" ){
       this.messageService.add({

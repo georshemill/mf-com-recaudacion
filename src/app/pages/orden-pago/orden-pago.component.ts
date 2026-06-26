@@ -516,6 +516,12 @@ export class OrdenPagoComponent implements OnInit{
     });
   }
 
+  onRowSelectOrden(x:any){
+
+    this.urlView=`http://apisistemas.ddns.net/comercialWEB/recaudacion/ordenPago.php?idEmpresa=1&idSede=${this.idSedeTk}&nroOrdenPago=${x.nroOrdenPago}` ;
+    this.displayPDF=true
+  }
+
   AceptAmortiza(){
     //console.log(this.deudaTempAmortiz)
 
