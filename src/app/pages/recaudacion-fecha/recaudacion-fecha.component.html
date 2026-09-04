@@ -43,19 +43,19 @@
                     </p-floatlabel>
                 </div>
 
-                <div class="col-span-12 md:col-span-3 md:col-start-4 ">
+                <div class="col-span-12 md:col-span-2 md:col-start-4 ">
                     <p-floatlabel variant="on" >
                         <p-datepicker  dateFormat="yy-mm-dd" [(ngModel)]="_cuadreModel.fechaDpl" [showIcon]="true" appendTo="body"  styleClass="w-full"/>
                         <label >Fecha Inicio</label>
                     </p-floatlabel>
                 </div>
-                <div class="col-span-12 md:col-span-3 ">
+                <div class="col-span-12 md:col-span-2 ">
                     <p-floatlabel variant="on" >
                         <p-datepicker  dateFormat="yy-mm-dd" [(ngModel)]="_cuadreModel.fechaDplFin" [showIcon]="true" appendTo="body"  styleClass="w-full"/>
                         <label >Fecha Fin</label>
                     </p-floatlabel>
                 </div>
-                <div class="col-span-12 md:col-span-2">
+                <!--<div class="col-span-12 md:col-span-2">
                     <button pButton pRipple icon="pi pi-search"  severity="info" (click)="Busqueda()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>
                 </div>
                 <div class="col-span-12 md:col-span-2">
@@ -63,6 +63,10 @@
                 </div>
                 <div class="col-span-12 md:col-span-2">
                     <button pButton pRipple icon="pi pi-print"  severity="primary" (click)="viewPDF2()" label="Padron 02" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockPadron ==1" ></button>
+                </div>-->
+                <div class="col-span-12 md:col-span-3 flex flex-wrap  gap-2">
+                    <button pButton pRipple icon="pi pi-search"  severity="info" (click)="Busqueda()" label="Buscar" iconPos="right" class="p-button p-button-warning  mr-2" ></button>	          
+                    <button pButton pRipple icon="pi pi-eye"  severity="warn" (click)="Resumen()" label="Ver Resumen" iconPos="right" class="p-button p-button-warning  mr-2" *ngIf="blockTable ==1" ></button>   
                 </div>
             </div>
         </fieldset>

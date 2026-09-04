@@ -154,16 +154,7 @@ accordions = {
       }
   
     showGlobalLoader()
-  
-    /*
-    @IdEmpresa = 1,
-		@IdSede = 3,
-		@FechaIni = '2026-05-01',
-		@FechaFin = '2026-05-30',
-		@Car = 1,
-		@Cajero = N'PCHAVEZ',
-		@IdSucursal = 0
-    */
+
   
       this._cuadreModel.idEmpresa=this.idEmpresaTk
       this._cuadreModel.idSede=this.idSedeTk
@@ -277,6 +268,13 @@ accordions = {
     //http://apisistemas.ddns.net/comercialWEB/recaudacion/cuadreCaja.php?idempresa=1&idsede=2&idCar=1&fecha=2026-03-03&usuarioCreacion=LALIAGA
     this.urlView=`${this.urlImpresion}/recaudacion/cuadreCaja.php?idempresa=${this.idEmpresaTk}&idsede=${this.idSedeTk}&idCar=${x.idCar}&fecha=${x.diaPago}&usuarioCreacion=${x.usuarioCreacion}`;
     this.displayPDF=true
+  }
+
+  Resumen(){
+
+    this.urlView=`${this.urlImpresion}/recaudacion/reporte_cobranza_pivot.php?fechaini=${this._cuadreModel.fechaIni}&fechafin=${this._cuadreModel.fechaFin}&idsede=${this.idSedeTk}&idsucursal=${this._cuadreModel.idSucursal}&idempresa=${this.idEmpresaTk}`;
+    this.displayPDF=true
+
   }
 
 }
